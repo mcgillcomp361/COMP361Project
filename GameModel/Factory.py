@@ -8,7 +8,7 @@ from Structure import Structure
 
 class Factory(Structure):
     '''
-    classdocs
+    Subclass of Structure that focuses on producing units.
     '''
 
 
@@ -16,7 +16,7 @@ class Factory(Structure):
         '''
         Constructor
         '''
-        self._units_in_construction = []
+        self._units_in_construction = [] #Queue for units waiting to be trained.
         
     def addToQueue(self, unitType):
         self._units_in_construction.append(unitType)

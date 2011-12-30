@@ -6,7 +6,7 @@ Created on Dec 29, 2011
 
 class Ability(object):
     '''
-    classdocs
+    This class contains the attributes to an ability for a given unit.
     '''
 
 
@@ -14,12 +14,15 @@ class Ability(object):
         '''
         Constructor
         '''
-        self._cool_down = 0
-        self._damage = 0
-        self._used = False
+        self._cool_down = 0 #Amount of time needed to use the ability again (in seconds)
+        self._damage = 0 #Amount of damage
+        self._used = False #Prevents the same ability from being used successively.
         
-    def setCoolDown(self, _cool_down):
-        self._cool_down = _cool_down
+    '''
+    Setters and Getters
+    '''    
+    def setCoolDown(self, cool_down):
+        self._cool_down = cool_down
         
     def getCoolDown(self):
         return self._cool_down

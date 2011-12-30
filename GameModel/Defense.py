@@ -5,9 +5,9 @@ Created on Dec 29, 2011
 '''
 from Structure import Structure
 
-class MyClass(object):
+class Defense(Structure):
     '''
-    classdocs
+    Subclass of Structure that focuses on defense.
     '''
 
 
@@ -15,8 +15,11 @@ class MyClass(object):
         '''
         Constructor
         '''
-        self._damage = 0
-        
+        self._damage = 0 #Amount of damage
+    
+    '''
+    Setters and Getters
+    ''' 
     def setDamage(self, damage):
         self._damage = damage
         

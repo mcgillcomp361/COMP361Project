@@ -7,25 +7,47 @@ from panda3d.core import Point3
 
 class Unit(object):
     '''
-    classdocs
+    General information and functions of units.
     '''
 
 
-    def __init__(self, _host_planet):
+    def __init__(self, name, host_planet):
         '''
         Constructor
         '''
+        self._name = name
         self._energy = 0
         self._damage = 0
-        self._host_planet = _host_planet
+        self._host_planet = host_planet
         self._position = Point3(0, 0, 0)
         self._velocity = 0;
         self._unit_abilities = []
         self._deep_space = False
         
-    def Unit(self, name, _host_planet):
-        self._host_planet = _host_planet
+    'Uses the ability that has been assigned to the unit, if any.'
+    def useAbility(self, ability):
+        'Fill in code here'
+        return True
         
+    'Once the units hp hits 0 or less, then it dies'
+    def destroyUnit(self):
+        'Please double check this'
+        self._energy = 0
+        self._damage = 0
+        self._host_planet = None
+        self._position = Point3(0, 0, 0)
+        self._velocity = 0;
+        self._unit_abilities = []
+        self._deep_space = False
+        self = None
+    
+    'Deals damage to an opposing unit.'
+    def attack(self):
+        'To do later'
+        
+    '''
+    Setters and Getters
+    '''  
     def setAbilities(self, abilities):
         self._unit_abilities.extend(abilities)
         
@@ -50,24 +72,6 @@ class Unit(object):
         
     def getHostPlanet(self):
         return self._host_planet
-    
-    def useAbility(self, ability):
-        'Fill in code here'
-        return True
-        
-    def destroyUnit(self):
-        'Please double check this'
-        self._energy = 0
-        self._damage = 0
-        self._host_planet = None
-        self._position = Point3(0, 0, 0)
-        self._velocity = 0;
-        self._unit_abilities = []
-        self._deep_space = False
-        self = None
-        
-    def attack(self):
-        'To do later'
         
     def set_velocity(self,velo):
         self._velocity = velo

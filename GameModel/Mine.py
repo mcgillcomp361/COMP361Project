@@ -5,9 +5,9 @@ Created on Dec 29, 2011
 '''
 from Structure import Structure
 
-class MyClass(object):
+class MyClass(Structure):
     '''
-    classdocs
+    Subclass of Structure that focuses on resource harvesting.
     '''
 
 

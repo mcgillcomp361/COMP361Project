@@ -7,7 +7,7 @@ from Structure import Structure
 
 class Lab(Structure):
     '''
-    classdocs
+    Subclass of Structure that focuses on research.
     '''
 
 

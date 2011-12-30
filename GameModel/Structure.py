@@ -6,18 +6,18 @@ Created on Dec 29, 2011
 
 class Structure(object):
     '''
-    classdocs
+    Contains the general information for structures.
     '''
 
 
-    def __init__(self, _energy):
+    def __init__(self, energy):
         '''
         Constructor
         '''
-        self._energy = _energy
+        self._energy = energy
         
-    def set_energy(self, _energy):
-        self._energy = _energy
+    def set_energy(self, energy):
+        self._energy = energy
         
     def get_energy(self):
         return self._energy
