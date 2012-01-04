@@ -7,4 +7,9 @@
 <pydev_pathproperty name="org.python.pydev.PROJECT_SOURCE_PATH">
 <path>/COMP361 Project</path>
 </pydev_pathproperty>
+<pydev_pathproperty name="org.python.pydev.PROJECT_EXTERNAL_SOURCE_PATH">
+<path>C:\Panda3D-1.7.2\bin</path>
+<path>C:\Panda3D-1.7.2\lib</path>
+<path>C:\Panda3D-1.7.2\include</path>
+</pydev_pathproperty>
 </pydev_project>
