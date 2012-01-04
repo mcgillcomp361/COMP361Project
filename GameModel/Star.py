@@ -24,9 +24,10 @@ class Star(object):
         '''
         
         self._timeToExplosion = timeToExplosion
-        self._radius =  radius
+        self._radius =  radius 
         self._center = center
         self._planets = []
+        self.loadStar()
         #for i in range(planets.size):
         #    self.planets.insert(i, planets.pop(i))
         
@@ -86,5 +87,10 @@ class Star(object):
         '''
         self._center = center
         
+    def loadStar(self):
+        self.sun = loader.loadModel("../models/planet_sphere")
+        self.sun_tex = loader.loadTexture("../models/sun_1k_tex.jpg")
+        self.sun.setTexture(self.sun_tex, 1)
+        self.sun.reparentTo(render)
+        self.sun.setScale(2 * self._radius)
     
-        
