@@ -114,4 +114,11 @@ class Planet(SphericalBody):
         @param units: List of unit objects
         '''
         self._orbiting_units[:] = [u for u in self._orbiting_units if u not in units]
+        
+    def units(self):
+        '''
+        Generator that iterates over the hosted units.
+        '''
+        for unit in self._orbiting_units:
+            yield unit
     
