@@ -1,5 +1,6 @@
+*.pyc
 .checkstyle
 .DS_Store
 .project
 .pydevproject
-
+.settings/
