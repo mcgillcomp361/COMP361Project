@@ -9,13 +9,14 @@ class Unit(object):
     General information and functions of units.
     '''
 
-    def __init__(self, name, host_planet):
+    def __init__(self, name, host_planet, position=None, max_velocity=0):
         '''
         Constructor
         '''
         self.name = name
         self.host_planet = host_planet
-        self.position = None
+        self.position = position
+        self.max_velocity = max_velocity
         self.energy = 0
         self.damage = 0
         self.deep_space = False

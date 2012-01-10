@@ -82,7 +82,7 @@ class Planet(SphericalBody):
         @param radius: float, body radius
         '''
         super(Planet, self).__init__(position, radius)
-        
+        self.max_orbital_velocity
         self.parent_star = None
         self._orbiting_units = []
         self._surface_structures = []
