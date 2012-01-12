@@ -121,4 +121,53 @@ class Planet(SphericalBody):
         '''
         for unit in self._orbiting_units:
             yield unit
+            
+    def getNumberOfUnits(self):
+        '''
+        Returns the number of hosted units from the planet
+        '''
+        len(self._orbiting_units)
+            
+    def addSurfaceStructure(self, structure):
+        ''' 
+        Add a structure to the surface structures by the planet
+        @param structure: Surface structure object
+        '''
+        self._surface_structures.append(structure)
+    
+    def addSurfaceStructures(self, structures):
+        '''
+        Add a list of structures to be hosted by the planet
+        @param structures: iterable of structure
+        '''
+        self._surface_structures.extend(structures)
+    
+    def removeSurfaceStructure(self, structure):
+        ''' 
+        Remove the surface structure from the planet
+        @param structure: Surface structure object
+        '''
+        self._surface_structures.remove(structure)
+    
+    def removeSurfaceStructures(self, structures):
+        ''' 
+        Remove many surface structures from the planet
+        @param structures: List of structure objects
+        '''
+        self._surface_structures[:] = [s for s in self._surface_structures if s not in structures]
+        
+    def structures(self):
+        '''
+        Generator that iterates over the surface structures.
+        '''
+        for structure in self._surface_structures:
+            yield structure
+            
+    def getNumberOfStructures(self):
+        '''
+        Returns the number of surface structures from the planet
+        '''
+        len(self._surface_structures)
+            
+    
     
