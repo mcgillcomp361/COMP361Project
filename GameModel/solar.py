@@ -3,8 +3,7 @@ Created on 7 janv. 2012
 
 @author: Bazibaz
 '''
-import constants
-
+from constants import *
 from abc import ABCMeta, abstractmethod
 
 class SphericalBody(object):
@@ -93,7 +92,7 @@ class Planet(SphericalBody):
         '''
         super(Planet, self).__init__(position, radius)
         self.orbital_velocity = orbital_velocity
-        self.parent_star = parent-star
+        self.parent_star = parent_star
         self._orbiting_units = []
         self._surface_structures = []
     

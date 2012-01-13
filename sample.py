@@ -104,8 +104,8 @@ class World(DirectObject):
                      self.orbit_period_mars, self.mkeyEventText])
         self.accept("newYear", self.incYear)
         
-        base.useDrive()
-        base.useTrackball()
+#        base.useDrive()
+#        base.useTrackball()
     #end __init__
         
     def handleMouseClick(self):
