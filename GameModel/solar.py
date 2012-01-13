@@ -1,8 +1,10 @@
 '''
 Created on 7 janv. 2012
 
-@author: bazibaz
+@author: Bazibaz
 '''
+import constants
+
 from abc import ABCMeta, abstractmethod
 
 class SphericalBody(object):
@@ -39,7 +41,6 @@ class Star(SphericalBody):
         '''
         super(Star, self).__init__(position, radius)
         self.lifetime = lifetime
-        #Note that we could also use some type of dictionary instead of a list
         self._planets = []
         
     def addPlanet(self, planet):
@@ -47,7 +48,8 @@ class Star(SphericalBody):
         Adds a planet to the star system
         @param: planet object
         '''
-        self._planets.append(planet)
+        if(self._planets < MAX_NUMBER_OF_PLANETS):
+            self._planets.append(planet)
         
     def removePlanet(self, planet):
         '''
@@ -68,6 +70,12 @@ class Star(SphericalBody):
         '''
         for planet in self._planets:
             yield planet
+            
+    def getNumberOfPlanets(self):
+        '''
+        Returns the number of planets currently orbiting the star
+        '''
+        len(self._planets)
 
 
 class Planet(SphericalBody): 
@@ -75,15 +83,17 @@ class Planet(SphericalBody):
     Planet contains units and structures
     '''
 
-    def __init__(self, position, radius):
+    def __init__(self, position, radius, orbital_velocity, parent_star=None):
         '''
         Constructor for class planet.
         @param position: Point3D, position in space
         @param radius: float, body radius
+        @param orbital_velocity: the speed at which the planet rotates the star
+        @precondition: MIN_PLANET_VELOCITY < orbital_velocity < MAX_PLANET_VELOCITY
         '''
         super(Planet, self).__init__(position, radius)
-        self.max_orbital_velocity
-        self.parent_star = None
+        self.orbital_velocity = orbital_velocity
+        self.parent_star = parent-star
         self._orbiting_units = []
         self._surface_structures = []
     
@@ -133,14 +143,16 @@ class Planet(SphericalBody):
         Add a structure to the surface structures by the planet
         @param structure: Surface structure object
         '''
-        self._surface_structures.append(structure)
+        if(len(self._surface_structures) < MAX_NUMBER_OF_STRUCTURE):
+            self._surface_structures.append(structure)
     
     def addSurfaceStructures(self, structures):
         '''
         Add a list of structures to be hosted by the planet
         @param structures: iterable of structure
         '''
-        self._surface_structures.extend(structures)
+        if(len(self._surface_structures) + len(structures) <= MAX_NUMBER_OF_STRUCTURE):
+            self._surface_structures.extend(structures)
     
     def removeSurfaceStructure(self, structure):
         ''' 

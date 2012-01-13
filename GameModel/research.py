@@ -1,7 +1,7 @@
 '''
 Created on 7 janv. 2012
 
-@author: bazibaz
+@author: Bazibaz
 '''
 
 _nb_of_tiers = 4

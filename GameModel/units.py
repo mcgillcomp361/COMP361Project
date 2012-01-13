@@ -1,7 +1,7 @@
 '''
 Created on Dec 29, 2011
 
-@author: bazibaz
+@author: Bazibaz
 '''
 
 class Unit(object):
@@ -9,7 +9,7 @@ class Unit(object):
     General information and functions of units.
     '''
 
-    def __init__(self, name, host_planet, position=None, max_velocity=0):
+    def __init__(self, name, host_planet=None, position=None, max_velocity=0, energy=0, damage=0, unit_abilities=[]):
         '''
         Constructor
         '''
@@ -17,10 +17,10 @@ class Unit(object):
         self.host_planet = host_planet
         self.position = position
         self.max_velocity = max_velocity
-        self.energy = 0
-        self.damage = 0
+        self.energy = energy
+        self.damage = damage
         self.deep_space = False
-        self._unit_abilities = set([]) #set to avoid duplicates
+        self._unit_abilities = unit_abilities
         
     
     def useAbility(self, ability):
@@ -35,20 +35,7 @@ class Unit(object):
         '''Deals damage to an opposing unit.'''
         #TODO: ...
         pass
-        
-    def addAbility(self, ability):
-        '''
-        Add ability to unit
-        @param ability: Unit ability
-        '''
-        self._unit_abilities.add(ability)
     
-    def addAbilities(self, abilities):
-        '''
-        Add abilities to unit
-        @param abilities: List of unit abilities
-        '''
-        self._unit_abilities.update(abilities)
         
     def abilities(self):
         '''

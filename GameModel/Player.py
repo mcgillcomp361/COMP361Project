@@ -1,7 +1,7 @@
 '''
 Created on Jan 2, 2012
 
-@author: Eran-Tasker
+@author: Bazibaz
 '''
 
 class Player(object):

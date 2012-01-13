@@ -1,7 +1,7 @@
 '''
 Created on 7 janv. 2012
 
-@author: num3ric
+@author: Bazibaz
 '''
 from abc import ABCMeta, abstractmethod
 
@@ -21,9 +21,9 @@ class Structure(object):
         self.energy = energy
         
 
-class Lab(Structure):
+class Nexus(Structure):
     '''
-    Subclass of Structure that focuses on research.
+    Subclass of Structure that unlocks the evolution tree and speeds up evolution.
     '''
     
     def __init__(self, energy=_default_energy):
@@ -31,14 +31,7 @@ class Lab(Structure):
         Constructor
         @param energy: Structure energy
         '''
-        super(Lab, self).__init__(energy)
-        self._research = []
-        
-    def addToResearch(self, research):
-        self._research.append(research)
-        
-    def removeResearch(self, research):
-        self._research.remove(research)
+        super(Nexus, self).__init__(energy)
 
        
 class Defense(Structure):
@@ -56,7 +49,7 @@ class Defense(Structure):
         self.damage = 0
 
 
-class Factory(Structure):
+class Forge(Structure):
     '''
     Subclass of Structure that focuses on producing units.
     '''
@@ -66,7 +59,7 @@ class Factory(Structure):
         Constructor
         @param energy: Structure energy
         '''
-        super(Factory, self).__init__(energy)
+        super(Forge, self).__init__(energy)
         self._units_in_construction = [] #Queue for units waiting to be trained.
         
     def addToConstructionQueue(self, unitType):
