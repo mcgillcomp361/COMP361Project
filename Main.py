@@ -29,8 +29,8 @@ class Game(DirectObject):
         base.disableMouse()
         
         c = Camera()
-        s = Star(lifetime=100, position=Point3(0,0,0), radius=20)
-        p = Planet(position=Point3(10,10,0), radius=10, orbital_velocity=1, parent_star=s) 
+        deadStar = Star(position=Point3(0,0,0), radius=20)
+        deadPlanet = Planet(position=Point3(10,10,0), radius=10, parent_star=deadStar) 
         
         self.title = OnscreenText(text="Bazibaz", style=1, fg=(1,1,1,1), pos=(0.9,0.9), scale = .1)
         self.text = self.genLabelText(

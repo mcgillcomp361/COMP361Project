@@ -30,17 +30,24 @@ class Star(SphericalBody):
     a list of all the planets orbiting the star.
     '''
 
-    def __init__(self, lifetime, position, radius):
+    def __init__(self, position, radius):
         '''
-        Constructor for class star: creates a star object, initializing the star's attributes with 
+        Constructor for class star: creates a dead star object, initializing the star's attributes with 
         the given parameters. 
-        @param lifetime : integer, the counter for the star's life in seconds (Game time)
         @param position : Point3D, the position of the center of the star
         @param radius : float, star radius
         '''
         super(Star, self).__init__(position, radius)
-        self.lifetime = lifetime
+        self.lifetime = 0
         self._planets = []
+        
+    def activateStar(self, lifetime=1800000):
+        '''
+        Activates a constructed dead star object, starting the lifetime counter with the assigned default value while
+        the Game Engine calls the graphic engine to display the corresponding animation.
+        @param lifetime : integer, the counter for the star's life in seconds (Game time)
+        '''
+        self.lifetime = lifetime
         
     def addPlanet(self, planet):
         '''
@@ -82,19 +89,26 @@ class Planet(SphericalBody):
     Planet contains units and structures
     '''
 
-    def __init__(self, position, radius, orbital_velocity, parent_star=None):
+    def __init__(self, position, radius, parent_star=None):
         '''
         Constructor for class planet.
         @param position: Point3D, position in space
         @param radius: float, body radius
-        @param orbital_velocity: the speed at which the planet rotates the star
-        @precondition: MIN_PLANET_VELOCITY < orbital_velocity < MAX_PLANET_VELOCITY
         '''
         super(Planet, self).__init__(position, radius)
-        self.orbital_velocity = orbital_velocity
+        self.orbital_velocity = 0
         self.parent_star = parent_star
         self._orbiting_units = []
         self._surface_structures = []
+        
+    def activatePlanet(self, orbital_velocity):
+        '''
+        Activates a constructed dead planet object, starting the orbital movement with the assigned value while
+        the Game Engine calls the graphic engine to display the corresponding animation.
+        @param orbital_velocity: the speed at which the planet rotates the star
+        @precondition: MIN_PLANET_VELOCITY < orbital_velocity < MAX_PLANET_VELOCITY
+        '''
+        self.orbital_velocity = orbital_velocity
     
     def addOrbitingUnit(self, unit):
         ''' 
