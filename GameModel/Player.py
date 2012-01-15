@@ -9,12 +9,12 @@ class Player(object):
     Player class
     '''
 
-    def __init__(self, name, reasearch_tree, planets=None, structures=None, units=None):
+    def __init__(self, name, research_tree, planets=None, structures=None, units=None):
         '''
         Constructor
         '''
         self.name = name
-        self.research_tree = reasearch_tree
+        self.research_tree = research_tree
         self.planets = planets
         self.structures = structures
         self.units = units

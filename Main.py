@@ -13,7 +13,10 @@ from direct.showbase.DirectObject import DirectObject
 import sys
 
 from GameModel.solar import Star, Planet
+from GameModel.Player import Player
 from GraphicEngine.camera import Camera
+from GraphicEngine.solar_render import StarRender, PlanetRender
+from GameEngine.MouseEvents import MouseEvents
 
 class Game(DirectObject):
     #Macro-like function used to reduce the amount to code needed to create the
@@ -27,10 +30,17 @@ class Game(DirectObject):
         #The standard camera position and background initialization
         base.setBackgroundColor(0, 0, 0)
         base.disableMouse()
-        
         c = Camera()
-        deadStar = Star(position=Point3(0,0,0), radius=20)
-        deadPlanet = Planet(position=Point3(10,10,0), radius=10, parent_star=deadStar) 
+        m = MouseEvents()
+        p = Player(name="Player 1", research_tree="research Tree")
+        
+        deadStar = Star(position=Point3(0,0,0), radius=0.5)
+        StarRender(deadStar)
+        deadPlanet = Planet(position=Point3(5,5,0), radius=1, parent_star=deadStar) 
+        deadPlanet.orbital_velocity = 100
+        PlanetRender(deadPlanet)
+        
+ 
         
         self.title = OnscreenText(text="Bazibaz", style=1, fg=(1,1,1,1), pos=(0.9,0.9), scale = .1)
         self.text = self.genLabelText(
