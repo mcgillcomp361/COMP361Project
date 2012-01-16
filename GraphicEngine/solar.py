@@ -4,7 +4,8 @@ Created on 7 janv. 2012
 @author: num3ric
 '''
 from pandac.PandaModules import CollisionNode, CollisionSphere
-from pandac.PandaModules import Vec3, Point2
+#from pandac.PandaModules import Vec3, Point2
+from panda3d.core import Vec3,Point2,BitMask32
 
 class SphericalDraw(object):
     '''
@@ -39,12 +40,16 @@ class SphericalDraw(object):
             self.point_path = self.root_path.attachNewNode("sphere_node")
         self.point_path.setPos(self.pos)
         
-        #Collision sphere for object picking
+        # Collision sphere for object picking
+        #-----------------------------------------------------
+        # As described in the Tut-Chessboard.py sample: "If this model was
+        # any more complex than a single polygon, you should set up a collision
+        # sphere around it instead."
         self.cnode = CollisionNode("coll_sphere_node")
         #We use no displacement (0,0,0) and no scaling factor (1)
         self.cnode.addSolid(CollisionSphere(0,0,0,1))
+        self.cnode.setIntoCollideMask(BitMask32.bit(1))
         self.cnode_path = render.attachNewNode(self.cnode)
-        
         #For temporary testing, display collision sphere.
 #        self.cnode_path.show()
 
@@ -62,6 +67,7 @@ class StarDraw(SphericalDraw):
         self.star_path.setTexture(self.star_tex, 1)
         self.star_path.reparentTo(self.point_path)
         self.star_path.setScale(self.size)
+        self.cnode.setTag('starTag', str(id(self)))
         # Reparenting the collision sphere so that it 
         # matches the star perfectly.
         self.cnode_path.reparentTo(self.star_path)
@@ -83,6 +89,7 @@ class PlanetDraw(SphericalDraw):
         self.planet_path.setTexture(self.planet_tex, 1)
         self.planet_path.reparentTo(self.point_path)
         self.planet_path.setScale(self.size)
+        self.cnode.setTag('planetTag', str(id(self)))
         # Reparenting the collision sphere so that it 
         # matches the planet perfectly.
         self.cnode_path.reparentTo(self.planet_path)
