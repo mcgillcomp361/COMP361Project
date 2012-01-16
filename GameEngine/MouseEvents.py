@@ -29,7 +29,6 @@ class MouseEvents(DirectObject.DirectObject):
         
         self.pickerNode = CollisionNode('mouseRay')
         self.pickerNP = camera.attachNewNode(self.pickerNode)
-#        self.pickerNode.setFromCollideMask(GeomNode.getDefaultCollideMask())
         self.pickerNode.setFromCollideMask(BitMask32.bit(1))
         self.pickerRay = CollisionRay()
         self.pickerNode.addSolid(self.pickerRay)
@@ -52,16 +51,13 @@ class MouseEvents(DirectObject.DirectObject):
             if self.myHandler.getNumEntries() > 0:
                 # This is so we get the closest object.
                 self.myHandler.sortEntries()
-                pickedObj = self.myHandler.getEntry(0).getIntoNodePath()
-                
-                #Check to see if the selected object is the star (to activate)
-                pickedObj = pickedObj.findNetTag('starTag')
-                if not pickedObj.isEmpty():
-                    self.activateStar(pickedObj)
-                pickedObj = pickedObj.findNetTag('planetTag')
-                if not pickedObj.isEmpty():
-                    print 'planet selected'
+                pickedObj = self.myHandler.getEntry(0).getIntoNodePath()                
+                if pickedObj.hasTag('starTag'):
+#                    self.activateStar(pickedObj)
+                    print 'You have selected star ' + pickedObj.getTag('starTag')
+                elif pickedObj.hasTag('planetTag'):
+                    print 'You have selected planet ' + pickedObj.getTag('planetTag')
                     
     def activateStar(self, pickedObj):
-        #Star is activated
-        print "You selected the star"
+        pass
+

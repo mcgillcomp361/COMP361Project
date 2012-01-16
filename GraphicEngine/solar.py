@@ -51,7 +51,7 @@ class SphericalDraw(object):
         self.cnode.setIntoCollideMask(BitMask32.bit(1))
         self.cnode_path = render.attachNewNode(self.cnode)
         #For temporary testing, display collision sphere.
-#        self.cnode_path.show()
+        self.cnode_path.show()
 
 class StarDraw(SphericalDraw):
     '''
@@ -107,57 +107,4 @@ class PlanetDraw(SphericalDraw):
                                     self.planet.orbital_velocity,
                                     Vec3(360, 0, 0))
         self.orbit_period_mercury.loop()
-        
 
-
-# KEEP => WILL BE USEFUL FOR MULTIPLE OBJECT SELECTION (CLICK & DRAG)!
-
-#def is3dpointIn2dRegion(node, point1, point2, point3d): 
-#    """This function takes a 2d selection box from the screen as defined by two corners 
-#    and queries whether a given 3d point lies in that selection box 
-#    Returns True if it is 
-#    Returns False if it is not""" 
-#    #node is the parent node- probably render or similar node
-#    #point1 is the first 2d coordinate in the selection box
-#    #point2 is the opposite corner 2d coordinate in the selection box
-#    #point3d is the point in 3d space to test if that point lies in the 2d selection box
-#    # Convert the point to the 3-d space of the camera
-#    p3 = base.cam.getRelativePoint(node, point3d)
-#
-#    # Convert it through the lens to render2d coordinates
-#    p2 = Point2()
-#    if not base.camLens.project(p3, p2):
-#        return False
-#    
-#    r2d = Point3(p2[0], 0, p2[1])
-#    
-#    # And then convert it to aspect2d coordinates
-#    a2d = aspect2d.getRelativePoint(render2d, r2d)
-#    
-#    #Find out the biggest/smallest X and Y of the 2- 2d points provided.
-#    if point1.getX() > point2.getX():
-#        bigX = point1.getX()
-#        smallX = point2.getX()
-#    else:
-#        bigX = point2.getX()
-#        smallX = point1.getX()
-#        
-#    if point1.getY() > point2.getY():
-#        bigY = point1.getY()
-#        smallY = point2.getY()
-#    else:
-#        bigY = point2.getY()
-#        smallY = point2.getY()
-#    pX = a2d.getX()
-#    pY = a2d.getZ()    #aspect2d is based on a point3 not a point2 like render2d.
-#    
-#    if pX < bigX and pX > smallX:
-#        if pY < bigY and pY > smallY:
-#                return True
-#        else: return False
-#    else: return False
-#            
-#def savemousePos():
-#    pos = Point2(base.mouseWatcherNode.getMouse())
-#    pos.setX(pos.getX() * 1.33)
-#    return pos

@@ -16,12 +16,13 @@ from panda3d.core import *
 
 from solar import *
 from GameModel.solar import *
-
+from GameEngine.MouseEvents import MouseEvents
     
 class Application(ShowBase):
     def __init__(self):
         ShowBase.__init__(self)
-        self.disableMouse() 
+#        self.disableMouse() 
+        mouse_events = MouseEvents()
 
         sun = Star(100, Point3(0,0,0), 1)
         dsun = StarDraw(sun)
