@@ -24,6 +24,7 @@ class SphericalBody(object):
         self.radius =  radius 
         self.position = position
         self.activated = activated
+        self.spin_velocity = 0
 
 
 class Star(SphericalBody):
