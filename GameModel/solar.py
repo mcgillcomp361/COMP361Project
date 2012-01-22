@@ -19,7 +19,7 @@ class SphericalBody(object):
         Constructor
         @param position: Point3D, position in space
         @param radius: float, body radius
-        @param activated: boolean, determine whether is activated by the player or not
+        @param activated: boolean, determine whether the spherical body is activated by the player or not
         '''
         self.radius =  radius 
         self.position = position
@@ -33,7 +33,7 @@ class Star(SphericalBody):
     a list of all the planets orbiting the star.
     '''
 
-    def __init__(self, position, radius, activated=False):
+    def __init__(self, position, radius):
         '''
         Constructor for class star: creates a dead star object, initializing the star's attributes with 
         the given parameters. 
@@ -41,7 +41,7 @@ class Star(SphericalBody):
         @param radius : float, star radius
         @param activated: boolean, determine whether star is activated by the player or not
         '''
-        super(Star, self).__init__(position, radius, activated)
+        super(Star, self).__init__(position, radius, False)
         self.lifetime = 0
         self._planets = []
 
@@ -94,29 +94,40 @@ class Planet(SphericalBody):
     Planet contains units and structures
     '''
 
-    def __init__(self, position, radius, activated=False, parent_star=None):
+    def __init__(self, position, radius, parent_star=None):
         '''
         Constructor for class planet.
         @param position: Point3D, position in space
         @param radius: float, body radius
-        @param activated: boolean, determine whether planet is activated by the player or not
+        @param parent_star: Star, the specific star the planet is orbiting around
         '''
-        super(Planet, self).__init__(position, radius, activated)
+        super(Planet, self).__init__(position, radius, False)
         self.orbital_velocity = 0
         self.parent_star = parent_star
+        self.player = None
         self._orbiting_units = []
         self._surface_structures = []
         
-    def activatePlanet(self, orbital_velocity):
+    def activatePlanet(self, orbital_velocity, player):
         '''
         Activates a constructed dead planet object, starting the orbital movement with the assigned value while
         the Game Engine calls the graphic engine to display the corresponding animation.
+        @param player: Player, the player who controls the planet
         @param orbital_velocity: the speed at which the planet rotates the star
         @precondition: MIN_PLANET_VELOCITY < orbital_velocity < MAX_PLANET_VELOCITY
         '''
+        self.player = player
         self.orbital_velocity = orbital_velocity
         self.activated = True
     
+    def changePlayer(self, player):
+        '''
+        Change the control of the planet from the self.player to the parameter player
+        @param player: Player, the player who has captured the planet by swarms
+        @precondition: the player must have used the capture ability of a swarm unit on the planet
+        '''
+        self.player = player
+        
     def addOrbitingUnit(self, unit):
         ''' 
         Add a unit to the hosted units by the planet
