@@ -4,9 +4,11 @@ Created on Jan 12, 2012
 '''
 
 ''' Stars '''
+STAR_BUILD_TIME = 0
 MAX_STAR_RADIUS = 0
 
 ''' Planets '''
+PLANET_BUILD_TIME = 0
 MAX_NUMBER_OF_PLANETS = 10
 MAX_PLANET_RADIUS = 0
 MIN_PLANET_VELOCITY = 0
@@ -61,7 +63,25 @@ UNIT_TYPE = ["Swarm","Horde","Hive","Globe","Sphere","Planetarium",
              "Analyzer","Mathematica","BlackHoleGenerator"]
 MAX_NUMBER_OF_UNITS = 30
 MIN_UNIT_VELOCITY = 0
-MAX_UNIT_VELOCITY = 1
+MAX_UNIT_VELOCITY = 2
+SWARM_DESCRIPTION = "The basic combat unit which compromises of hundreds of combat bio-drones equipped with para-dimensional sight and dark energy engines. The swarm is fast but very weak"
+SWARM_MAX_ENERGY = 100
+SWARM_DAMAGE = 4
+SWARM_VELOCITY = 1
+SWARM_BUILD_TIME = 15
+SWARM_MINERAL_COST = 50
+HORDE_DESCRIPTION = "Evolved from the swarm, this unit compromises of thousands of combat bio-drones  equipped with para-dimensional sight, dark energy engines and excavation tech. The horde is much stronger and larger than the swarm but relatively slower"
+HORDE_MAX_ENERGY = 250
+HORDE_DAMAGE = 8
+HORDE_VELOCITY = 1
+HORDE_BUILD_TIME = 30
+HORDE_MINERAL_COST = 120
+HIVE_DESCRIPTION = "Evolved from the Horde, this unit compromises of millions of combat bio-drones  equipped with para-dimensional sight, dark energy engines, excavation tech and deadly harvesting tools. The hive is much stronger and larger than the horde but relatively slower"
+HIVE_MAX_ENERGY = 500
+HIVE_DAMAGE = 12
+HIVE_VELOCITY = 1
+HIVE_BUILD_TIME = 60
+HIVE_MINERAL_COST = 230
 
 ''' Abilities '''
 
