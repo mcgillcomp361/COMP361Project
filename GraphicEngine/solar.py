@@ -63,7 +63,7 @@ class StarDraw(SphericalDraw):
         self.star = star
         #Models & textures
         self.star_path = loader.loadModel("models/planet_sphere")
-        self.star_tex = loader.loadTexture("models/star_dead_tex.jpg")
+        self.star_tex = loader.loadTexture("models/sphere9_tex.jpg")
         self.star_path.setTexture(self.star_tex, 1)
         self.star_path.reparentTo(self.point_path)
         self.star_path.setScale(self.size)
@@ -85,7 +85,7 @@ class PlanetDraw(SphericalDraw):
         self.orbital_velocity = planet.orbital_velocity
         #Models & textures
         self.planet_path = loader.loadModel("models/planet_sphere")
-        self.planet_tex = loader.loadTexture("models/mars_1k_tex.jpg")
+        self.planet_tex = loader.loadTexture("models/sphere5_tex.jpg")
         self.planet_path.setTexture(self.planet_tex, 1)
         self.planet_path.reparentTo(self.point_path)
         self.planet_path.setScale(self.size)

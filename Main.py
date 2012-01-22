@@ -1,5 +1,5 @@
 '''
-Created on 13 janv. 2012
+Created on 13 jan. 2012
 
 @author: num3ric
 '''
@@ -65,10 +65,11 @@ class Application(ShowBase):
         self.loadBackground()
         
         self.title = OnscreenText(text="Bazibaz", style=1, fg=(1,1,1,1), pos=(0.9,0.9), scale = .1)
+        self.text = self.genLabelText("Orbits Alpha Ver.0.1", 0)
         self.text = self.genLabelText(
-            "Zoom in and out using a mouse", 0)
-        self.text = self.genLabelText("Move mouse side to side", 1)
-        self.text = self.genLabelText("Rotate view by pressing on the right mouse key", 2)
+            "Zoom in and out using a mouse", 1)
+        self.text = self.genLabelText("Move mouse side to side", 2)
+        self.text = self.genLabelText("Rotate view by pressing on the right mouse key", 3)
         
         #Exit the program when escape is pressed
         self.accept("escape", sys.exit)
