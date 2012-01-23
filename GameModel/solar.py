@@ -25,6 +25,14 @@ class SphericalBody(object):
         self.position = position
         self.activated = activated
         self.spin_velocity = 0
+        
+    def __str__(self) :
+        '''To String method'''
+        return str(self.__dict__)
+
+    def __eq__(self, other) : 
+        '''Compare to object of SphericalBody class for equality'''
+        return self.__dict__ == other.__dict__
 
 
 class Star(SphericalBody):
