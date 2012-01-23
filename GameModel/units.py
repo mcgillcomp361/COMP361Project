@@ -24,7 +24,7 @@ class Unit(object):
         '''
         self.host_planet = host_planet
         #TODO : calculate starting position base on host_planet
-        self.position = position
+        self.position = None
         self.max_velocity = max_velocity
         self.energy = energy
         self.damage = damage

@@ -3,7 +3,7 @@ Created on 7 janv. 2012
 
 @author: Bazibaz
 '''
-from constants import *
+from constants import MAX_NUMBER_OF_PLANETS, MAX_NUMBER_OF_STRUCTURE, LIFETIME
 from abc import ABCMeta, abstractmethod
 
 class SphericalBody(object):
@@ -26,13 +26,13 @@ class SphericalBody(object):
         self.activated = activated
         self.spin_velocity = 0
         
-    def __str__(self) :
-        '''To String method'''
-        return str(self.__dict__)
+    #def __str__(self) :
+    #   '''To String method'''
+    #  return str(self.__dict__)
 
-    def __eq__(self, other) : 
-        '''Compare to object of SphericalBody class for equality'''
-        return self.__dict__ == other.__dict__
+    #def __eq__(self, other) : 
+    #   '''Compare to object of SphericalBody class for equality'''
+    #  return self.__dict__ == other.__dict__
 
 
 class Star(SphericalBody):
@@ -53,13 +53,13 @@ class Star(SphericalBody):
         self.lifetime = 0
         self._planets = []
 
-    def activateStar(self, lifetime=1800000):
+    def activateStar(self):
         '''
         Activates a constructed dead star object, starting the lifetime counter with the assigned default value while
         the Game Engine calls the graphic engine to display the corresponding animation.
         @param lifetime : integer, the counter for the star's life in seconds (Game time)
         '''
-        self.lifetime = lifetime
+        self.lifetime = LIFETIME
         self.activated = True
         
     def addPlanet(self, planet):
@@ -75,7 +75,8 @@ class Star(SphericalBody):
         removes a planet from the star system
         @param planet object
         '''
-        self._planets.remove(planet)
+        if len(self._planets) != 0:
+            self._planets.remove(planet)
         
     def removeAllPlanets(self):
         '''
