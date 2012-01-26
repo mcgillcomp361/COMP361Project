@@ -10,10 +10,10 @@ from direct.showbase import DirectObject
 import sys
 sys.path.append("..")
 
-from GameModel.solar import *
-from GraphicEngine.environement import Environement
-from GraphicEngine.solar import StarDraw, PlanetDraw
-from GraphicEngine.camera import Camera
+from gameModel.solar import *
+from graphicEngine.environement import Environement
+from graphicEngine.solar import StarDraw, PlanetDraw
+from graphicEngine.camera import Camera
 from panda3d.core import Point3
 
 from mouseEvents import MouseEvents

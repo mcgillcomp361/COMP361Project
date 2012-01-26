@@ -14,7 +14,7 @@ from direct.showbase.ShowBase import ShowBase
 from direct.gui.OnscreenText import OnscreenText
 from panda3d.core import *
 
-from GameEngine.gameEngine import GameEngine
+from gameEngine.gameEngine import GameEngine
     
 class Application(ShowBase):
     def __init__(self):
