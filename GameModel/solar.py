@@ -3,17 +3,15 @@ Created on 7 janv. 2012
 
 @author: Bazibaz
 '''
+from observable import Observable
 from constants import MAX_NUMBER_OF_PLANETS, MAX_NUMBER_OF_STRUCTURE, LIFETIME
-from abc import ABCMeta, abstractmethod
 
-class SphericalBody(object):
-    __metaclass__ = ABCMeta
+class SphericalBody(Observable):
     
     '''
     Abstract class defining a radius and a position
     '''
     
-    @abstractmethod
     def __init__(self, position, radius, activated):
         '''
         Constructor
@@ -21,7 +19,8 @@ class SphericalBody(object):
         @param radius: float, body radius
         @param activated: boolean, determine whether the spherical body is activated by the player or not
         '''
-        self.radius =  radius 
+        super(SphericalBody,self).__init__()
+        self._radius =  radius 
         self.position = position
         self.activated = activated
         self.spin_velocity = 0
@@ -33,6 +32,19 @@ class SphericalBody(object):
     #def __eq__(self, other) : 
     #   '''Compare to object of SphericalBody class for equality'''
     #  return self.__dict__ == other.__dict__
+    
+
+    def getRadius(self):
+        return self._radius
+    
+    def setRadius(self, radius):
+        self._radius = radius
+        self.notify('radius')
+    
+    def delRadius(self):
+        del self._radius
+    
+    radius = property(getRadius, setRadius, delRadius, "Sphere radius")
 
 
 class Star(SphericalBody):

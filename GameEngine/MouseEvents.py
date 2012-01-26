@@ -3,18 +3,18 @@ Created on Jan 15, 2012
 
 @author: Julie
 '''
-
-from direct.showbase.ShowBase import ShowBase
+import sys
+from direct.showbase import DirectObject 
 from pandac.PandaModules import CollisionTraverser, CollisionHandlerQueue, CollisionRay 
 from pandac.PandaModules import CollisionNode
-from direct.showbase import DirectObject
-from panda3d.core import *
-import sys
+from panda3d.core import BitMask32
 
 class MouseEvents(DirectObject.DirectObject):
     
     def __init__(self):
-
+        
+        #Old class inheritance style because Panda3D is prehistoric
+                
         # Initialize the traverser.
         self.myTraverser = CollisionTraverser()
  
@@ -46,12 +46,18 @@ class MouseEvents(DirectObject.DirectObject):
             if self.myHandler.getNumEntries() > 0:
                 # This is so we get the closest object.
                 self.myHandler.sortEntries()
-                pickedObj = self.myHandler.getEntry(0).getIntoNodePath()                
-                if pickedObj.hasTag('starTag'):
-#                    self.activateStar(pickedObj)
-                    print 'You have selected star ' + pickedObj.getTag('starTag')
-                elif pickedObj.hasTag('planetTag'):
-                    print 'You have selected planet ' + pickedObj.getTag('planetTag')
+                pickedObj = self.myHandler.getEntry(0).getIntoNodePath()
+                if pickedObj.hasTag('star'):
+                    self.scaleSelected(pickedObj, 'star', 'pyStar')
+                elif pickedObj.hasTag('planet'):
+                    self.scaleSelected(pickedObj, 'planet', 'pyPlanet')
                     
-    def activateStar(self, pickedObj):
-        pass
+    def scaleSelected(self, pickedObj, tag, python_tag):
+        print 'You have selected '+ tag + ' ' + pickedObj.getTag(tag)
+        model_path = pickedObj.getParent()
+        graphic_obj = model_path.getPythonTag(python_tag)
+        # Since the stardraw dstar is listening to the model
+        # it will automatically get updated, idem for the
+        # planet below.
+        graphic_obj.model.radius = 1.2 * graphic_obj.model.radius
+

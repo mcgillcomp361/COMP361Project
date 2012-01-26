@@ -14,6 +14,7 @@ class SphericalDraw(object):
     position and size.
     '''
     def __init__(self, SphericalBody, point_path=None):
+        self.model = SphericalBody
         self.pos = Vec3(SphericalBody.position)
         self.vel = Vec3()
         self.size = 2*SphericalBody.radius
@@ -40,6 +41,8 @@ class SphericalDraw(object):
             self.point_path = self.root_path.attachNewNode("sphere_node")
         self.point_path.setPos(self.pos)
         
+        self.model_path = None
+        
         # Collision sphere for object picking
         #-----------------------------------------------------
         # As described in the Tut-Chessboard.py sample: "If this model was
@@ -52,6 +55,22 @@ class SphericalDraw(object):
         self.cnode_path = render.attachNewNode(self.cnode)
         #For temporary testing, display collision sphere.
 #        self.cnode_path.show()
+    
+    def update(self, event):
+        if event == 'radius':
+            self.setSize(self.model.radius)
+        elif event == 'velocity':
+            pass
+        else:
+            raise Exception, "Event received by spherical draw does not exist."
+    
+    
+    def setSize(self, radius):
+        self.size = 2*radius
+        self.model_path.setScale(self.size)
+        
+    def setColor(self):
+        pass
 
 class StarDraw(SphericalDraw):
     '''
@@ -60,18 +79,18 @@ class StarDraw(SphericalDraw):
     
     def __init__(self, star):
         super(StarDraw, self).__init__(star)
-        self.star = star
         #Models & textures
-        self.star_path = loader.loadModel("models/planet_sphere")
+        self.model_path = loader.loadModel("models/planet_sphere")
         self.star_tex = loader.loadTexture("models/sphere9_tex.jpg")
-        self.star_path.setTexture(self.star_tex, 1)
-        self.star_path.reparentTo(self.point_path)
-        self.star_path.setScale(self.size)
-        self.cnode.setTag('starTag', str(id(self)))
+        self.model_path.setTexture(self.star_tex, 1)
+        self.model_path.reparentTo(self.point_path)
+        self.model_path.setScale(self.size)
+        self.model_path.setPythonTag('pyStar', self);
+        
+        self.cnode.setTag('star', str(id(self)))
         # Reparenting the collision sphere so that it 
         # matches the star perfectly.
-        self.cnode_path.reparentTo(self.star_path)
-
+        self.cnode_path.reparentTo(self.model_path)
 
 
 class PlanetDraw(SphericalDraw):
@@ -81,30 +100,28 @@ class PlanetDraw(SphericalDraw):
     
     def __init__(self, planet, star_point_path):
         super(PlanetDraw, self).__init__(planet, star_point_path)
-        self.planet = planet
         self.orbital_velocity = planet.orbital_velocity
+        self.spin_velocity = planet.spin_velocity
         #Models & textures
-        self.planet_path = loader.loadModel("models/planet_sphere")
+        self.model_path = loader.loadModel("models/planet_sphere")
         self.planet_tex = loader.loadTexture("models/sphere5_tex.jpg")
-        self.planet_path.setTexture(self.planet_tex, 1)
-        self.planet_path.reparentTo(self.point_path)
-        self.planet_path.setScale(self.size)
-        self.cnode.setTag('planetTag', str(id(self)))
+        self.model_path.setTexture(self.planet_tex, 1)
+        self.model_path.reparentTo(self.point_path)
+        self.model_path.setScale(self.size)
+        self.model_path.setPythonTag('pyPlanet', self);
+        
+        self.cnode.setTag('planet', str(id(self)))
         # Reparenting the collision sphere so that it 
         # matches the planet perfectly.
-        self.cnode_path.reparentTo(self.planet_path)
-    
+        self.cnode_path.reparentTo(self.model_path)
     
     def startSpin(self):
-        self.day_period_mercury = self.planet_path.hprInterval(
-                                    self.planet.spin_velocity, Vec3(360, 0, 0))
+        self.day_period_mercury = self.model_path.hprInterval(self.spin_velocity, Vec3(360, 0, 0))
         self.day_period_mercury.loop()
     
     def startOrbit(self):
-        self.planet.orbital_velocity
-
         self.orbit_period_mercury = self.root_path.hprInterval(
-                                    self.planet.orbital_velocity,
+                                    self.orbital_velocity,
                                     Vec3(360, 0, 0))
         self.orbit_period_mercury.loop()
 

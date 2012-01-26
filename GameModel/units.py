@@ -4,6 +4,7 @@ Created on Dec 29, 2011
 @author: Bazibaz
 '''
 from abc import ABCMeta, abstractmethod
+from constants import *
 
 _default_energy = 0
 
