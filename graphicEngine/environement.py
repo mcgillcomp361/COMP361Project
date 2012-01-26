@@ -1,7 +1,7 @@
 '''
 Created on 25 janv. 2012
 
-@author: num3ric
+@author: Bazibaz
 '''
 from direct.showbase import DirectObject 
 from pandac.PandaModules import AntialiasAttrib, DirectionalLight, AmbientLight

@@ -1,7 +1,7 @@
 '''
 Created on Jan 15, 2012
 
-@author: Julie
+@author: Bazibaz
 '''
 import sys
 from direct.showbase import DirectObject 
@@ -11,10 +11,7 @@ from panda3d.core import BitMask32
 
 class MouseEvents(DirectObject.DirectObject):
     
-    def __init__(self):
-        
-        #Old class inheritance style because Panda3D is prehistoric
-                
+    def __init__(self):                
         # Initialize the traverser.
         self.myTraverser = CollisionTraverser()
  

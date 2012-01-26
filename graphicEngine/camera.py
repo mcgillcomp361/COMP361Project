@@ -1,6 +1,7 @@
 '''
 Created on Jan 2, 2012
 
+@author: Bazibaz
 '''
 from direct.showbase import DirectObject 
 from pandac.PandaModules import Vec3,Vec2 

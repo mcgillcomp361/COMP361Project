@@ -1,7 +1,7 @@
 '''
 Created on 25 janv. 2012
 
-@author: num3ric
+@author: Bazibaz
 '''
 
 #TODO: Could we actually move this to the __init__?

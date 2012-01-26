@@ -1,7 +1,7 @@
 '''
 Created on 7 janv. 2012
 
-@author: num3ric
+@author: Bazibaz
 '''
 from pandac.PandaModules import CollisionNode, CollisionSphere
 #from pandac.PandaModules import Vec3, Point2

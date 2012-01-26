@@ -1,7 +1,7 @@
 '''
 Created on 13 jan. 2012
 
-@author: num3ric
+@author: Bazibaz
 '''
 import random, math, sys
 
@@ -33,7 +33,7 @@ class Application(ShowBase):
         self.accept("escape", sys.exit)
 
     def genLabelText(self, text, i):
-            return OnscreenText(text = text, pos = (-1.3, .95-.05*i), fg=(1,1,1,1), \
+        return OnscreenText(text = text, pos = (-1.3, .95-.05*i), fg=(1,1,1,1), \
                             align = TextNode.ALeft, scale = .05, mayChange = 1)
         
 

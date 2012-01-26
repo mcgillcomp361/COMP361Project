@@ -1,7 +1,7 @@
 '''
 Created on Jan 23, 2012
 
-@author: Eran-Tasker
+@author: Bazibaz
 '''
 import random
 
