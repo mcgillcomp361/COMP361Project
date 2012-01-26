@@ -41,7 +41,7 @@ class GameEngine(DirectObject.DirectObject):
         self.star1.attach(self.dstar1);
         
         self.system_planets = []
-        for i in xrange(random.random()*20):
+        for i in xrange(int(random.random()*20)):
             r = random.random()
             planet = Planet(position=Point3((random.random()-0.5) * 20, \
                                             (random.random()-0.5) * 20, 0), \
@@ -59,7 +59,7 @@ class GameEngine(DirectObject.DirectObject):
         #Add observer to star model
         self.star2.attach(self.dstar2);
         
-        for i in xrange(random.random()*20):
+        for i in xrange(int(random.random()*20)):
             r = random.random()
             planet = Planet(position=Point3((random.random()-0.5) * 20, \
                                             (random.random()-0.5) * 20, 0), \
@@ -77,7 +77,7 @@ class GameEngine(DirectObject.DirectObject):
         #Add observer to star model
         self.star3.attach(self.dstar3);
         
-        for i in xrange(random.random()*20):
+        for i in xrange(int(random.random()*20)):
             r = random.random()
             planet = Planet(position=Point3((random.random()-0.5) * 20, \
                                             (random.random()-0.5) * 20, 0), \
