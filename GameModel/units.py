@@ -6,15 +6,13 @@ Created on Dec 29, 2011
 from abc import ABCMeta, abstractmethod
 from constants import *
 
-_default_energy = 0
-
 class Unit(object):
     __metaclass__ = ABCMeta
     '''
     General information and functions of units.
     '''
 
-    def __init__(self, host_planet=None, max_velocity=0, energy=0, damage=0, unit_abilities=[]):
+    def __init__(self, host_planet, max_velocity, energy, damage, unit_abilities=[]):
         '''
         Constructor
         @param host_planet : the current planet where the unit is being built

@@ -115,7 +115,7 @@ class Planet(SphericalBody):
     Planet contains units and structures
     '''
 
-    def __init__(self, position, radius, parent_star=None):
+    def __init__(self, position, radius, parent_star):
         '''
         Constructor for class planet.
         @param position: Point3D, position in space
