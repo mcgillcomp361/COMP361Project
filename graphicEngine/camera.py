@@ -37,12 +37,12 @@ class Camera(DirectObject.DirectObject):
         # This variable controls how close the mouse cursor needs to be to the edge of the screen to start panning the camera. It must be less than 1, 
         # and I recommend keeping it less than .2 
          
-        self.panLimitsX = Vec2(-20, 20) 
-        self.panLimitsY = Vec2(-20, 20) 
+        self.panLimitsX = Vec2(-100, 100) 
+        self.panLimitsY = Vec2(-100, 100) 
         # These two vairables will serve as limits for how far the camera can pan, so you don't scroll away from the map.
         
-        self.maxZoomOut = 500
-        self.maxZoomIn = 5
+        self.maxZoomOut = 600
+        self.maxZoomIn = 20
         #These two variables set the max distance a person can zoom in or out
 
         self.setTarget(0,0,0) 

@@ -5,7 +5,8 @@ Created on Jan 12, 2012
 
 ''' Stars '''
 STAR_BUILD_TIME = 0
-MAX_STAR_RADIUS = 0
+MAX_DEAD_STAR_RADIUS = 10
+NUMBER_OF_STARS = 10
 LIFETIME = 1800000
 
 ''' Planets '''

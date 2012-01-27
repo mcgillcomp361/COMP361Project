@@ -14,6 +14,7 @@ from direct.showbase.ShowBase import ShowBase
 from direct.gui.OnscreenText import OnscreenText
 from panda3d.core import *
 
+from gui.menu import Menu
 from gameEngine.gameEngine import GameEngine
     
 class Application(ShowBase):
@@ -22,6 +23,8 @@ class Application(ShowBase):
         loadPrcFileData('', 'fullscreen 1')
         loadPrcFileData('', 'win-size 1280 800')
         ShowBase.__init__(self)
+        
+        self.menu = Menu()
         
         self.ge = GameEngine()
         

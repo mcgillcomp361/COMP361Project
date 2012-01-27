@@ -17,7 +17,7 @@ class SphericalDraw(object):
         self.model = SphericalBody
         self.pos = Vec3(SphericalBody.position)
         self.vel = Vec3()
-        self.size = 2*SphericalBody.radius
+        self.radius = SphericalBody.radius
         
         # Dummy parent paths for both model & collision sphere
         #-----------------------------------------------------
@@ -67,7 +67,7 @@ class SphericalDraw(object):
     
     def setSize(self, radius):
         self.size = 2*radius
-        self.model_path.setScale(self.size)
+        self.model_path.setScale(self.radius)
         
     def setColor(self):
         pass
@@ -81,10 +81,10 @@ class StarDraw(SphericalDraw):
         super(StarDraw, self).__init__(star)
         #Models & textures
         self.model_path = loader.loadModel("models/planet_sphere")
-        self.star_tex = loader.loadTexture("models/sphere_tex.jpg")
+        self.star_tex = loader.loadTexture("models/star_dead_tex.jpg")
         self.model_path.setTexture(self.star_tex, 1)
         self.model_path.reparentTo(self.point_path)
-        self.model_path.setScale(self.size)
+        self.model_path.setScale(self.radius)
         self.model_path.setPythonTag('pyStar', self);
         
         self.cnode.setTag('star', str(id(self)))
@@ -104,10 +104,10 @@ class PlanetDraw(SphericalDraw):
         self.spin_velocity = planet.spin_velocity
         #Models & textures
         self.model_path = loader.loadModel("models/planet_sphere")
-        self.planet_tex = loader.loadTexture("models/sphere5_tex.jpg")
+        self.planet_tex = loader.loadTexture("models/sphere7_tex.jpg")
         self.model_path.setTexture(self.planet_tex, 1)
         self.model_path.reparentTo(self.point_path)
-        self.model_path.setScale(self.size)
+        self.model_path.setScale(self.radius)
         self.model_path.setPythonTag('pyPlanet', self);
         
         self.cnode.setTag('planet', str(id(self)))
