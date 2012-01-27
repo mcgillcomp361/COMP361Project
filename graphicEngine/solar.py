@@ -81,7 +81,7 @@ class StarDraw(SphericalDraw):
         super(StarDraw, self).__init__(star)
         #Models & textures
         self.model_path = loader.loadModel("models/planet_sphere")
-        self.star_tex = loader.loadTexture("models/star_dead_tex.jpg")
+        self.star_tex = loader.loadTexture("models/sun_1k_tex.jpg")
         self.model_path.setTexture(self.star_tex, 1)
         self.model_path.reparentTo(self.point_path)
         self.model_path.setScale(self.radius)
