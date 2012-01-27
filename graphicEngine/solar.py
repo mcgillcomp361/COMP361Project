@@ -66,7 +66,7 @@ class SphericalDraw(object):
     
     
     def setSize(self, radius):
-        self.size = 2*radius
+        self.radius = 2*radius
         self.model_path.setScale(self.radius)
         
     def setColor(self):

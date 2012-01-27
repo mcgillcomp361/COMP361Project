@@ -6,6 +6,7 @@ Created on 25 janv. 2012
 from direct.showbase import DirectObject 
 from pandac.PandaModules import AntialiasAttrib, DirectionalLight, AmbientLight
 from panda3d.core import VBase4, Vec4
+from gameModel.constants import UNIVERSE_SCALE
 
 class Environement(DirectObject.DirectObject):
     '''
@@ -33,4 +34,4 @@ class Environement(DirectObject.DirectObject):
         self.sky_tex = loader.loadTexture("models/stars_1k_tex.jpg")
         self.sky.setTexture(self.sky_tex, 1)
         self.sky.reparentTo(render)
-        self.sky.setScale(700)
+        self.sky.setScale(UNIVERSE_SCALE)
