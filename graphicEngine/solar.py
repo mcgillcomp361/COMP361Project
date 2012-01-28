@@ -57,19 +57,17 @@ class SphericalDraw(object):
 #        self.cnode_path.show()
     
     def update(self, event):
-        if event == 'radius':
-            self.setSize(self.model.radius)
-        elif event == 'velocity':
-            pass
+        if event == 'initiatePlanet':
+            self.initiateStar()
+        elif event == 'initiateStar':
+            self.initiatePlanet()
         else:
             raise Exception, "Event received by spherical draw does not exist."
     
+    def initiateStar(self):
+        pass
     
-    def setSize(self, radius):
-        self.radius = 2*radius
-        self.model_path.setScale(self.radius)
-        
-    def setColor(self):
+    def initiatePlanet(self):
         pass
 
 class StarDraw(SphericalDraw):
@@ -116,12 +114,12 @@ class PlanetDraw(SphericalDraw):
         self.cnode_path.reparentTo(self.model_path)
     
     def startSpin(self):
-        self.day_period_mercury = self.model_path.hprInterval(self.spin_velocity, Vec3(360, 0, 0))
-        self.day_period_mercury.loop()
+        self.day_period = self.model_path.hprInterval(self.spin_velocity, Vec3(360, 0, 0))
+        self.day_period.loop()
     
     def startOrbit(self):
-        self.orbit_period_mercury = self.root_path.hprInterval(
+        self.orbit_period = self.root_path.hprInterval(
                                     self.orbital_velocity,
                                     Vec3(360, 0, 0))
-        self.orbit_period_mercury.loop()
+        self.orbit_period.loop()
 

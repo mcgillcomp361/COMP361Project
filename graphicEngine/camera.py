@@ -9,13 +9,15 @@ import math
 from gameModel.constants import UNIVERSE_SCALE, MAX_PLANET_RADIUS
 
 class Camera(DirectObject.DirectObject): 
-    def __init__(self):      
+    def __init__(self, star):      
+        '''
+        @param star: the star the camera will be set at
+        '''
      
         base.disableMouse() 
         # This disables the default mouse based camera control used by panda. This default control is awkward, and won't be used. 
-         
-        base.camera.setPos(0,20,20) 
-        base.camera.lookAt(0,0,0) 
+        base.camera.setPos(star[0].position.x,star[0].position.y+UNIVERSE_SCALE/3,UNIVERSE_SCALE/3) 
+        base.camera.lookAt(star[0].position.x,star[0].position.y,0) 
         self.mx,self.my=0,0 
         # Sets up variables for storing the mouse coordinates 
          

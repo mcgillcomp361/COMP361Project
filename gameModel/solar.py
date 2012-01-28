@@ -38,8 +38,7 @@ class SphericalBody(Observable):
         return self._radius
     
     def setRadius(self, radius):
-        self._radius = radius
-        self.notify('radius')
+        self.notify('initiateStar')
     
     def delRadius(self):
         del self._radius

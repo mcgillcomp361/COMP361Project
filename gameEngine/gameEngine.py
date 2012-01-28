@@ -14,8 +14,8 @@ from gameModel.solar import Star, Planet
 from graphicEngine.environement import Environement
 from graphicEngine.solar import StarDraw, PlanetDraw
 from graphicEngine.camera import Camera
-from gameModel.constants import MAX_DEAD_STAR_RADIUS, MAX_STAR_RAIDUS, NUMBER_OF_STARS, \
-    MAX_DEAD_PLANET_RADIUS, MAX_PLANET_VELOCITY, MAX_NUMBER_OF_PLANETS, DEEP_SPACE_DISTANCE, \
+from gameModel.constants import MAX_DEAD_STAR_RADIUS, NUMBER_OF_STARS, \
+    MAX_DEAD_PLANET_RADIUS, MIN_PLANET_VELOCITY, MAX_NUMBER_OF_PLANETS, DEEP_SPACE_DISTANCE, \
     UNIVERSE_SCALE, DISTANCE_BETWEEN_PLANETS
 from panda3d.core import Point3
 
@@ -36,6 +36,11 @@ class GameEngine(DirectObject.DirectObject):
         self.all_planets = []
         self.prepareGame(NUMBER_OF_STARS, MAX_NUMBER_OF_PLANETS, self.all_stars, self.all_planets)
         
+        #randomly set the camera on one of the stars
+        rand = random.randrange(0,NUMBER_OF_STARS,1)
+        '''@TODO : camera is not set on the correct position, why ? '''
+        self.game_camera = Camera(self.all_stars[rand])
+        
         self.startSinglePlayerGame()
         
     
@@ -48,29 +53,28 @@ class GameEngine(DirectObject.DirectObject):
         @precondition number_of_planets > 0
         @param stars : Star, list of the stars
         '''
-        #Initialize graphics and camera
+        #Initialize graphics
         self.env_graphics = Environement()
-        self.game_camera = Camera()
         
         while(len(stars)<number_of_stars):
             rand = random.random()*10
             if (rand<2.5):
-                x_random = -random.random()*UNIVERSE_SCALE/2
-                y_random = -random.random()*UNIVERSE_SCALE/2
+                x_random = -random.random()*UNIVERSE_SCALE/(1.8)
+                y_random = -random.random()*UNIVERSE_SCALE/(1.8)
             elif (rand>=2.5 and rand<5):
-                x_random = random.random()*UNIVERSE_SCALE/2
-                y_random = -random.random()*UNIVERSE_SCALE/2
+                x_random = random.random()*UNIVERSE_SCALE/(1.8)
+                y_random = -random.random()*UNIVERSE_SCALE/(1.8)
             elif (rand>=5 and rand<7.5):
-                x_random = -random.random()*UNIVERSE_SCALE/2
-                y_random = random.random()*UNIVERSE_SCALE/2
+                x_random = -random.random()*UNIVERSE_SCALE/(1.8)
+                y_random = random.random()*UNIVERSE_SCALE/(1.8)
             else:
-                x_random = random.random()*UNIVERSE_SCALE/2
-                y_random = random.random()*UNIVERSE_SCALE/2
+                x_random = random.random()*UNIVERSE_SCALE/(1.8)
+                y_random = random.random()*UNIVERSE_SCALE/(1.8)
                 
             add = True
             
             for star in stars:
-                if(DEEP_SPACE_DISTANCE>abs(x_random-star[0].position.x) and \
+                if(DEEP_SPACE_DISTANCE>abs(x_random-star[0].position.x) or \
                    DEEP_SPACE_DISTANCE>abs(y_random-star[0].position.y)):
                     add = False
             
@@ -80,8 +84,8 @@ class GameEngine(DirectObject.DirectObject):
                 #Add observer to star model
                 star.attach(dstar);
                 stars.append((star,dstar))
-                i=1
-                while(i<number_of_planets+1):
+                i=2
+                while(i<number_of_planets+2):
                     rand = random.random()*10
                     if (rand<2.5):
                         x_random = -random.random()*i*star.radius*10
@@ -95,20 +99,20 @@ class GameEngine(DirectObject.DirectObject):
                     else:
                         x_random = random.random()*i*star.radius*10
                         y_random = random.random()*i*star.radius*10
-                    print i  
-                    planet = Planet(position=Point3(x_random,\
-                                                    y_random, 0), \
-                                    radius=MAX_DEAD_PLANET_RADIUS*0.2+0.2)
-                    planet.parent_star = star
-                    planet.orbital_velocity = (number_of_planets-i)*MAX_PLANET_VELOCITY*50
-                    planet.spin_velocity = 60
-                    dplanet = PlanetDraw(planet, dstar.point_path)
-                    dplanet.startSpin()
-                    dplanet.startOrbit()
-                    planet.attach(dplanet);
-                    star.addPlanet(planet)
-                    planets.append((planet,dplanet))
-                    i+=1
+                        
+                        planet = Planet(position=Point3(x_random,\
+                                                        y_random, 0), \
+                                        radius=MAX_DEAD_PLANET_RADIUS*0.2+0.2)
+                        planet.parent_star = star
+                        planet.orbital_velocity = (number_of_planets-i)*MIN_PLANET_VELOCITY*20
+                        planet.spin_velocity = 70
+                        dplanet = PlanetDraw(planet, dstar.point_path)
+                        dplanet.startSpin()
+                        dplanet.startOrbit()
+                        planet.attach(dplanet);
+                        star.addPlanet(planet)
+                        planets.append((planet,dplanet))
+                        i+=1
             
         
             
