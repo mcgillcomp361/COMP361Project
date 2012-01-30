@@ -34,16 +34,17 @@ class SphericalBody(Observable):
     #  return self.__dict__ == other.__dict__
     
 
-    def getRadius(self):
+    def _getRadius(self):
         return self._radius
     
-    def setRadius(self, radius):
+    def _setRadius(self, radius):
+        self._radius = radius
         self.notify('initiateStar')
     
-    def delRadius(self):
+    def _delRadius(self):
         del self._radius
     
-    radius = property(getRadius, setRadius, delRadius, "Sphere radius")
+    radius = property(_getRadius, _setRadius, _delRadius, "Sphere radius")
 
 
 class Star(SphericalBody):

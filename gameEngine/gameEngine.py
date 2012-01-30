@@ -82,7 +82,7 @@ class GameEngine(DirectObject.DirectObject):
                 star = Star(position=Point3(x_random,y_random,0), radius = MAX_DEAD_STAR_RADIUS)
                 dstar = StarDraw(star)
                 #Add observer to star model
-                star.attach(dstar);
+                star.attachObserver(dstar);
                 stars.append((star,dstar))
                 i=2
                 while(i<number_of_planets+2):
@@ -109,7 +109,7 @@ class GameEngine(DirectObject.DirectObject):
                         dplanet = PlanetDraw(planet, dstar.point_path)
                         dplanet.startSpin()
                         dplanet.startOrbit()
-                        planet.attach(dplanet);
+                        planet.attachObserver(dplanet);
                         star.addPlanet(planet)
                         planets.append((planet,dplanet))
                         i+=1
