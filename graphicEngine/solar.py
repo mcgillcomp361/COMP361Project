@@ -78,8 +78,8 @@ class StarDraw(SphericalDraw):
     def __init__(self, star):
         super(StarDraw, self).__init__(star)
         #Models & textures
-        self.model_path = loader.loadModel("models/planet_sphere")
-        self.star_tex = loader.loadTexture("models/white_dwarf2.jpg")
+        self.model_path = loader.loadModel("models/stars/planet_sphere")
+        self.star_tex = loader.loadTexture("models/stars/white_dwarf2.jpg")
         self.model_path.setTexture(self.star_tex, 1)
         self.model_path.reparentTo(self.point_path)
         self.model_path.setScale(self.radius)
@@ -101,8 +101,8 @@ class PlanetDraw(SphericalDraw):
         self.orbital_velocity = planet.orbital_velocity
         self.spin_velocity = planet.spin_velocity
         #Models & textures
-        self.model_path = loader.loadModel("models/planet_sphere")
-        self.planet_tex = loader.loadTexture("models/comet.jpg")
+        self.model_path = loader.loadModel("models/planets/planet_sphere")
+        self.planet_tex = loader.loadTexture("models/planets/comet.jpg")
         self.model_path.setTexture(self.planet_tex, 1)
         self.model_path.reparentTo(self.point_path)
         self.model_path.setScale(self.radius)

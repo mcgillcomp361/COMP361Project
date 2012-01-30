@@ -120,6 +120,6 @@ class GameEngine(DirectObject.DirectObject):
         '''
         Start a prepared game
         '''
-        music = base.loader.loadSfx("models/music1.mp3")
+        music = base.loader.loadSfx("sound/music/music1.mp3")
         music.play()
 

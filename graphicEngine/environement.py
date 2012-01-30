@@ -30,8 +30,8 @@ class Environement(DirectObject.DirectObject):
         render.setLight(alnp)
         render.setShaderAuto()
     
-        self.sky = loader.loadModel("models/solar_sky_sphere")
-        self.sky_tex = loader.loadTexture("models/stars_1k_tex.jpg")
+        self.sky = loader.loadModel("models/environment/solar_sky_sphere")
+        self.sky_tex = loader.loadTexture("models/environment/stars_1k_tex.jpg")
         self.sky.setTexture(self.sky_tex, 1)
         self.sky.reparentTo(render)
         self.sky.setScale(UNIVERSE_SCALE)

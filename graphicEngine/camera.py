@@ -16,8 +16,8 @@ class Camera(DirectObject.DirectObject):
      
         base.disableMouse() 
         # This disables the default mouse based camera control used by panda. This default control is awkward, and won't be used. 
-        base.camera.setPos(star[0].position.x,star[0].position.y+UNIVERSE_SCALE/3,UNIVERSE_SCALE/3) 
-        base.camera.lookAt(star[0].position.x,star[0].position.y,0) 
+        base.camera.setPos(0,30,30) 
+        base.camera.lookAt(0,0,0) 
         self.mx,self.my=0,0 
         # Sets up variables for storing the mouse coordinates 
          
