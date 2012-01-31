@@ -39,7 +39,7 @@ class SphericalBody(Observable):
     
     def _setRadius(self, radius):
         self._radius = radius
-        self.notify('initiateStar')
+        self.notify('radius')
     
     def _delRadius(self):
         del self._radius
@@ -73,6 +73,7 @@ class Star(SphericalBody):
         '''
         self.lifetime = LIFETIME
         self.activated = True
+        self.notify('initiateStar')
         
     def addPlanet(self, planet):
         '''

@@ -55,20 +55,6 @@ class SphericalDraw(object):
         self.cnode_path = render.attachNewNode(self.cnode)
         #For temporary testing, display collision sphere.
 #        self.cnode_path.show()
-    
-    def update(self, event):
-        if event == 'initiatePlanet':
-            self.initiateStar()
-        elif event == 'initiateStar':
-            self.initiatePlanet()
-        else:
-            raise Exception, "Event received by spherical draw does not exist."
-    
-    def initiateStar(self):
-        pass
-    
-    def initiatePlanet(self):
-        pass
 
 class StarDraw(SphericalDraw):
     '''
@@ -89,6 +75,15 @@ class StarDraw(SphericalDraw):
         # Reparenting the collision sphere so that it 
         # matches the star perfectly.
         self.cnode_path.reparentTo(self.model_path)
+    
+    def update(self, event):
+        if event == 'initiateStar':
+            self.initiateStar()
+        else:
+            raise Exception, "Event received by spherical draw does not exist."
+        
+    def initiateStar(self):
+        pass
 
 
 class PlanetDraw(SphericalDraw):
@@ -112,6 +107,12 @@ class PlanetDraw(SphericalDraw):
         # Reparenting the collision sphere so that it 
         # matches the planet perfectly.
         self.cnode_path.reparentTo(self.model_path)
+    
+    def update(self, event):
+        if event == 'initiatePlanet':
+            pass
+        else:
+            raise Exception, "Event received by spherical draw does not exist."
     
     def startSpin(self):
         self.day_period = self.model_path.hprInterval(self.spin_velocity, Vec3(360, 0, 0))
