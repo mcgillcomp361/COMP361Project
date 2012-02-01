@@ -4,6 +4,7 @@ Created on Jan 23, 2012
 @author: Bazibaz
 '''
 import random
+import math
 
 from direct.showbase import DirectObject 
 
@@ -79,40 +80,35 @@ class GameEngine(DirectObject.DirectObject):
                     add = False
             
             if(add):
-                star = Star(position=Point3(x_random,y_random,0), radius = MAX_DEAD_STAR_RADIUS)
+                star = Star(position=Point3(0,0,0), radius = MAX_DEAD_STAR_RADIUS)
                 dstar = StarDraw(star)
                 #Add observer to star model
                 star.attachObserver(dstar);
                 stars.append((star,dstar))
-                i=2
-                while(i<number_of_planets+2):
-                    rand = random.random()*10
-                    if (rand<2.5):
-                        x_random = -random.random()*i*star.radius*10
-                        y_random = -random.random()*i*star.radius*10
-                    elif (rand>=2.5 and rand<5):
-                        x_random = random.random()*i*star.radius*10
-                        y_random = -random.random()*i*star.radius*10
-                    elif (rand>=5 and rand<7.5):
-                        x_random = -random.random()*i*star.radius*10
-                        y_random = random.random()*i*star.radius*10
-                    else:
-                        x_random = random.random()*i*star.radius*10
-                        y_random = random.random()*i*star.radius*10
-                        
-                        planet = Planet(position=Point3(x_random,\
-                                                        y_random, 0), \
-                                        radius=MAX_DEAD_PLANET_RADIUS*0.2+0.2)
-                        planet.parent_star = star
-                        planet.orbital_velocity = (number_of_planets-i)*MIN_PLANET_VELOCITY*20
-                        planet.spin_velocity = 70
-                        dplanet = PlanetDraw(planet, dstar.point_path)
-                        dplanet.startSpin()
-                        dplanet.startOrbit()
-                        planet.attachObserver(dplanet);
-                        star.addPlanet(planet)
-                        planets.append((planet,dplanet))
-                        i+=1
+                i=1
+                #print ("star x : %lf", x_random)
+                #print ("star y : %lf", y_random)
+                while(i<=number_of_planets):
+                    alpha = random.random()*math.pi*2
+                    pxcord =  i * math.cos(alpha) * DISTANCE_BETWEEN_PLANETS
+                    pycord = i * math.sin(alpha) * DISTANCE_BETWEEN_PLANETS
+                    planet = Planet(position=Point3(pxcord + 0,\
+                                                    pycord + 0, 0), \
+                                    radius=MAX_DEAD_PLANET_RADIUS)
+                    #print ("planet x : ", pxcord)
+                    #print ("planet y : ", pycord)
+                    print("2-norm: ", math.sqrt(math.pow(pxcord - x_random, 2) + math.pow(pycord - y_random, 2)) / DISTANCE_BETWEEN_PLANETS)
+                    
+                    planet.parent_star = star
+                    planet.orbital_velocity = 0
+                    planet.spin_velocity = 70
+                    dplanet = PlanetDraw(planet, dstar.point_path)
+                    dplanet.startSpin()
+                    dplanet.startOrbit()
+                    planet.attachObserver(dplanet);
+                    star.addPlanet(planet)
+                    planets.append((planet,dplanet))
+                    i+=1
             
         
             
