@@ -3,9 +3,12 @@ Created on 7 janv. 2012
 
 @author: Bazibaz
 '''
+import random
+
 from pandac.PandaModules import CollisionNode, CollisionSphere
 #from pandac.PandaModules import Vec3, Point2
 from panda3d.core import Vec3,Point2,BitMask32
+from gameModel.constants import MAX_STAR_RADIUS, MAX_PLANET_RADIUS
 
 class SphericalDraw(object):
     '''
@@ -77,13 +80,20 @@ class StarDraw(SphericalDraw):
         self.cnode_path.reparentTo(self.model_path)
     
     def update(self, event):
-        if event == 'initiateStar':
-            self.initiateStar()
+        if event == 'starLifetime':
+                pass
+                '''TODO : show star lifetime counter'''
+        elif event == 'initiateStar':
+                self.initiateStar()
         else:
             raise Exception, "Event received by spherical draw does not exist."
         
     def initiateStar(self):
-        pass
+        '''TODO : display star birth animation '''
+        self.radius = MAX_STAR_RADIUS
+        self.model_path.setScale(self.radius)
+        self.star_tex = loader.loadTexture("models/stars/bstar.png")
+        self.model_path.setTexture(self.star_tex, 1)
 
 
 class PlanetDraw(SphericalDraw):
@@ -97,7 +107,7 @@ class PlanetDraw(SphericalDraw):
         self.spin_velocity = planet.spin_velocity
         #Models & textures
         self.model_path = loader.loadModel("models/planets/planet_sphere")
-        self.planet_tex = loader.loadTexture("models/planets/comet.jpg")
+        self.planet_tex = loader.loadTexture("models/planets/dead_planet_tex.jpg")
         self.model_path.setTexture(self.planet_tex, 1)
         self.model_path.reparentTo(self.point_path)
         self.model_path.setScale(self.radius)
@@ -114,6 +124,14 @@ class PlanetDraw(SphericalDraw):
         else:
             raise Exception, "Event received by spherical draw does not exist."
     
+    def initiatePlanet(self):
+        '''TODO : display star birth animation '''
+        self.radius = MAX_PLANET_RADIUS
+        self.model_path.setScale(self.radius)
+        rand = (int)(random.random()*10)
+        self.star_tex = loader.loadTexture("models/planets/planet"+rand+"_tex.jpg")
+        self.model_path.setTexture(self.star_tex, 1)
+        
     def startSpin(self):
         self.day_period = self.model_path.hprInterval(self.spin_velocity, Vec3(360, 0, 0))
         self.day_period.loop()

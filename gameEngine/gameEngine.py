@@ -63,17 +63,17 @@ class GameEngine(DirectObject.DirectObject):
                 x_random = 0
                 y_random = 0
             elif (rand<2.5):
-                x_random = -random.random()*UNIVERSE_SCALE/(1.8)
-                y_random = -random.random()*UNIVERSE_SCALE/(1.8)
+                x_random = -random.random()*UNIVERSE_SCALE/(1.4)
+                y_random = -random.random()*UNIVERSE_SCALE/(1.4)
             elif (rand>=2.5 and rand<5):
-                x_random = random.random()*UNIVERSE_SCALE/(1.8)
-                y_random = -random.random()*UNIVERSE_SCALE/(1.8)
+                x_random = random.random()*UNIVERSE_SCALE/(1.4)
+                y_random = -random.random()*UNIVERSE_SCALE/(1.4)
             elif (rand>=5 and rand<7.5):
-                x_random = -random.random()*UNIVERSE_SCALE/(1.8)
-                y_random = random.random()*UNIVERSE_SCALE/(1.8)
+                x_random = -random.random()*UNIVERSE_SCALE/(1.4)
+                y_random = random.random()*UNIVERSE_SCALE/(1.4)
             else:
-                x_random = random.random()*UNIVERSE_SCALE/(1.8)
-                y_random = random.random()*UNIVERSE_SCALE/(1.8)
+                x_random = random.random()*UNIVERSE_SCALE/(1.4)
+                y_random = random.random()*UNIVERSE_SCALE/(1.4)
                 
             add = True
             
@@ -89,16 +89,9 @@ class GameEngine(DirectObject.DirectObject):
                 star.attachObserver(dstar);
                 stars.append((star,dstar))
                 i=1
-                print ("star x : %lf", x_random)
-                print ("star y : %lf", y_random)
+                
                 while(i<=number_of_planets):
                     alpha = random.random()*10*math.pi*2
-                    #pxcord =  i * math.sin(alpha) * DISTANCE_BETWEEN_PLANETS + x_random
-                    #pycord = i * math.cos(alpha) * DISTANCE_BETWEEN_PLANETS + y_random
-                    #pxcord = i*DISTANCE_BETWEEN_PLANETS + x_random
-                    #pycord = math.sqrt(math.fabs(math.pow(DISTANCE_BETWEEN_PLANETS,2)-math.pow((pxcord-x_random),2))) + y_random
-                    #pxcord = random.randrange(i-1,i)*DISTANCE_BETWEEN_PLANETS + x_random
-                    #pycord = math.sqrt(math.fabs(math.pow(random.randrange(i-1,i)*DISTANCE_BETWEEN_PLANETS, 2)-math.pow(pxcord, 2))) + y_random
                     pxcord = 2*math.cos(alpha)*DISTANCE_BETWEEN_PLANETS*i + x_random
                     pycord = 2*math.sin(alpha)*DISTANCE_BETWEEN_PLANETS*i + y_random
                     planet = Planet(position=Point3(pxcord*0.03,\
@@ -124,4 +117,3 @@ class GameEngine(DirectObject.DirectObject):
         '''
         music = base.loader.loadSfx("sound/music/music1.mp3")
         music.play()
-

@@ -4,7 +4,7 @@ Created on 7 janv. 2012
 @author: Bazibaz
 '''
 from observable import Observable
-from constants import MAX_NUMBER_OF_PLANETS, MAX_NUMBER_OF_STRUCTURE, LIFETIME
+from constants import MAX_NUMBER_OF_PLANETS, MAX_NUMBER_OF_STRUCTURE, LIFETIME, MAX_STAR_RADIUS
 
 class SphericalBody(Observable):
     
@@ -38,8 +38,7 @@ class SphericalBody(Observable):
         return self._radius
     
     def _setRadius(self, radius):
-        self._radius = radius
-        self.notify('radius')
+        self.select()
     
     def _delRadius(self):
         del self._radius
@@ -64,7 +63,14 @@ class Star(SphericalBody):
         super(Star, self).__init__(position, radius, False)
         self.lifetime = 0
         self._planets = []
-
+    
+    def select(self):
+        if(self.activated):
+            self.notify('starLifetime')
+        else:
+            self.notify('initiateStar')
+            self.activateStar()
+        
     def activateStar(self):
         '''
         Activates a constructed dead star object, starting the lifetime counter with the assigned default value while
@@ -73,7 +79,8 @@ class Star(SphericalBody):
         '''
         self.lifetime = LIFETIME
         self.activated = True
-        self.notify('initiateStar')
+        '''TOD : Start the count-down '''
+        self.radius = MAX_STAR_RADIUS
         
     def addPlanet(self, planet):
         '''
@@ -129,6 +136,10 @@ class Planet(SphericalBody):
         self.player = None
         self._orbiting_units = []
         self._surface_structures = []
+    
+    def select(self):
+        #self.activatePlanet()
+        pass
         
     def activatePlanet(self, orbital_velocity, player):
         '''

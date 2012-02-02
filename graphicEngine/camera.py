@@ -16,9 +16,9 @@ class Camera(DirectObject.DirectObject):
      
         base.disableMouse() 
         # This disables the default mouse based camera control used by panda. This default control is awkward, and won't be used. 
-        base.camera.setPos(0,30,30) 
+        base.camera.setPos(0,0,0) 
         base.camera.lookAt(0,0,0) 
-        self.mx,self.my=0,0 
+        self.mx,self.my=0,0
         # Sets up variables for storing the mouse coordinates 
          
         self.orbiting=False 
@@ -39,8 +39,8 @@ class Camera(DirectObject.DirectObject):
         # This variable controls how close the mouse cursor needs to be to the edge of the screen to start panning the camera. It must be less than 1, 
         # and I recommend keeping it less than .2 
          
-        self.panLimitsX = Vec2(-UNIVERSE_SCALE*3/5, UNIVERSE_SCALE*3/5) 
-        self.panLimitsY = Vec2(-UNIVERSE_SCALE*3/5, UNIVERSE_SCALE*3/5) 
+        self.panLimitsX = Vec2(-UNIVERSE_SCALE*4/5, UNIVERSE_SCALE*4/5) 
+        self.panLimitsY = Vec2(-UNIVERSE_SCALE*4/5, UNIVERSE_SCALE*4/5) 
         # These two vairables will serve as limits for how far the camera can pan, so you don't scroll away from the map.
         
         self.maxZoomOut = UNIVERSE_SCALE/3

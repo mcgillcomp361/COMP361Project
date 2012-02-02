@@ -45,21 +45,20 @@ class MouseEvents(DirectObject.DirectObject):
                 self.myHandler.sortEntries()
                 pickedObj = self.myHandler.getEntry(0).getIntoNodePath()
                 if pickedObj.hasTag('star'):
-                    pass
-                    #self.activateSelected(pickedObj, 'star', 'pyStar')
+                    self.selected(pickedObj, 'star', 'pyStar')
                 elif pickedObj.hasTag('planet'):
-                    pass
-                    #self.scaleSelected(pickedObj, 'planet', 'pyPlanet')
+                    self.selected(pickedObj, 'planet', 'pyPlanet')
                 elif pickedObj.hasTag('unit'):
-                    pass
-                    #self.scaleSelected(pickedObj, 'planet', 'pyPlanet')
+                    self.selected(pickedObj, 'unit', 'pyUnit')
                     
-    def activateSelected(self, pickedObj, tag, python_tag):
-        print 'You have selected '+ tag + ' ' + pickedObj.getTag(tag)
+    def selected(self, pickedObj, tag, python_tag):
+        print 'Player has selected '+ tag + ' ' + pickedObj.getTag(tag)
         model_path = pickedObj.getParent()
+        #model_path.notify("starSelected")
         graphic_obj = model_path.getPythonTag(python_tag)
+        #model_path.notify("star")
         # Since the stardraw dstar is listening to the model
         # it will automatically get updated, idem for the
         # planet below.
-        #graphic_obj.model.radius = 1.09 * graphic_obj.model.radius
+        graphic_obj.model.radius = graphic_obj.model.radius
 
