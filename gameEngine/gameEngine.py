@@ -16,7 +16,7 @@ from graphicEngine.environement import Environement
 from graphicEngine.solar import StarDraw, PlanetDraw
 from graphicEngine.camera import Camera
 from gameModel.constants import MAX_DEAD_STAR_RADIUS, NUMBER_OF_STARS, \
-    MAX_DEAD_PLANET_RADIUS, MIN_PLANET_VELOCITY, MAX_NUMBER_OF_PLANETS, DEEP_SPACE_DISTANCE, \
+    MAX_DEAD_PLANET_RADIUS, MIN_PLANET_VELOCITY, MAX_PLANET_VELOCITY, MAX_NUMBER_OF_PLANETS, DEEP_SPACE_DISTANCE, \
     UNIVERSE_SCALE, DISTANCE_BETWEEN_PLANETS
 from panda3d.core import Point3
 
@@ -90,6 +90,7 @@ class GameEngine(DirectObject.DirectObject):
                 stars.append((star,dstar))
                 i=1
                 
+                prev_p = None
                 while(i<=number_of_planets):
                     alpha = random.random()*10*math.pi*2
                     pxcord = 2*math.cos(alpha)*DISTANCE_BETWEEN_PLANETS*i + x_random
@@ -99,11 +100,11 @@ class GameEngine(DirectObject.DirectObject):
                                     radius = MAX_DEAD_PLANET_RADIUS)
                     
                     planet.parent_star = star
-                    planet.orbital_velocity = MIN_PLANET_VELOCITY/(number_of_planets-i+1)
+                    planet.prev_planet = prev_p
+                    prev_p = planet
+                    planet.orbital_velocity = MAX_PLANET_VELOCITY/(number_of_planets-i+1) + (MIN_PLANET_VELOCITY*math.pow(i+2,3))
                     planet.spin_velocity = 70
                     dplanet = PlanetDraw(planet, dstar.point_path)
-                    dplanet.startSpin()
-                    dplanet.startOrbit()
                     planet.attachObserver(dplanet);
                     star.addPlanet(planet)
                     planets.append((planet,dplanet))

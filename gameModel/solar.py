@@ -4,7 +4,8 @@ Created on 7 janv. 2012
 @author: Bazibaz
 '''
 from observable import Observable
-from constants import MAX_NUMBER_OF_PLANETS, MAX_NUMBER_OF_STRUCTURE, LIFETIME, MAX_STAR_RADIUS
+from constants import MAX_NUMBER_OF_PLANETS, MAX_NUMBER_OF_STRUCTURE, LIFETIME, MAX_STAR_RADIUS,\
+                      MAX_PLANET_VELOCITY
 
 class SphericalBody(Observable):
     
@@ -65,6 +66,10 @@ class Star(SphericalBody):
         self._planets = []
     
     def select(self):
+        '''
+        This method observes the events on the star and calls the related methods
+        and notifies the corresponding objects based on the state of the star
+        '''
         if(self.activated):
             self.notify('starLifetime')
         else:
@@ -79,7 +84,7 @@ class Star(SphericalBody):
         '''
         self.lifetime = LIFETIME
         self.activated = True
-        '''TOD : Start the count-down '''
+        '''TOD : Start the count-down as soon as a star's planet is activated '''
         self.radius = MAX_STAR_RADIUS
         
     def addPlanet(self, planet):
@@ -110,6 +115,13 @@ class Star(SphericalBody):
         '''
         for planet in self._planets:
             yield planet
+    
+    def getPlanet(self, planet):
+        '''
+        Returns the index of the given planet from list of planets 
+        @param planet : the desired planet
+        '''
+        self._planets.index(planet)
             
     def getNumberOfPlanets(self):
         '''
@@ -123,34 +135,43 @@ class Planet(SphericalBody):
     Planet contains units and structures
     '''
 
-    def __init__(self, position, radius, parent_star=None):
+    def __init__(self, position, radius, parent_star=None, prev_planet=None):
         '''
         Constructor for class planet.
         @param position: Point3D, position in space
         @param radius: float, body radius
         @param parent_star: Star, the specific star the planet is orbiting around
+        @param prev_planet: previous planet in the star system, if None then the planet is the first
         '''
         super(Planet, self).__init__(position, radius, False)
         self.orbital_velocity = 0
         self.parent_star = parent_star
+        self.prev_planet = prev_planet
         self.player = None
         self._orbiting_units = []
         self._surface_structures = []
     
     def select(self):
-        #self.activatePlanet()
-        pass
+        '''
+        This method observes the events on the planet and calls the related methods
+        and notifies the corresponding objects based on the state of the planet
+        '''
+        if(self.activated):
+            self.notify('planetSelected')
+        else:
+            ''' TODO : get the player who selected the planet '''
+            if((self.prev_planet == None or self.prev_planet.activated) and self.parent_star.activated):
+                self.notify('initiatePlanet')
+                self.activatePlanet(None)         
         
-    def activatePlanet(self, orbital_velocity, player):
+    def activatePlanet(self, player):
         '''
         Activates a constructed dead planet object, starting the orbital movement with the assigned value while
         the Game Engine calls the graphic engine to display the corresponding animation.
         @param player: Player, the player who controls the planet
-        @param orbital_velocity: the speed at which the planet rotates the star
         @precondition: MIN_PLANET_VELOCITY < orbital_velocity < MAX_PLANET_VELOCITY
         '''
         self.player = player
-        self.orbital_velocity = orbital_velocity
         self.activated = True
     
     def changePlayer(self, player):

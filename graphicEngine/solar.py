@@ -8,7 +8,7 @@ import random
 from pandac.PandaModules import CollisionNode, CollisionSphere
 #from pandac.PandaModules import Vec3, Point2
 from panda3d.core import Vec3,Point2,BitMask32
-from gameModel.constants import MAX_STAR_RADIUS, MAX_PLANET_RADIUS
+from gameModel.constants import MAX_STAR_RADIUS, MAX_PLANET_RADIUS, MAX_PLANET_VELOCITY
 
 class SphericalDraw(object):
     '''
@@ -120,17 +120,23 @@ class PlanetDraw(SphericalDraw):
     
     def update(self, event):
         if event == 'initiatePlanet':
+            self.initiatePlanet()
+        elif event == 'planetSelected':
+            '''TODO: hightlight the planet'''
             pass
         else:
             raise Exception, "Event received by spherical draw does not exist."
     
     def initiatePlanet(self):
-        '''TODO : display star birth animation '''
+        '''TODO : display planet cration animation '''
         self.radius = MAX_PLANET_RADIUS
         self.model_path.setScale(self.radius)
-        rand = (int)(random.random()*10)
-        self.star_tex = loader.loadTexture("models/planets/planet"+rand+"_tex.jpg")
+        #self.orbital_velocity = MAX_PLANET_VELOCITY
+        rand = random.randrange(1,8,1)
+        self.star_tex = loader.loadTexture("models/planets/planet"+str(rand)+"_tex.jpg")
         self.model_path.setTexture(self.star_tex, 1)
+        self.startSpin()
+        self.startOrbit()
         
     def startSpin(self):
         self.day_period = self.model_path.hprInterval(self.spin_velocity, Vec3(360, 0, 0))

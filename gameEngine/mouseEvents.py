@@ -61,4 +61,3 @@ class MouseEvents(DirectObject.DirectObject):
         # it will automatically get updated, idem for the
         # planet below.
         graphic_obj.model.radius = graphic_obj.model.radius
-
