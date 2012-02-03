@@ -4,6 +4,7 @@ Created on Jan 23, 2012
 @author: Bazibaz
 '''
 import random
+from random import uniform
 import math
 
 from direct.showbase import DirectObject 
@@ -89,14 +90,15 @@ class GameEngine(DirectObject.DirectObject):
                 star.attachObserver(dstar);
                 stars.append((star,dstar))
                 i=1
-                
                 prev_p = None
+                #alpha = random.randrange(0,2)*math.pi
                 while(i<=number_of_planets):
-                    alpha = random.random()*10*math.pi*2
-                    pxcord = 2*math.cos(alpha)*DISTANCE_BETWEEN_PLANETS*i + x_random
-                    pycord = 2*math.sin(alpha)*DISTANCE_BETWEEN_PLANETS*i + y_random
-                    planet = Planet(position=Point3(pxcord*0.03,\
-                                                    pycord*0.03, 0), \
+                    '''DO NOT CHANGE THESE FORMULAS'''
+                    alpha = math.pi*2*random.random()
+                    pxcord = math.cos(alpha)*DISTANCE_BETWEEN_PLANETS*i + star.position.x
+                    pycord = math.sin(alpha)*DISTANCE_BETWEEN_PLANETS*i + star.position.y
+                    planet = Planet(position=Point3(pxcord*0.001,\
+                                                    pycord*0.001, 0), \
                                     radius = MAX_DEAD_PLANET_RADIUS)
                     
                     planet.parent_star = star
