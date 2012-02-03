@@ -4,8 +4,7 @@ Created on 7 janv. 2012
 @author: Bazibaz
 '''
 from observable import Observable
-from constants import MAX_NUMBER_OF_PLANETS, MAX_NUMBER_OF_STRUCTURE, LIFETIME, MAX_STAR_RADIUS,\
-                      MAX_PLANET_VELOCITY
+from constants import MAX_NUMBER_OF_PLANETS, MAX_NUMBER_OF_STRUCTURE, LIFETIME, MAX_STAR_RADIUS
 
 class SphericalBody(Observable):
     
@@ -173,7 +172,7 @@ class Planet(SphericalBody):
         '''
         self.player = player
         self.activated = True
-    
+        
     def changePlayer(self, player):
         '''
         Change the control of the planet from the self.player to the parameter player

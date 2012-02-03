@@ -3,7 +3,7 @@ Created on 13 jan. 2012
 
 @author: Bazibaz
 '''
-import random, math, sys
+import sys
 
 #ANTIALIASING PREREQUISITE. Has to be loaded before anything else.
 from pandac.PandaModules import loadPrcFileData 

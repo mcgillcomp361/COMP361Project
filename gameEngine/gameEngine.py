@@ -64,17 +64,17 @@ class GameEngine(DirectObject.DirectObject):
                 x_random = 0
                 y_random = 0
             elif (rand<2.5):
-                x_random = -random.random()*UNIVERSE_SCALE/(1.4)
-                y_random = -random.random()*UNIVERSE_SCALE/(1.4)
+                x_random = -random.random()*UNIVERSE_SCALE/(1.3)
+                y_random = -random.random()*UNIVERSE_SCALE/(1.3)
             elif (rand>=2.5 and rand<5):
-                x_random = random.random()*UNIVERSE_SCALE/(1.4)
-                y_random = -random.random()*UNIVERSE_SCALE/(1.4)
+                x_random = random.random()*UNIVERSE_SCALE/(1.3)
+                y_random = -random.random()*UNIVERSE_SCALE/(1.3)
             elif (rand>=5 and rand<7.5):
-                x_random = -random.random()*UNIVERSE_SCALE/(1.4)
-                y_random = random.random()*UNIVERSE_SCALE/(1.4)
+                x_random = -random.random()*UNIVERSE_SCALE/(1.3)
+                y_random = random.random()*UNIVERSE_SCALE/(1.3)
             else:
-                x_random = random.random()*UNIVERSE_SCALE/(1.4)
-                y_random = random.random()*UNIVERSE_SCALE/(1.4)
+                x_random = random.random()*UNIVERSE_SCALE/(1.3)
+                y_random = random.random()*UNIVERSE_SCALE/(1.3)
                 
             add = True
             
@@ -91,7 +91,6 @@ class GameEngine(DirectObject.DirectObject):
                 stars.append((star,dstar))
                 i=1
                 prev_p = None
-                #alpha = random.randrange(0,2)*math.pi
                 while(i<=number_of_planets):
                     '''DO NOT CHANGE THESE FORMULAS'''
                     alpha = math.pi*2*random.random()
@@ -119,4 +118,5 @@ class GameEngine(DirectObject.DirectObject):
         Start a prepared game
         '''
         music = base.loader.loadSfx("sound/music/music1.mp3")
+        music.setLoop(True)
         music.play()

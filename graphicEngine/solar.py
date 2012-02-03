@@ -8,7 +8,7 @@ import random
 from pandac.PandaModules import CollisionNode, CollisionSphere
 #from pandac.PandaModules import Vec3, Point2
 from panda3d.core import Vec3,Point2,BitMask32
-from gameModel.constants import MAX_STAR_RADIUS, MAX_PLANET_RADIUS, MAX_PLANET_VELOCITY
+from gameModel.constants import MAX_STAR_RADIUS, MAX_PLANET_RADIUS
 
 class SphericalDraw(object):
     '''
@@ -90,6 +90,16 @@ class StarDraw(SphericalDraw):
         
     def initiateStar(self):
         '''TODO : display star birth animation '''
+        
+        sound1 = base.loader.loadSfx("sound/effects/star/starCreation1.wav")
+        sound1.setLoop(False)
+        sound1.setVolume(0.5)
+        sound1.play()
+        sound2 = base.loader.loadSfx("sound/effects/star/starCreation2.wav")
+        sound2.setLoop(False)
+        sound2.setVolume(0.45)
+        sound2.play()
+        
         self.radius = MAX_STAR_RADIUS
         self.model_path.setScale(self.radius)
         self.star_tex = loader.loadTexture("models/stars/bstar.png")
@@ -128,13 +138,21 @@ class PlanetDraw(SphericalDraw):
             raise Exception, "Event received by spherical draw does not exist."
     
     def initiatePlanet(self):
-        '''TODO : display planet cration animation '''
+        '''TODO : display planet creation animation '''
+        '''TODO : add energy ray from planet to star that moves with the planet '''
+        
+        sound = base.loader.loadSfx("sound/effects/planet/planetCreation.wav")
+        sound.setLoop(False)
+        sound.setVolume(0.23)
+        sound.play()
+        
         self.radius = MAX_PLANET_RADIUS
         self.model_path.setScale(self.radius)
-        #self.orbital_velocity = MAX_PLANET_VELOCITY
+        
         rand = random.randrange(1,8,1)
         self.star_tex = loader.loadTexture("models/planets/planet"+str(rand)+"_tex.jpg")
         self.model_path.setTexture(self.star_tex, 1)
+        
         self.startSpin()
         self.startOrbit()
         
