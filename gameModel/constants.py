@@ -2,7 +2,6 @@
 Created on Jan 12, 2012
 @author: Bazibaz
 '''
-import math
 
 ''' Environment '''
 UNIVERSE_SCALE = 12000
@@ -51,7 +50,7 @@ PHYLON_MAX_ENERGY = 400
 PHYLON_BUILD_TIME = 30
 PHYLON_RESOURCE_GENERATION_RATE = 2
 GENERATOR_CORE_DESCRIPTION = "Massive mineral gathering complex equipped with ancient technology of cracking planet's cores"
-GENERATOR_CORE_ENERGY = 600
+GENERATOR_CORE_MAX_ENERGY = 600
 GENERATOR_CORE_BUILD_TIME = 60
 GENERATOR_CORE_RESOURCE_GENERATION_RATE = 3
 PLANETARY_DEFENSE_I_DESCRIPTION = "Basic turrets constructed in the orbit of the planet"

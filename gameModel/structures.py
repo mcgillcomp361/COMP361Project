@@ -4,6 +4,10 @@ Created on 7 Jan. 2012
 @author: Bazibaz
 '''
 from abc import ABCMeta, abstractmethod
+from constants import FORGE_MAX_ENERGY, NEXUS_MAX_ENERGY, EXTRACTOR_MAX_ENERGY, PHYLON_MAX_ENERGY,\
+GENERATOR_CORE_MAX_ENERGY, PLANETARY_DEFENSE_I_MAX_ENERGY, PLANETARY_DEFENSE_I_DAMAGE, PLANETARY_DEFENSE_II_MAX_ENERGY,\
+PLANETARY_DEFENSE_II_DAMAGE, PLANETARY_DEFENSE_III_MAX_ENERGY, PLANETARY_DEFENSE_III_DAMAGE,\
+ PLANETARY_DEFENSE_IV_MAX_ENERGY, PLANETARY_DEFENSE_IV_DAMAGE
 
 _default_energy = 0
 
@@ -142,20 +146,6 @@ class PlanetaryDefenseIII(Structure):
         '''
         super(PlanetaryDefenseIII, self).__init__(PLANETARY_DEFENSE_III_MAX_ENERGY, host_planet)
         self.damage = PLANETARY_DEFENSE_III_DAMAGE        
-
-
-class PlanetaryDefenseIII(Structure):
-    '''
-    Subclass of Structure that focuses on Tier III defense systems.
-    '''
-
-    def __init__(self, host_planet):
-        '''
-        Constructor
-        @param host_planet : The planet where the structure is constructed on
-        '''
-        super(PlanetaryDefenseIII, self).__init__(PLANETARY_DEFENSE_III_MAX_ENERGY, host_planet)
-        self.damage = PLANETARY_DEFENSE_III_DAMAGE
 
 
 class PlanetaryDefenseIV(Structure):
