@@ -12,6 +12,7 @@ from direct.showbase import DirectObject
 import sys
 sys.path.append("..")
 
+from gameModel.player import *
 from gameModel.solar import Star, Planet
 from graphicEngine.environement import Environement
 from graphicEngine.solar import StarDraw, PlanetDraw
@@ -34,16 +35,12 @@ class GameEngine(DirectObject.DirectObject):
         '''
         self.mouse_events = MouseEvents()
         
+        self.all_players = []
         self.all_stars = []
         self.all_planets = []
         self.prepareGame(NUMBER_OF_STARS, MAX_NUMBER_OF_PLANETS, self.all_stars, self.all_planets)
         
-        #randomly set the camera on one of the stars
-        rand = random.randrange(0,NUMBER_OF_STARS,1)
-        '''@TODO : camera is not set on the correct position, why ? '''
-        self.game_camera = Camera(self.all_stars[rand])
-        
-        self.startSinglePlayerGame()
+        self.startGame(self.all_players)
         
     
     def prepareGame(self, number_of_stars, number_of_planets, stars, planets):
@@ -113,10 +110,32 @@ class GameEngine(DirectObject.DirectObject):
             
         
             
-    def startSinglePlayerGame(self):
+    def startGame(self, players):
         '''
-        Start a prepared game
+        Start a prepared game, executes the codes that are common to both modes of the game and then enters
+        either the single player mode or the multiplayer mode based on the players choice.
+        @param players: the list of the players ready to play
         '''
         music = base.loader.loadSfx("sound/music/music1.mp3")
         music.setLoop(True)
         music.play()
+        
+        #randomly set the camera on one of the stars for the player
+        rand = random.randrange(0,NUMBER_OF_STARS,1)
+        ''' TODO : camera is not set on the correct position, why ? '''
+        self.game_camera = Camera(self.all_stars[rand])
+        
+        '''TODO : choose between single player or multiplayer '''
+        self.singlePlayer()
+        #multiPlayer(players)
+            
+    def singlePlayer(self):
+        '''
+        Run a single player game with an AI player
+        @players : the player
+        '''
+        self.player = Player("player")
+        self.AI = Player("AI")
+        
+        
+        
