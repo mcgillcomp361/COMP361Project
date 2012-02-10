@@ -123,7 +123,7 @@ class GameEngine(DirectObject.DirectObject):
         #randomly set the camera on one of the stars for the player
         rand = random.randrange(0,NUMBER_OF_STARS,1)
         ''' TODO : camera is not set on the correct position, why ? '''
-        self.game_camera = Camera(self.all_stars[rand])
+        self.game_camera = Camera(self.all_stars[rand][0])
         
         '''TODO : choose between single player or multiplayer '''
         self.singlePlayer()

@@ -79,7 +79,6 @@ class Star(SphericalBody):
         '''
         Activates a constructed dead star object, starting the lifetime counter with the assigned default value while
         the Game Engine calls the graphic engine to display the corresponding animation.
-        @param lifetime : integer, the counter for the star's life in seconds (Game time)
         '''
         self.lifetime = LIFETIME
         self.activated = True
