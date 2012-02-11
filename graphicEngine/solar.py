@@ -7,8 +7,10 @@ import random
 
 from pandac.PandaModules import CollisionNode, CollisionSphere
 #from pandac.PandaModules import Vec3, Point2
-from panda3d.core import Vec3,Point2,BitMask32
+from panda3d.core import Vec3,Vec4,Point2,BitMask32
+from direct.directtools.DirectGeometry import LineNodePath
 from gameModel.constants import MAX_STAR_RADIUS, MAX_PLANET_RADIUS
+
 
 class SphericalDraw(object):
     '''
@@ -127,6 +129,10 @@ class PlanetDraw(SphericalDraw):
         # Reparenting the collision sphere so that it 
         # matches the planet perfectly.
         self.cnode_path.reparentTo(self.model_path)
+        
+        self.star_point_path = star_point_path
+        self.lines = LineNodePath(parent = self.point_path, thickness = 4.0, colorVec = Vec4(255, 255, 255, 1))
+        self.lines.reparentTo(self.point_path)
     
     def update(self, event):
         if event == 'initiatePlanet':
@@ -155,6 +161,7 @@ class PlanetDraw(SphericalDraw):
         
         self.startSpin()
         self.startOrbit()
+        self.drawLines()
         
     def startSpin(self):
         self.day_period = self.model_path.hprInterval(self.spin_velocity, Vec3(360, 0, 0))
@@ -166,3 +173,8 @@ class PlanetDraw(SphericalDraw):
                                     Vec3(360, 0, 0))
         self.orbit_period.loop()
 
+    def drawLines(self): 
+       self.lines.reset()
+       self.lines.drawLines([((self.star_point_path.getX(), self.star_point_path.getY(), self.star_point_path.getZ()),
+                               (-1 * self.point_path.getX(), -1* self.point_path.getY(), -1 *self.point_path.getZ()))])
+       self.lines.create()
