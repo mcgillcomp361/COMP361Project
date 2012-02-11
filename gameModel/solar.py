@@ -20,7 +20,7 @@ class SphericalBody(Observable):
         @param activated: boolean, determine whether the spherical body is activated by the player or not
         '''
         super(SphericalBody,self).__init__()
-        self._radius =  radius 
+        self.radius =  radius 
         self.position = position
         self.activated = activated
         self.spin_velocity = 0
@@ -34,16 +34,16 @@ class SphericalBody(Observable):
     #  return self.__dict__ == other.__dict__
     
 
-    def _getRadius(self):
-        return self._radius
+    #def _getRadius(self):
+        #return self._radius
     
-    def _setRadius(self, radius):
-        self.select()
+    #def _setRadius(self, radius):
+      #  self.select()
     
-    def _delRadius(self):
-        del self._radius
+    #def _delRadius(self):
+    #    del self._radius
     
-    radius = property(_getRadius, _setRadius, _delRadius, "Sphere radius")
+    #radius = property(_getRadius, _setRadius, _delRadius, "Sphere radius")
 
 
 class Star(SphericalBody):

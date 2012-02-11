@@ -150,7 +150,7 @@ class PlanetDraw(SphericalDraw):
         self.model_path.setScale(self.radius)
         
         #rand = random.randrange(1,8,1)
-        self.star_tex = loader.loadTexture("models/planets/planet_forge_tex.png")
+        self.star_tex = loader.loadTexture("models/structures/planet_forge_nexus_extractor_tex.png")
         self.model_path.setTexture(self.star_tex, 1)
         
         self.startSpin()

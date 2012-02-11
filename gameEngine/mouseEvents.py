@@ -60,4 +60,5 @@ class MouseEvents(DirectObject.DirectObject):
         # Since the stardraw dstar is listening to the model
         # it will automatically get updated, idem for the
         # planet below.
-        graphic_obj.model.radius = graphic_obj.model.radius
+        #graphic_obj.model.radius = graphic_obj.model.radius
+        graphic_obj.model.select()
