@@ -10,7 +10,9 @@ from pandac.PandaModules import CollisionNode, CollisionSphere
 from panda3d.core import Vec3,Vec4,Point2,BitMask32
 from direct.directtools.DirectGeometry import LineNodePath
 from gameModel.constants import MAX_STAR_RADIUS, MAX_PLANET_RADIUS
-
+from panda3d.core import Filename,Buffer,Shader
+from panda3d.core import PandaNode,NodePath
+from panda3d.core import AmbientLight,DirectionalLight
 
 class SphericalDraw(object):
     '''
@@ -131,7 +133,9 @@ class PlanetDraw(SphericalDraw):
         self.cnode_path.reparentTo(self.model_path)
         
         self.star_point_path = star_point_path
-        self.lines = LineNodePath(parent = self.point_path, thickness = 4.0, colorVec = Vec4(255, 255, 255, 1))
+        self.lines = LineNodePath(parent = self.point_path, thickness = 4.0, colorVec = Vec4(1.0, 1.0, 1.0, 1.0))
+        self.lines.setColor(Vec4(1.0, 1.0, 1.0, 0.05))
+
         self.lines.reparentTo(self.point_path)
     
     def update(self, event):
@@ -156,7 +160,7 @@ class PlanetDraw(SphericalDraw):
         self.model_path.setScale(self.radius)
         
         #rand = random.randrange(1,8,1)
-        self.star_tex = loader.loadTexture("models/structures/planet_forge_nexus_extractor_tex.png")
+        self.star_tex = loader.loadTexture("models/planets/planet_activated_tex.png")
         self.model_path.setTexture(self.star_tex, 1)
         
         self.startSpin()
@@ -175,6 +179,6 @@ class PlanetDraw(SphericalDraw):
 
     def drawLines(self): 
        self.lines.reset()
-       self.lines.drawLines([((self.star_point_path.getX(), self.star_point_path.getY(), self.star_point_path.getZ()),
-                               (-1 * self.point_path.getX(), -1* self.point_path.getY(), -1 *self.point_path.getZ()))])
+       self.lines.drawLines([((self.star_point_path.getX(), self.star_point_path.getY(), 0),
+                               (-1 * self.point_path.getX(), -1 * self.point_path.getY(), 0))])
        self.lines.create()
