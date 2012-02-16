@@ -38,7 +38,7 @@ class SphericalBody(Observable):
         #return self._radius
     
     #def _setRadius(self, radius):
-      #  self.select()
+    #    self.select()
     
     #def _delRadius(self):
     #    del self._radius
