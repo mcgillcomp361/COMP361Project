@@ -20,7 +20,7 @@ from gameEngine.gameEngine import GameEngine
 class Application(ShowBase):
     def __init__(self):
         '''TODO: An option should be added to graphics submenu that allows the user to adjust resolution'''
-  #      loadPrcFileData('', 'fullscreen 1')
+#        loadPrcFileData('', 'fullscreen 1')
 #        loadPrcFileData('', 'win-size 1280 800')
         ShowBase.__init__(self)
         

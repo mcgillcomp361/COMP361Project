@@ -90,7 +90,7 @@ class Star(SphericalBody):
         Adds a planet to the star system
         @param: planet object
         '''
-        if(self._planets < MAX_NUMBER_OF_PLANETS):
+        if(len(self._planets) < MAX_NUMBER_OF_PLANETS):
             self._planets.append(planet)
         
     def removePlanet(self, planet):
@@ -119,13 +119,13 @@ class Star(SphericalBody):
         Returns the index of the given planet from list of planets 
         @param planet : the desired planet
         '''
-        self._planets.index(planet)
+        return self._planets.index(planet)
             
     def getNumberOfPlanets(self):
         '''
         Returns the number of planets currently orbiting the star
         '''
-        len(self._planets)
+        return len(self._planets)
 
 
 class Planet(SphericalBody): 
@@ -145,6 +145,7 @@ class Planet(SphericalBody):
         self.orbital_velocity = 0
         self.parent_star = parent_star
         self.prev_planet = prev_planet
+        self.next_planet = None
         self.player = None
         self._orbiting_units = []
         self._surface_structures = []
