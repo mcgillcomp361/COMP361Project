@@ -133,9 +133,7 @@ class PlanetDraw(SphericalDraw):
         self.cnode_path.reparentTo(self.model_path)
         
         self.star_point_path = star_point_path
-        self.lines = LineNodePath(parent = self.point_path, thickness = 4.0, colorVec = Vec4(1.0, 1.0, 1.0, 1.0))
-        self.lines.setColor(Vec4(1.0, 1.0, 1.0, 0.05))
-
+        self.lines = LineNodePath(parent = self.point_path, thickness = 2.0, colorVec = Vec4(1, 1, 1, 1))
         self.lines.reparentTo(self.point_path)
     
     def update(self, event):
@@ -178,7 +176,16 @@ class PlanetDraw(SphericalDraw):
         self.orbit_period.loop()
 
     def drawLines(self): 
-       self.lines.reset()
-       self.lines.drawLines([((self.star_point_path.getX(), self.star_point_path.getY(), 0),
+        # put some lighting on the line
+        # for some reason the ambient and directional light in the environment drain out
+        # all other colors in the scene
+        # this is a temporary solution just so we can view the lines... the light can be removed and
+        #a glow effect will be added later
+        alight = AmbientLight('alight')
+        alnp = render.attachNewNode(alight)
+        alight.setColor(Vec4(0.2, 0.2, 0.2, 1))
+        render.setLight(alnp)
+        self.lines.reset()
+        self.lines.drawLines([((self.star_point_path.getX(), self.star_point_path.getY(), 0),
                                (-1 * self.point_path.getX(), -1 * self.point_path.getY(), 0))])
-       self.lines.create()
+        self.lines.create()
