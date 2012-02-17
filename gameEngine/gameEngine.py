@@ -17,10 +17,8 @@ from gameModel.solar import Star, Planet
 from graphicEngine.environement import Environement
 from graphicEngine.solar import StarDraw, PlanetDraw
 from graphicEngine.camera import Camera
-from gameModel.constants import MAX_DEAD_STAR_RADIUS, NUMBER_OF_STARS, \
-    MAX_DEAD_PLANET_RADIUS, MIN_PLANET_VELOCITY, MAX_PLANET_VELOCITY, MAX_NUMBER_OF_PLANETS, DEEP_SPACE_DISTANCE, \
-    UNIVERSE_SCALE, DISTANCE_BETWEEN_PLANETS
-from panda3d.core import Point3
+from gameModel.constants import *
+from panda3d.core import Point3, Vec3
 
 from mouseEvents import MouseEvents
 
@@ -54,61 +52,53 @@ class GameEngine(DirectObject.DirectObject):
         '''
         #Initialize graphics
         self.env_graphics = Environement()
-        
-        while(len(stars)<number_of_stars):
-            rand = random.random()*10
+        max_loop = 0
+        while(len(stars)< number_of_stars):
+            new_star_pos = Point3()
             if (len(stars)==0):
-                x_random = 0
-                y_random = 0
-            elif (rand<2.5):
-                x_random = -random.random()*UNIVERSE_SCALE/(1.3)
-                y_random = -random.random()*UNIVERSE_SCALE/(1.3)
-            elif (rand>=2.5 and rand<5):
-                x_random = random.random()*UNIVERSE_SCALE/(1.3)
-                y_random = -random.random()*UNIVERSE_SCALE/(1.3)
-            elif (rand>=5 and rand<7.5):
-                x_random = -random.random()*UNIVERSE_SCALE/(1.3)
-                y_random = random.random()*UNIVERSE_SCALE/(1.3)
+                new_star_pos = Point3(0,0,0)
             else:
-                x_random = random.random()*UNIVERSE_SCALE/(1.3)
-                y_random = random.random()*UNIVERSE_SCALE/(1.3)
-                
-            add = True
-            
-            for star in stars:
-                if(DEEP_SPACE_DISTANCE>abs(x_random-star[0].position.x) or \
-                   DEEP_SPACE_DISTANCE>abs(y_random-star[0].position.y)):
-                    add = False
-            
-            if(add):
-                star = Star(position=Point3(x_random,y_random,0), radius = MAX_DEAD_STAR_RADIUS)
+                new_star_pos= Point3((random.random()-0.5)*UNIVERSE_SCALE,
+                                     (random.random()-0.5)*UNIVERSE_SCALE, 0)
+            # Given that the star is separated enough from its neighboring stars
+            # we can add it to the solar system  
+            if _isSeparated([s[0] for s in stars], new_star_pos, MIN_DISTANCE_BETWEEN_STARS):
+                star = Star(position = new_star_pos, radius = MAX_DEAD_STAR_RADIUS)
                 dstar = StarDraw(star)
                 #Add observer to star model
                 star.attachObserver(dstar);
                 stars.append((star,dstar))
-                i=1
+                # Add planets to star
                 prev_p = None
-                while(i<=number_of_planets):
-                    '''DO NOT CHANGE THESE FORMULAS'''
-                    alpha = math.pi*2*random.random()
-                    pxcord = math.cos(alpha)*DISTANCE_BETWEEN_PLANETS*i + star.position.x
-                    pycord = math.sin(alpha)*DISTANCE_BETWEEN_PLANETS*i + star.position.y
-                    planet = Planet(position=Point3(pxcord*0.001,\
-                                                    pycord*0.001, 0), \
-                                    radius = MAX_DEAD_PLANET_RADIUS)
-                    
+                radius = MAX_SOLAR_SYSTEM_RADIUS/number_of_planets
+                while(star.getNumberOfPlanets() < number_of_planets):
+                    i = star.getNumberOfPlanets()
+                    angle = math.pi*2*random.random()
+                    radius += MIN_DISTANCE_BETWEEN_PLANETS + 3*random.random()
+                    new_planet_pos = Point3(radius * math.cos(angle),
+                                            radius * math.sin(angle), 0)
+                    planet = Planet(new_planet_pos, MAX_DEAD_PLANET_RADIUS)
                     planet.parent_star = star
                     planet.prev_planet = prev_p
                     prev_p = planet
+                    # This is probably too slow, we might have to change it later
                     planet.orbital_velocity = MAX_PLANET_VELOCITY/(number_of_planets-i+1) + (MIN_PLANET_VELOCITY*math.pow(i+2,3))
                     planet.spin_velocity = 70
                     dplanet = PlanetDraw(planet, dstar.point_path)
                     planet.attachObserver(dplanet);
                     star.addPlanet(planet)
                     planets.append((planet,dplanet))
-                    i = i + 1
-            
-        
+                
+                for i, planet in enumerate(star.planets()):
+                    if i==0:
+                        continue
+                    planet.prev_planet.next_planet = planet
+                    
+                    
+            #Safety check so that we don't loop forever without knowing why
+            max_loop = max_loop + 1
+            if max_loop > 10*number_of_stars:
+                raise Exception("Cannot add all stars based on the current parameters.")
             
     def startGame(self, players):
         '''
@@ -137,5 +127,17 @@ class GameEngine(DirectObject.DirectObject):
         self.player = Player("player")
         self.AI = Player("AI")
         
-        
+def _isSeparated(neighbors, test_position, mindist):
+    '''
+     Check if we can add the star by verifying that it has no
+     close neighbours
+     @param neighbors: Neighboring bodies (ex. stars)
+     @param test_position: Current position being tested
+     @param mindist: Minimum distance between the position and any neighboring body
+    '''
+    for neighbor in neighbors:
+            distance = Vec3(neighbor.position - test_position).length()
+            if distance < mindist:
+                return False
+    return True    
         
