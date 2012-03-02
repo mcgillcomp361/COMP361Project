@@ -5,8 +5,7 @@ Created on Jan 12, 2012
 
 ''' Environment '''
 #Smaller for easier testing -> instead of searching forever
-UNIVERSE_SCALE = 5000
-MIN_DISTANCE_BETWEEN_STARS = 500
+UNIVERSE_SCALE = 12000
 ''' Stars '''
 STAR_BUILD_TIME = 0
 #I think these should be independent from the universe scale
@@ -26,8 +25,8 @@ MIN_DISTANCE_BETWEEN_PLANETS = MAX_PLANET_RADIUS*5
 MIN_PLANET_VELOCITY = 1
 MAX_PLANET_VELOCITY = 100
 
-''' Deep Space '''
-DEEP_SPACE_DISTANCE = 12000*MAX_NUMBER_OF_PLANETS/100
+''' Deep Space a.k.a. min distance between stars'''
+DEEP_SPACE_DISTANCE = UNIVERSE_SCALE*MAX_NUMBER_OF_PLANETS/1000
 
 ''' Resources '''
 MINERAL_STARTING_AMOUNT = 0

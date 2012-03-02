@@ -179,6 +179,6 @@ class PlanetDraw(SphericalDraw):
 
     def drawLines(self): 
         self.lines.reset()
-        self.lines.drawLines([((self.star_point_path.getX(), self.star_point_path.getY(), 0),
+        self.lines.drawLines([((0,0, 0),
                                (self.point_path.getX(), self.point_path.getY(), 0))])
         self.lines.create()

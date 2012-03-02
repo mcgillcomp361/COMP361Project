@@ -17,7 +17,10 @@ from gameModel.solar import Star, Planet
 from graphicEngine.environement import Environement
 from graphicEngine.solar import StarDraw, PlanetDraw
 from graphicEngine.camera import Camera
-from gameModel.constants import *
+from gameModel.constants import UNIVERSE_SCALE, DEEP_SPACE_DISTANCE, \
+MAX_DEAD_STAR_RADIUS, NUMBER_OF_STARS, MIN_DISTANCE_BETWEEN_PLANETS, \
+MIN_PLANET_VELOCITY, MAX_SOLAR_SYSTEM_RADIUS, MAX_DEAD_PLANET_RADIUS, \
+MAX_NUMBER_OF_PLANETS, MAX_PLANET_VELOCITY
 from panda3d.core import Point3, Vec3
 
 from mouseEvents import MouseEvents
@@ -62,7 +65,7 @@ class GameEngine(DirectObject.DirectObject):
                                      (random.random()-0.5)*UNIVERSE_SCALE, 0)
             # Given that the star is separated enough from its neighboring stars
             # we can add it to the solar system  
-            if _isSeparated([s[0] for s in stars], new_star_pos, MIN_DISTANCE_BETWEEN_STARS):
+            if _isSeparated([s[0] for s in stars], new_star_pos, DEEP_SPACE_DISTANCE):
                 star = Star(position = new_star_pos, radius = MAX_DEAD_STAR_RADIUS)
                 dstar = StarDraw(star)
                 #Add observer to star model
@@ -75,6 +78,7 @@ class GameEngine(DirectObject.DirectObject):
                     i = star.getNumberOfPlanets()
                     angle = math.pi*2*random.random()
                     radius += MIN_DISTANCE_BETWEEN_PLANETS + 3*random.random()
+                    #Position is relative to the parent star
                     new_planet_pos = Point3(radius * math.cos(angle),
                                             radius * math.sin(angle), 0)
                     planet = Planet(new_planet_pos, MAX_DEAD_PLANET_RADIUS)
