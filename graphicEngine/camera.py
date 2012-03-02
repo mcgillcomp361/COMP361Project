@@ -6,7 +6,7 @@ Created on Jan 2, 2012
 from direct.showbase import DirectObject 
 from pandac.PandaModules import Vec3,Vec2 
 import math 
-from gameModel.constants import UNIVERSE_SCALE, MAX_PLANET_RADIUS
+from gameModel.constants import MAX_CAMERA_DISTANCE, MAX_PLANET_RADIUS
 
 class Camera(DirectObject.DirectObject): 
     def __init__(self, star):      
@@ -39,11 +39,11 @@ class Camera(DirectObject.DirectObject):
         # This variable controls how close the mouse cursor needs to be to the edge of the screen to start panning the camera. It must be less than 1, 
         # and I recommend keeping it less than .2 
          
-        self.panLimitsX = Vec2(-UNIVERSE_SCALE*4/5, UNIVERSE_SCALE*4/5) 
-        self.panLimitsY = Vec2(-UNIVERSE_SCALE*4/5, UNIVERSE_SCALE*4/5) 
+        self.panLimitsX = Vec2(-MAX_CAMERA_DISTANCE*4/5, MAX_CAMERA_DISTANCE*4/5) 
+        self.panLimitsY = Vec2(-MAX_CAMERA_DISTANCE*4/5, MAX_CAMERA_DISTANCE*4/5) 
         # These two vairables will serve as limits for how far the camera can pan, so you don't scroll away from the map.
         
-        self.maxZoomOut = UNIVERSE_SCALE/3
+        self.maxZoomOut = MAX_CAMERA_DISTANCE/3
         self.maxZoomIn = MAX_PLANET_RADIUS
         #These two variables set the max distance a person can zoom in or out
 

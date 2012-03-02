@@ -133,8 +133,11 @@ class PlanetDraw(SphericalDraw):
         self.cnode_path.reparentTo(self.model_path)
         
         self.star_point_path = star_point_path
-        self.lines = LineNodePath(parent = self.point_path, thickness = 2.0, colorVec = Vec4(1, 1, 1, 1))
-        self.lines.reparentTo(self.point_path)
+
+        self.lines = LineNodePath(parent = self.root_path, thickness = 4.0, colorVec = Vec4(1.0, 1.0, 1.0, 1.0))
+        self.lines.setColor(Vec4(1.0, 1.0, 1.0, 0.05))
+
+#        self.lines.reparentTo(self.point_path)
     
     def update(self, event):
         if event == 'initiatePlanet':
@@ -186,6 +189,6 @@ class PlanetDraw(SphericalDraw):
         alight.setColor(Vec4(0.2, 0.2, 0.2, 1))
         render.setLight(alnp)
         self.lines.reset()
-        self.lines.drawLines([((self.star_point_path.getX(), self.star_point_path.getY(), 0),
-                               (-1 * self.point_path.getX(), -1 * self.point_path.getY(), 0))])
+        self.lines.drawLines([((0,0, 0),
+                               (self.point_path.getX(), self.point_path.getY(), 0))])
         self.lines.create()
