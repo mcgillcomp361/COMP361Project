@@ -15,7 +15,7 @@ sys.path.append("..")
 from gameModel.player import *
 from gameModel.solar import Star, Planet
 from graphicEngine.environement import Environement
-from graphicEngine.solar import StarDraw, PlanetDraw
+from graphicEngine.solar import StarDraw, PlanetDraw, UnitDraw
 from graphicEngine.camera import Camera
 from gameModel.constants import UNIVERSE_SCALE, DEEP_SPACE_DISTANCE, \
 MAX_DEAD_STAR_RADIUS, NUMBER_OF_STARS, MIN_DISTANCE_BETWEEN_PLANETS, \
@@ -43,6 +43,7 @@ class GameEngine(DirectObject.DirectObject):
         
         self.startGame(self.all_players)
         
+        self.unit = UnitDraw()
     
     def prepareGame(self, number_of_stars, number_of_planets, stars, planets):
         '''

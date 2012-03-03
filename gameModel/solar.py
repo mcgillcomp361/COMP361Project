@@ -20,7 +20,7 @@ class SphericalBody(Observable):
         @param activated: boolean, determine whether the spherical body is activated by the player or not
         '''
         super(SphericalBody,self).__init__()
-        self.radius =  radius 
+        self.radius = radius
         self.position = position
         self.activated = activated
         self.spin_velocity = 0
@@ -155,9 +155,12 @@ class Planet(SphericalBody):
         This method observes the events on the planet and calls the related methods
         and notifies the corresponding objects based on the state of the planet
         '''
-        if(self.activated):
-            self.notify('planetSelected')
-        else:
+#        if(self.activated):
+        self.notify('planetSelected')
+        for planet in self.parent_star.planets():
+            if planet != self:
+                planet.notify('planetUnselected')
+        if(not self.activated):
             ''' TODO : get the player who selected the planet '''
             if((self.prev_planet == None or self.prev_planet.activated) and self.parent_star.activated):
                 self.notify('initiatePlanet')

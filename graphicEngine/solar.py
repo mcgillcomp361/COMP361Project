@@ -5,12 +5,12 @@ Created on 7 janv. 2012
 '''
 import random
 
-from pandac.PandaModules import CollisionNode, CollisionSphere
+from pandac.PandaModules import CollisionNode, CollisionSphere, TransparencyAttrib
 #from pandac.PandaModules import Vec3, Point2
 from panda3d.core import Vec3,Vec4,Point2,BitMask32
 from direct.directtools.DirectGeometry import LineNodePath
 from gameModel.constants import MAX_STAR_RADIUS, MAX_PLANET_RADIUS
-from panda3d.core import Filename,Buffer,Shader
+from panda3d.core import Filename,Buffer,Shader, CardMaker
 from panda3d.core import PandaNode,NodePath
 from panda3d.core import AmbientLight,DirectionalLight
 
@@ -119,6 +119,8 @@ class PlanetDraw(SphericalDraw):
         super(PlanetDraw, self).__init__(planet, star_point_path)
         self.orbital_velocity = planet.orbital_velocity
         self.spin_velocity = planet.spin_velocity
+        self.is_highlighted = False
+        
         #Models & textures
         self.model_path = loader.loadModel("models/planets/planet_sphere")
         self.planet_tex = loader.loadTexture("models/planets/dead_planet_tex.jpg")
@@ -137,14 +139,33 @@ class PlanetDraw(SphericalDraw):
         self.lines = LineNodePath(parent = self.root_path, thickness = 4.0, colorVec = Vec4(1.0, 1.0, 1.0, 1.0))
         self.lines.setColor(Vec4(1.0, 1.0, 1.0, 0.05))
 
+        self.quad_path = None
 #        self.lines.reparentTo(self.point_path)
+    
+    def highlight(self):
+        self.is_highlighted = True
+        flare_tex = base.loader.loadTexture("models/units/flare.png")
+        cm = CardMaker('quad')
+        cm.setFrameFullscreenQuad() # so that the center acts as the origin (from -1 to 1)
+        self.quad_path = render.attachNewNode(cm.generate())
+        self.quad_path.reparentTo(self.point_path)
+        
+        self.quad_path.setTransparency(TransparencyAttrib.MAlpha)
+        self.quad_path.setTexture(flare_tex)
+        self.quad_path.setScale(15)
+        self.quad_path.setPos(Vec3(0,0,0))
+        self.quad_path.setBillboardPointEye()
     
     def update(self, event):
         if event == 'initiatePlanet':
             self.initiatePlanet()
         elif event == 'planetSelected':
-            '''TODO: hightlight the planet'''
-            pass
+            if not self.quad_path:
+                self.highlight()
+        elif event == 'planetUnselected':
+            if self.quad_path:
+                self.quad_path.detachNode()
+                self.quad_path = None
         else:
             raise Exception, "Event received by spherical draw does not exist."
     
@@ -192,3 +213,19 @@ class PlanetDraw(SphericalDraw):
         self.lines.drawLines([((0,0, 0),
                                (self.point_path.getX(), self.point_path.getY(), 0))])
         self.lines.create()
+
+
+class UnitDraw(object):
+    def __init__(self):#, unit, host_draw_planet):
+        pass
+#        self.host_draw_planet = host_draw_planet
+#        self.model = unit
+#        self.tex = loader.loadTexture("models/units/flare.png")
+##        cm = CardMaker('quad')
+#        self.card = render.attachNewNode(CardMaker('quad').generate())
+#        self.card.setTexture(self.tex)
+#        
+##        card.reparentTo(host_draw_planet)
+#        self.card.setPos(Vec3(0,0,0))
+#        self.card.setScale(100)
+#        self.card.setBillboardPointEye()
