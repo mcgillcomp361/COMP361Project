@@ -15,7 +15,7 @@ MAX_STAR_RADIUS = 8
 MAX_SOLAR_SYSTEM_RADIUS = 100 #could be variable instead
 #make sure the number is satisfactory for UNIVERSE_SCALE
 NUMBER_OF_STARS = 15
-LIFETIME = 1800000
+LIFETIME = 2000.0
 
 ''' Planets '''
 PLANET_BUILD_TIME = 0

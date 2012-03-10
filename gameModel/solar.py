@@ -7,6 +7,9 @@ from observable import Observable
 #from gameEngine.gameEngine import *
 from constants import MAX_NUMBER_OF_PLANETS, MAX_NUMBER_OF_STRUCTURE, LIFETIME, MAX_STAR_RADIUS
 from time import time
+from threading import Timer
+
+import math
 
 class SphericalBody(Observable):
     
@@ -65,11 +68,13 @@ class Star(SphericalBody):
         @param player: Player, the owner of the star
         @param activated: boolean, determine whether star is activated by the player or not
         @param birthTime: Time, is the time when the star is initiated
+        @param counter: Timer, is the count-down timer for the star's life
         '''
         super(Star, self).__init__(position, radius, False, player)
         self.lifetime = 0
         self._planets = []
-        self.birthTime = None
+        self.birth_time = None
+        self.counter = None
     
     def select(self):
         '''
@@ -89,11 +94,24 @@ class Star(SphericalBody):
         '''
         self.lifetime = LIFETIME
         self.activated = True
+        self.radius = MAX_STAR_RADIUS
         '''TODO : get the player from the game engine '''
         #self.player = GameEngine.player
-        self.birthTime = time()
-        '''TODO : Start the count-down as soon as a star's planet is activated '''
-        self.radius = MAX_STAR_RADIUS
+        self.birth_time = time()
+        self.counter = Timer(1.0, self.tackStarLife)
+        self.counter.start()
+        
+    def tackStarLife(self):
+        elapsed_time = math.floor(time() - self.birth_time)
+        print elapsed_time
+        self.lifetime = math.fabs(self.lifetime - self.getNumberOfActivePlanets()*self.lifetime/(MAX_NUMBER_OF_PLANETS*100))
+        print self.lifetime
+        if(elapsed_time >= self.lifetime):
+            '''TODO : create black hole '''
+            print "time is up !"
+        else:
+            self.counter = Timer(1.0, self.tackStarLife)
+            self.counter.start()
         
     def addPlanet(self, planet):
         '''
@@ -133,9 +151,20 @@ class Star(SphericalBody):
             
     def getNumberOfPlanets(self):
         '''
-        Returns the number of planets currently orbiting the star
+        Returns the number of dead planets currently around the star
         '''
         return len(self._planets)
+    
+    def getNumberOfActivePlanets(self):
+        '''
+        Returns the number of planets currently orbiting the star
+        '''
+        sum = 0
+        for planet in self.planets():
+            if(planet.activated):
+                sum = sum + 1
+        return sum
+                 
 
 
 class Planet(SphericalBody): 
