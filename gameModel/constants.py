@@ -5,7 +5,7 @@ Created on Jan 12, 2012
 
 ''' Environment '''
 #Smaller for easier testing -> instead of searching forever
-UNIVERSE_SCALE = 2000
+UNIVERSE_SCALE = 4000
 MAX_CAMERA_DISTANCE = 15000
 ''' Stars '''
 STAR_BUILD_TIME = 0
@@ -27,7 +27,7 @@ MIN_PLANET_VELOCITY = 1
 MAX_PLANET_VELOCITY = 100
 
 ''' Deep Space a.k.a. min distance between stars'''
-DEEP_SPACE_DISTANCE = UNIVERSE_SCALE*MAX_NUMBER_OF_PLANETS/100
+DEEP_SPACE_DISTANCE = UNIVERSE_SCALE*MAX_NUMBER_OF_PLANETS/50
 
 ''' Resources '''
 MINERAL_STARTING_AMOUNT = 0

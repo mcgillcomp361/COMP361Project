@@ -36,6 +36,9 @@ class GameEngine(DirectObject.DirectObject):
         '''
         self.mouse_events = MouseEvents()
         
+        self.player = None
+        self.AI = None
+        
         self.all_players = []
         self.all_stars = []
         self.all_planets = []
@@ -111,6 +114,8 @@ class GameEngine(DirectObject.DirectObject):
         either the single player mode or the multiplayer mode based on the players choice.
         @param players: the list of the players ready to play
         '''
+        
+        ''' TODO : music should be self.music so it can be changed later on '''
         music = base.loader.loadSfx("sound/music/music1.mp3")
         music.setLoop(True)
         music.play()

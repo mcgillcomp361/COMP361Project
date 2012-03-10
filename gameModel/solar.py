@@ -4,7 +4,9 @@ Created on 7 janv. 2012
 @author: Bazibaz
 '''
 from observable import Observable
+#from gameEngine.gameEngine import *
 from constants import MAX_NUMBER_OF_PLANETS, MAX_NUMBER_OF_STRUCTURE, LIFETIME, MAX_STAR_RADIUS
+from time import time
 
 class SphericalBody(Observable):
     
@@ -12,17 +14,19 @@ class SphericalBody(Observable):
     Abstract class defining a radius and a position
     '''
     
-    def __init__(self, position, radius, activated):
+    def __init__(self, position, radius, activated, player):
         '''
         Constructor
         @param position: Point3D, position in space
         @param radius: float, body radius
         @param activated: boolean, determine whether the spherical body is activated by the player or not
+        @param player: the player who owns the solar object
         '''
         super(SphericalBody,self).__init__()
         self.radius = radius
         self.position = position
         self.activated = activated
+        self.player = player
         self.spin_velocity = 0
         
     #def __str__(self) :
@@ -52,17 +56,20 @@ class Star(SphericalBody):
     a list of all the planets orbiting the star.
     '''
 
-    def __init__(self, position, radius):
+    def __init__(self, position, radius, player=None):
         '''
         Constructor for class star: creates a dead star object, initializing the star's attributes with 
         the given parameters. 
         @param position : Point3D, the position of the center of the star
         @param radius : float, star radius
+        @param player: Player, the owner of the star
         @param activated: boolean, determine whether star is activated by the player or not
+        @param birthTime: Time, is the time when the star is initiated
         '''
-        super(Star, self).__init__(position, radius, False)
+        super(Star, self).__init__(position, radius, False, player)
         self.lifetime = 0
         self._planets = []
+        self.birthTime = None
     
     def select(self):
         '''
@@ -82,7 +89,10 @@ class Star(SphericalBody):
         '''
         self.lifetime = LIFETIME
         self.activated = True
-        '''TOD : Start the count-down as soon as a star's planet is activated '''
+        '''TODO : get the player from the game engine '''
+        #self.player = GameEngine.player
+        self.birthTime = time()
+        '''TODO : Start the count-down as soon as a star's planet is activated '''
         self.radius = MAX_STAR_RADIUS
         
     def addPlanet(self, planet):
@@ -133,20 +143,20 @@ class Planet(SphericalBody):
     Planet contains units and structures
     '''
 
-    def __init__(self, position, radius, parent_star=None, prev_planet=None):
+    def __init__(self, position, radius, parent_star=None, prev_planet=None, player=None):
         '''
         Constructor for class planet.
         @param position: Point3D, position in space
         @param radius: float, body radius
+        @param player: Player, the owner of the planet
         @param parent_star: Star, the specific star the planet is orbiting around
         @param prev_planet: previous planet in the star system, if None then the planet is the first
         '''
-        super(Planet, self).__init__(position, radius, False)
+        super(Planet, self).__init__(position, radius, False, player)
         self.orbital_velocity = 0
         self.parent_star = parent_star
         self.prev_planet = prev_planet
         self.next_planet = None
-        self.player = None
         self._orbiting_units = []
         self._surface_structures = []
     
