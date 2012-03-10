@@ -5,9 +5,9 @@ Created on 7 janv. 2012
 '''
 import random
 
-from pandac.PandaModules import CollisionNode, CollisionSphere, TransparencyAttrib
+from pandac.PandaModules import CollisionNode, CollisionBox, CollisionSphere, TransparencyAttrib
 #from pandac.PandaModules import Vec3, Point2
-from panda3d.core import Vec3,Vec4,Point2,BitMask32
+from panda3d.core import Vec3,Vec4,Point2, Point3, BitMask32
 from direct.directtools.DirectGeometry import LineNodePath
 from gameModel.constants import MAX_STAR_RADIUS, MAX_PLANET_RADIUS
 from panda3d.core import Filename,Buffer,Shader, CardMaker
@@ -62,6 +62,9 @@ class SphericalDraw(object):
         self.cnode_path = render.attachNewNode(self.cnode)
         #For temporary testing, display collision sphere.
 #        self.cnode_path.show()
+    
+    def select(self):
+        self.model.select();
 
 class StarDraw(SphericalDraw):
     '''
@@ -119,7 +122,6 @@ class PlanetDraw(SphericalDraw):
         super(PlanetDraw, self).__init__(planet, star_point_path)
         self.orbital_velocity = planet.orbital_velocity
         self.spin_velocity = planet.spin_velocity
-        self.is_highlighted = False
         
         #Models & textures
         self.model_path = loader.loadModel("models/planets/planet_sphere")
@@ -143,7 +145,6 @@ class PlanetDraw(SphericalDraw):
 #        self.lines.reparentTo(self.point_path)
     
     def highlight(self):
-        self.is_highlighted = True
         flare_tex = base.loader.loadTexture("models/units/flare.png")
         cm = CardMaker('quad')
         cm.setFrameFullscreenQuad() # so that the center acts as the origin (from -1 to 1)
@@ -152,6 +153,7 @@ class PlanetDraw(SphericalDraw):
         
         self.quad_path.setTransparency(TransparencyAttrib.MAlpha)
         self.quad_path.setTexture(flare_tex)
+        self.quad_path.setColor(Vec4(0.2, 1.0, 0.3, 1))
         self.quad_path.setScale(15)
         self.quad_path.setPos(Vec3(0,0,0))
         self.quad_path.setBillboardPointEye()
@@ -167,7 +169,7 @@ class PlanetDraw(SphericalDraw):
                 self.quad_path.detachNode()
                 self.quad_path = None
         else:
-            raise Exception, "Event received by spherical draw does not exist."
+            raise Exception, "Event received by PlanetDraw draw does not exist."
     
     def initiatePlanet(self):
         '''TODO : display planet creation animation '''
@@ -216,16 +218,37 @@ class PlanetDraw(SphericalDraw):
 
 
 class UnitDraw(object):
-    def __init__(self):#, unit, host_draw_planet):
+    def __init__(self, unit, host_draw_planet):
+        self.host_draw_planet = host_draw_planet
+        self.model = unit
+        
+        self.root_path = self.host_draw_planet.point_path.attachNewNode("unit_center_node")
+        self.model_path = self.root_path.attachNewNode("unit_node")
+        self.model_path.setPythonTag('pyUnit', self);
+        self.model_path.setPos(Vec3(0,10,0))
+        
+        rad = 1
+        self.cnode = CollisionNode("coll_sphere_node")
+        self.cnode.addSolid(CollisionBox(Point3(-rad,-rad,-rad),Point3(rad,rad,rad)))
+        self.cnode.setIntoCollideMask(BitMask32.bit(1))
+        self.cnode.setTag('unit', str(id(self)))
+        self.cnode_path = self.model_path.attachNewNode(self.cnode)
+        self.cnode_path.show()
+        
+        
+        self.tex = loader.loadTexture("models/units/flare.png")
+        cm = CardMaker('quad')
+        cm.setFrameFullscreenQuad()
+        self.quad_path = self.model_path.attachNewNode(cm.generate())
+        self.quad_path.setTexture(self.tex)
+        self.quad_path.setTransparency(TransparencyAttrib.MAlpha)
+        self.quad_path.setColor(Vec4(1.0, 0.3, 0.3, 1))
+        self.quad_path.setScale(5)
+        self.quad_path.setBillboardPointEye()
+    
+    def startOrbit(self):
+        self.orbit_period = self.root_path.hprInterval(1, Vec3(-360, 0, 0))
+        self.orbit_period.loop()
+
+    def select(self):
         pass
-#        self.host_draw_planet = host_draw_planet
-#        self.model = unit
-#        self.tex = loader.loadTexture("models/units/flare.png")
-##        cm = CardMaker('quad')
-#        self.card = render.attachNewNode(CardMaker('quad').generate())
-#        self.card.setTexture(self.tex)
-#        
-##        card.reparentTo(host_draw_planet)
-#        self.card.setPos(Vec3(0,0,0))
-#        self.card.setScale(100)
-#        self.card.setBillboardPointEye()

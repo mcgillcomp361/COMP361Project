@@ -12,6 +12,7 @@ from direct.showbase import DirectObject
 import sys
 sys.path.append("..")
 
+from gameModel.units import Unit
 from gameModel.player import *
 from gameModel.solar import Star, Planet
 from graphicEngine.environement import Environement
@@ -28,8 +29,7 @@ from mouseEvents import MouseEvents
 class GameEngine(DirectObject.DirectObject):
     '''
     This class acts as the connection between the game model and the graphic engine.
-    '''
-    
+    '''    
     def __init__(self):
         '''
         Constructor
@@ -42,8 +42,8 @@ class GameEngine(DirectObject.DirectObject):
         self.prepareGame(NUMBER_OF_STARS, MAX_NUMBER_OF_PLANETS, self.all_stars, self.all_planets)
         
         self.startGame(self.all_players)
-        
-        self.unit = UnitDraw()
+        #Keyboard events
+        self.accept('u', self._addUnit) #temporary function for testing units
     
     def prepareGame(self, number_of_stars, number_of_planets, stars, planets):
         '''
@@ -131,7 +131,17 @@ class GameEngine(DirectObject.DirectObject):
         '''
         self.player = Player("player")
         self.AI = Player("AI")
-        
+    
+    #Temporary function for adding & testing units
+    def _addUnit(self):
+        if self.mouse_events.selected_planet_pair != None:
+            host_planet = self.mouse_events.selected_planet_pair[0]
+            self.unit = Unit(host_planet, 1,1,1)
+            host_planet.addOrbitingUnit(self.unit)
+            self.dunit = UnitDraw(self.unit, self.mouse_events.selected_planet_pair[1])
+            self.dunit.startOrbit()
+
+       
 def _isSeparated(neighbors, test_position, mindist):
     '''
      Check if we can add the star by verifying that it has no
@@ -145,4 +155,3 @@ def _isSeparated(neighbors, test_position, mindist):
             if distance < mindist:
                 return False
     return True    
-        
