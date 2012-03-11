@@ -17,6 +17,7 @@ from gameModel.solar import Star, Planet
 from graphicEngine.environement import Environement
 from graphicEngine.solar import StarDraw, PlanetDraw
 from graphicEngine.camera import Camera
+from gui.gamePanel import GamePanel
 from gameModel.constants import UNIVERSE_SCALE, DEEP_SPACE_DISTANCE, \
 MAX_DEAD_STAR_RADIUS, NUMBER_OF_STARS, MIN_DISTANCE_BETWEEN_PLANETS, \
 MIN_PLANET_VELOCITY, MAX_SOLAR_SYSTEM_RADIUS, MAX_DEAD_PLANET_RADIUS, \
@@ -58,6 +59,7 @@ class GameEngine(DirectObject.DirectObject):
         '''
         #Initialize graphics
         self.env_graphics = Environement()
+        self.gP = GamePanel()
         max_loop = 0
         while(len(stars)< number_of_stars):
             new_star_pos = Point3()
