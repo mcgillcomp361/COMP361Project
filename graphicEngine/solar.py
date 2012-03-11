@@ -89,6 +89,17 @@ class StarDraw(SphericalDraw):
                 '''TODO : show star lifetime counter'''
         elif event == 'initiateStar':
                 self.initiateStar()
+        elif event == 'starStage2':
+            self.changeStarStage(2)
+        elif event == 'starStage3':
+            self.changeStarStage(3)
+        elif event == 'starStage4':
+            self.changeStarStage(4)
+        elif event == 'starStage5':
+            self.changeStarStage(5)
+        elif event == 'starStage6':
+            '''TODO : black hole animation goes here'''
+            self.changeStarStage(6)
         else:
             raise Exception, "Event received by spherical draw does not exist."
         
@@ -106,9 +117,16 @@ class StarDraw(SphericalDraw):
         
         self.radius = MAX_STAR_RADIUS
         self.model_path.setScale(self.radius)
-        self.star_tex = loader.loadTexture("models/stars/bstar.png")
+        self.star_tex = loader.loadTexture("models/stars/star_stage1_tex.png")
         self.model_path.setTexture(self.star_tex, 1)
 
+    def changeStarStage(self, stage):
+        '''
+        Changes the graphical aspects of the star according to its stage, including any animations needed
+        @param stage : Integer, is the stage in which the star is in; consists of 6 stages
+        '''
+        self.planet_tex = loader.loadTexture("models/stars/star_stage"+str(stage)+"_tex.png")
+        self.model_path.setTexture(self.planet_tex, 1)
 
 class PlanetDraw(SphericalDraw):
     '''
@@ -141,13 +159,13 @@ class PlanetDraw(SphericalDraw):
     
     def update(self, event):
         if event == 'initiatePlanet':
-            self.initiatePlanet()
+            self.initiatePlanet()#also know as starStage1
         elif event == 'planetSelected':
             '''TODO: hightlight the planet'''
             pass
         else:
             raise Exception, "Event received by spherical draw does not exist."
-    
+
     def initiatePlanet(self):
         '''TODO : display planet creation animation '''
         '''TODO : add energy ray from planet to star that moves with the planet '''
