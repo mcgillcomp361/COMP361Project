@@ -12,7 +12,7 @@ class GamePanel():
             scale=0.05,
             pos=(0, 0,-0.8),
             sortOrder=2,
-            geom=loader.loadModel("./gui/guiBar.egg"),        
+            geom=loader.loadModel("./models/gui/guiBar.egg"),        
             geom_scale = (60,5,8),
             geom_pos = (0,0,0)
         )   
@@ -24,7 +24,6 @@ class GamePanel():
         self.loadResearchTree()
         
     def loadResources(self):
-
         b1 = DirectButton(text = ("Forge", "click!", "roll"), frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
                   text_scale=0.4, pos=(-28,0,0.5),borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                   relief=2, command=self.selectForge)
