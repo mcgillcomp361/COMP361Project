@@ -103,23 +103,24 @@ class Star(SphericalBody):
         
     def tackStarLife(self):
         #elapsed_time = math.floor(time() - self.birth_time)
-        self.lifetime = self.lifetime - float(self.getNumberOfActivePlanets())/(4.0)
-        print self.lifetime
-        if(self.lifetime <= 1500 and self.stage == 1):
+        self.lifetime = self.lifetime - float(self.getNumberOfActivePlanets())/(2)
+        #print self.lifetime
+        if(self.lifetime <= LIFETIME - LIFETIME/6 and self.stage == 1):
             self.stage = 2
             self.notify('starStage2')
-        elif(self.lifetime <= 1200 and self.stage == 2):
+        elif(self.lifetime <= LIFETIME - LIFETIME/3 and self.stage == 2):
             self.stage = 3
             self.notify('starStage3')
-        elif(self.lifetime <= 900 and self.stage == 3):
+        elif(self.lifetime <= LIFETIME - LIFETIME/2 and self.stage == 3):
             self.stage = 4
             self.notify('starStage4')
-        elif(self.lifetime <= 600 and self.stage == 4):
+        elif(self.lifetime <= LIFETIME - 2*LIFETIME/3 and self.stage == 4):
             self.stage = 5
             self.notify('starStage5')
         if(self.lifetime <= 0):
             self.stage = 6
             self.notify('starStage6')
+            '''TODO : tell all the other planets to start moving into the black hole '''
         else:
             self.counter = Timer(1.0, self.tackStarLife)
             self.counter.start()
@@ -206,6 +207,8 @@ class Planet(SphericalBody):
         and notifies the corresponding objects based on the state of the planet
         '''
         if(self.activated):
+            print "prev_planet:" + str(self.prev_planet)
+            print "next_planet:" + str(self.next_planet)
             self.notify('planetSelected')
         else:
             ''' TODO : get the player who selected the planet '''

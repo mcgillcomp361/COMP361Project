@@ -99,6 +99,7 @@ class StarDraw(SphericalDraw):
             self.changeStarStage(5)
         elif event == 'starStage6':
             '''TODO : black hole animation goes here'''
+            '''TODO : planet movement animation into black hole'''
             self.changeStarStage(6)
         else:
             raise Exception, "Event received by spherical draw does not exist."
