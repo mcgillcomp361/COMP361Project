@@ -11,6 +11,7 @@ from direct.showbase import DirectObject
 from panda3d.core import Vec3,Vec4,Point2, Point3, BitMask32
 from direct.directtools.DirectGeometry import LineNodePath
 from gameModel.constants import MAX_STAR_RADIUS, MAX_PLANET_RADIUS
+from gui.Timer import Timer
 from panda3d.core import Filename,Buffer,Shader, CardMaker
 from panda3d.core import PandaNode,NodePath
 from panda3d.core import AmbientLight,DirectionalLight
@@ -77,6 +78,8 @@ class StarDraw(SphericalDraw):
         # Reparenting the collision sphere so that it 
         # matches the star perfectly.
         self.cnode_path.reparentTo(self.model_path)
+        self.star = star
+        self.t = Timer(star)
     
     def update(self, event):
         if event == 'starLifetime':
@@ -84,6 +87,20 @@ class StarDraw(SphericalDraw):
                 '''TODO : show star lifetime counter'''
         elif event == 'initiateStar':
                 self.initiateStar()
+        elif event == 'starStage2':
+            self.changeStarStage(2)
+        elif event == 'starStage3':
+            self.changeStarStage(3)
+        elif event == 'starStage4':
+            self.changeStarStage(4)
+        elif event == 'starStage5':
+            self.changeStarStage(5)
+        elif event == 'starStage6':
+            '''TODO : black hole animation goes here'''
+            '''TODO : planet movement animation into black hole'''
+            self.changeStarStage(6)
+        elif event == 'updateTimer':
+            self.updateTimer()
         else:
             raise Exception, "Event received by spherical draw does not exist."
         
@@ -101,9 +118,24 @@ class StarDraw(SphericalDraw):
         
         self.radius = MAX_STAR_RADIUS
         self.model_path.setScale(self.radius)
-        self.star_tex = loader.loadTexture("models/stars/bstar.png")
+        self.star_tex = loader.loadTexture("models/stars/star_stage1_tex.png")
         self.model_path.setTexture(self.star_tex, 1)
 
+    def changeStarStage(self, stage):
+        '''
+        Changes the graphical aspects of the star according to its stage, including any animations needed
+        @param stage : Integer, is the stage in which the star is in; consists of 6 stages
+        '''
+        self.planet_tex = loader.loadTexture("models/stars/star_stage"+str(stage)+"_tex.png")
+        self.model_path.setTexture(self.planet_tex, 1)
+        
+        
+    def updateTimer(self):
+        self.t.refresh()
+        self.t.star = self.star
+        #TODO: There may be a threading problem here so I have left the updating of the time in comments.
+        # I have gotten a deadlock error a couple times because of this.. 
+        self.t.printTime()
 
 class PlanetDraw(SphericalDraw):
     '''
@@ -156,7 +188,7 @@ class PlanetDraw(SphericalDraw):
     
     def update(self, event):
         if event == 'initiatePlanet':
-            self.initiatePlanet()
+            self.initiatePlanet()#also know as starStage1
         elif event == 'planetSelected':
             if not self.quad_path:
                 self.highlight()
@@ -165,8 +197,7 @@ class PlanetDraw(SphericalDraw):
                 self.quad_path.detachNode()
                 self.quad_path = None
         else:
-            raise Exception, "Event received by PlanetDraw draw does not exist."
-    
+            raise Exception, "Event received by spherical draw does not exist."
     def initiatePlanet(self):
         '''TODO : display planet creation animation '''
         '''TODO : add energy ray from planet to star that moves with the planet '''

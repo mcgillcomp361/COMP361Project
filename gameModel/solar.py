@@ -7,8 +7,8 @@ from observable import Observable
 from panda3d.core import Point3
 #from gameEngine.gameEngine import *
 from constants import MAX_NUMBER_OF_PLANETS, MAX_NUMBER_OF_STRUCTURE, LIFETIME, MAX_STAR_RADIUS
-from time import time
-from math import cos, sin
+import math
+
 
 class SphericalBody(Observable):
     
@@ -66,12 +66,14 @@ class Star(SphericalBody):
         @param radius : float, star radius
         @param player: Player, the owner of the star
         @param activated: boolean, determine whether star is activated by the player or not
-        @param birthTime: Time, is the time when the star is initiated
+        @param stage: Integer, is the stage in which the star is in; consists of 6 stages
+        @param counter: Timer, is the count-down timer for the star's life
         '''
         super(Star, self).__init__(position, radius, False, player)
         self.lifetime = 0
         self._planets = []
-        self.birthTime = None
+        self.stage = 0
+        self.timer_task = None
     
     def select(self):
         '''
@@ -90,12 +92,34 @@ class Star(SphericalBody):
         the Game Engine calls the graphic engine to display the corresponding animation.
         '''
         self.lifetime = LIFETIME
+        self.stage = 1
         self.activated = True
+        self.radius = MAX_STAR_RADIUS
         '''TODO : get the player from the game engine '''
         #self.player = GameEngine.player
-        self.birthTime = time()
-        '''TODO : Start the count-down as soon as a star's planet is activated '''
-        self.radius = MAX_STAR_RADIUS
+        self.timer_task = taskMgr.doMethodLater(1, self.tackStarLife, 'starLifeTick')
+        
+    def tackStarLife(self, task):
+        self.lifetime = self.lifetime - float(self.getNumberOfActivePlanets())/(2)
+        self.notify('updateTimer')
+        if(self.lifetime <= LIFETIME - LIFETIME/6 and self.stage == 1):
+            self.stage = 2
+            self.notify('starStage2')
+        elif(self.lifetime <= LIFETIME - LIFETIME/3 and self.stage == 2):
+            self.stage = 3
+            self.notify('starStage3')
+        elif(self.lifetime <= LIFETIME - LIFETIME/2 and self.stage == 3):
+            self.stage = 4
+            self.notify('starStage4')
+        elif(self.lifetime <= LIFETIME - 2*LIFETIME/3 and self.stage == 4):
+            self.stage = 5
+            self.notify('starStage5')
+        elif(self.lifetime <= 0):
+            self.stage = 6
+            self.notify('starStage6')
+            return task.done
+            '''TODO : tell all the other planets to start moving into the black hole '''
+        return task.again
         
     def addPlanet(self, planet):
         '''
@@ -135,9 +159,20 @@ class Star(SphericalBody):
             
     def getNumberOfPlanets(self):
         '''
-        Returns the number of planets currently orbiting the star
+        Returns the number of dead planets currently around the star
         '''
         return len(self._planets)
+    
+    def getNumberOfActivePlanets(self):
+        '''
+        Returns the number of planets currently orbiting the star
+        '''
+        sum = 0
+        for planet in self.planets():
+            if(planet.activated):
+                sum = sum + 1
+        return sum
+                 
 
 
 class Planet(SphericalBody): 
@@ -154,8 +189,8 @@ class Planet(SphericalBody):
         @param parent_star: Star, the specific star the planet is orbiting around
         @param prev_planet: previous planet in the star system, if None then the planet is the first
         '''
-        position = Point3(orbital_radius * cos(orbital_angle),
-                          orbital_radius * sin(orbital_angle), 0)
+        position = Point3(orbital_radius * math.cos(orbital_angle),
+                          orbital_radius * math.sin(orbital_angle), 0)
         super(Planet, self).__init__(position, radius, False, player)
         self.orbital_velocity = 0
         self.orbital_radius = orbital_radius
@@ -171,7 +206,8 @@ class Planet(SphericalBody):
         This method observes the events on the planet and calls the related methods
         and notifies the corresponding objects based on the state of the planet
         '''
-#        if(self.activated):
+        print "prev_planet:" + str(self.prev_planet)
+        print "next_planet:" + str(self.next_planet)
         self.notify('planetSelected')
         for planet in self.parent_star.planets():
             if planet != self:
