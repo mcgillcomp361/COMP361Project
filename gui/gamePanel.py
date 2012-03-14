@@ -7,15 +7,16 @@ from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 
 class GamePanel(): 
-    def __init__(self): 
+    def __init__(self, player): 
         self.mainFrame = DirectFrame(frameColor= (0,0,0,1),
             scale=0.05,
             pos=(0, 0,-0.8),
             sortOrder=2,
             geom=loader.loadModel("./models/gui/guiBar.egg"),        
-            geom_scale = (60,5,8),
+            geom_scale = (65,5,8),
             geom_pos = (0,0,0)
         )   
+        self.player = player
         self.loadResources()
         self.loadMiniMap()
         self.playerResources()
@@ -25,31 +26,31 @@ class GamePanel():
         
     def loadResources(self):
         b1 = DirectButton(text = ("Forge", "click!", "roll"), frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                  text_scale=0.4, pos=(-28,0,0.5),borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                  text_scale=0.4, pos=(-30,0,0.5),borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                   relief=2, command=self.selectForge)
         b2 = DirectButton(text = ("Nexus", "click!", "roll"),frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                  text_scale=0.4, pos=(-26.5,0,0.5), borderWidth = (0.005, 0.005),  text_align = TextNode.ALeft,
+                  text_scale=0.4, pos=(-28.5,0,0.5), borderWidth = (0.005, 0.005),  text_align = TextNode.ALeft,
                   relief=2, command=self.selectNexus)
         b3 = DirectButton(text = ("Extractor", "click!", "roll"),frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                  text_scale=0.3, pos=(-25,0, 0.5), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                  text_scale=0.3, pos=(-27,0, 0.5), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                   relief=2, command=self.selectExtractor)
         b4 = DirectButton(text = ("PD 1", "click!", "roll"), frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                          text_scale=0.4, pos=(-23.5,0, 0.5), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          text_scale=0.4, pos=(-25.5,0, 0.5), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                           relief=2, command=self.selectPD1)
         b5 = DirectButton(text = ("Phylon", "click!", "roll"), frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                          text_scale=0.4, pos=(-28,0, -0.5), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          text_scale=0.4, pos=(-30,0, -0.5), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                           relief=2, command=self.selectPhylon)
         b6 = DirectButton(text = ("PD II", "click!", "roll"), frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                          text_scale=0.4, pos=(-26.5,0, -0.5), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          text_scale=0.4, pos=(-28.5,0, -0.5), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                           relief=2, command=self.selectPD2)
         b7 = DirectButton(text = ("GC", "click!", "roll"), frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                          text_scale=0.4, pos=(-28,0, -1.5), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          text_scale=0.4, pos=(-30,0, -1.5), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                           relief=2, command=self.selectGC)
         b8 = DirectButton(text = ("PD III", "click!", "roll"), frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                          text_scale=0.4, pos=(-26.5,0, -1.5), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          text_scale=0.4, pos=(-28.5,0, -1.5), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                           relief=2, command=self.selectPD3)
         b9 = DirectButton(text = ("PD IV", "click!", "roll"), frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                          text_scale=0.4, pos=(-28,0, -2.5), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          text_scale=0.4, pos=(-30,0, -2.5), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                           relief=2, command=self.selectPD4)    
         b1.reparentTo(self.mainFrame)
         b2.reparentTo(self.mainFrame)
@@ -63,31 +64,31 @@ class GamePanel():
         
     def loadUnits(self):
          b1 = DirectButton(text = ("Swarm", "click!", "roll"), frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                  text_scale=0.4, pos=(-20,0,0.5),borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                  text_scale=0.4, pos=(-22,0,0.5),borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                   relief=2, command=self.selectSwarm)
          b2 = DirectButton(text = ("Globe", "click!", "roll"), frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                  text_scale=0.4, pos=(-18.5,0,0.5),borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                  text_scale=0.4, pos=(-20.5,0,0.5),borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                   relief=2, command=self.selectGlobe)
          b3 = DirectButton(text = ("Analyzer", "click!", "roll"), frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                  text_scale=0.4, pos=(-17,0,0.5),borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                  text_scale=0.4, pos=(-19,0,0.5),borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                   relief=2, command=self.selectAnalyzer)
          b4 = DirectButton(text = ("Horde", "click!", "roll"), frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                  text_scale=0.4, pos=(-20,0,-0.5),borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                  text_scale=0.4, pos=(-22,0,-0.5),borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                   relief=2, command=self.selectHorde)
          b5 = DirectButton(text = ("Sphere", "click!", "roll"), frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                  text_scale=0.4, pos=(-18.5,0,-0.5),borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                  text_scale=0.4, pos=(-20.5,0,-0.5),borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                   relief=2, command=self.selectSphere)
          b6 = DirectButton(text = ("Hive", "click!", "roll"), frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                  text_scale=0.4, pos=(-20,0,-1.5),borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                  text_scale=0.4, pos=(-22,0,-1.5),borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                   relief=2, command=self.selectHive)
          b7 = DirectButton(text = ("Planetarium", "click!", "roll"), frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                  text_scale=0.4, pos=(-18.5,0,-1.5),borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                  text_scale=0.4, pos=(-20.5,0,-1.5),borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                   relief=2, command=self.selectPlanetarium)
          b8 = DirectButton(text = ("Mathematica", "click!", "roll"), frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                  text_scale=0.4, pos=(-17,0,-1.5),borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                  text_scale=0.4, pos=(-19,0,-1.5),borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                   relief=2, command=self.selectMathematica)
          b9 = DirectButton(text = ("BHG", "click!", "roll"), frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                  text_scale=0.4, pos=(-20,0,-2.5),borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                  text_scale=0.4, pos=(-22,0,-2.5),borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                   relief=2, command=self.selectBHG)        
          b1.reparentTo(self.mainFrame)
          b2.reparentTo(self.mainFrame)
@@ -105,11 +106,13 @@ class GamePanel():
         message = "Ability list"   
          
     def playerResources(self):
-        screenText = OnscreenText(text = 'Resources: ', pos = (1.3, 0.3), scale = 0.7, fg = (1, 1, 1, 1))
-        resources = OnscreenText(text = 'Gravity Engines: ', pos = (2, -0.7), scale = 0.7, fg = (1, 1, 1, 1))
-        screenText.reparentTo(self.mainFrame)
+        resources = OnscreenText(text = 'Resources: ', pos = (1.3, 0.3), scale = 0.7, fg = (1, 1, 1, 1))
+        amt = str(self.player.minerals)
+        amount = OnscreenText(text = amt, pos = (5, 0.3), scale = 0.7, fg = (1, 1, 1, 1))
+        gEngine = OnscreenText(text = 'Gravity Engines: ', pos = (2, -0.7), scale = 0.7, fg = (1, 1, 1, 1))
         resources.reparentTo(self.mainFrame)
-       
+        gEngine.reparentTo(self.mainFrame)
+        amount.reparentTo(self.mainFrame)
       
     def loadResearchTree(self):
         b1 = DirectButton(text = ("Research Tree", "click!", "roll"), pos = (0, 0, -2.4),

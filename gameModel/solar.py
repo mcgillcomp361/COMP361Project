@@ -104,7 +104,8 @@ class Star(SphericalBody):
     def tackStarLife(self):
         #elapsed_time = math.floor(time() - self.birth_time)
         self.lifetime = self.lifetime - float(self.getNumberOfActivePlanets())/(2)
-        #print self.lifetime
+        self.notify('updateTimer')
+   #     print self.lifetime
         if(self.lifetime <= LIFETIME - LIFETIME/6 and self.stage == 1):
             self.stage = 2
             self.notify('starStage2')

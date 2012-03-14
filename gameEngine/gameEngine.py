@@ -59,7 +59,6 @@ class GameEngine(DirectObject.DirectObject):
         '''
         #Initialize graphics
         self.env_graphics = Environement()
-        self.gP = GamePanel()
         max_loop = 0
         while(len(stars)< number_of_stars):
             new_star_pos = Point3()
@@ -136,6 +135,7 @@ class GameEngine(DirectObject.DirectObject):
         @players : the player
         '''
         self.player = Player("player")
+        self.gP = GamePanel(self.player)
         self.AI = Player("AI")
         
 def _isSeparated(neighbors, test_position, mindist):

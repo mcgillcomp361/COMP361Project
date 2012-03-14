@@ -10,6 +10,7 @@ from pandac.PandaModules import CollisionNode, CollisionSphere
 from panda3d.core import Vec3,Vec4,Point2,BitMask32
 from direct.directtools.DirectGeometry import LineNodePath
 from gameModel.constants import MAX_STAR_RADIUS, MAX_PLANET_RADIUS
+from gui.Timer import Timer
 from panda3d.core import Filename,Buffer,Shader
 from panda3d.core import PandaNode,NodePath
 from panda3d.core import AmbientLight,DirectionalLight
@@ -82,6 +83,8 @@ class StarDraw(SphericalDraw):
         # Reparenting the collision sphere so that it 
         # matches the star perfectly.
         self.cnode_path.reparentTo(self.model_path)
+        self.star = star
+        self.t = Timer(star)
     
     def update(self, event):
         if event == 'starLifetime':
@@ -101,6 +104,8 @@ class StarDraw(SphericalDraw):
             '''TODO : black hole animation goes here'''
             '''TODO : planet movement animation into black hole'''
             self.changeStarStage(6)
+        elif event == 'updateTimer':
+            self.updateTimer()
         else:
             raise Exception, "Event received by spherical draw does not exist."
         
@@ -128,6 +133,14 @@ class StarDraw(SphericalDraw):
         '''
         self.planet_tex = loader.loadTexture("models/stars/star_stage"+str(stage)+"_tex.png")
         self.model_path.setTexture(self.planet_tex, 1)
+        
+        
+    def updateTimer(self):
+        self.t.refresh()
+        self.t.star = self.star
+        #TODO: There may be a threading problem here so I have left the updating of the time in comments.
+        # I have gotten a deadlock error a couple times because of this.. 
+     #   self.t.printTime()
 
 class PlanetDraw(SphericalDraw):
     '''
