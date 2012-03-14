@@ -27,7 +27,8 @@ class Application(ShowBase):
         self.menu = Menu()
         
         self.ge = GameEngine()
-        
+        #Uncomment to show current tasks
+#        taskMgr.popupControls()
         #GUI stuff
         self.title = OnscreenText(text="Bazibaz", style=1, fg=(1,1,1,1), pos=(0.9,0.9), scale = .1)
         self.text = self.genLabelText("Orbits Alpha Ver.0.1", 0)

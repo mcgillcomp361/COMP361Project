@@ -4,9 +4,11 @@ Created on 7 janv. 2012
 @author: Bazibaz
 '''
 from observable import Observable
+from panda3d.core import Point3
 #from gameEngine.gameEngine import *
 from constants import MAX_NUMBER_OF_PLANETS, MAX_NUMBER_OF_STRUCTURE, LIFETIME, MAX_STAR_RADIUS
 from time import time
+from math import cos, sin
 
 class SphericalBody(Observable):
     
@@ -143,7 +145,7 @@ class Planet(SphericalBody):
     Planet contains units and structures
     '''
 
-    def __init__(self, position, radius, parent_star=None, prev_planet=None, player=None):
+    def __init__(self, orbital_radius, orbital_angle, radius, parent_star=None, prev_planet=None, player=None):
         '''
         Constructor for class planet.
         @param position: Point3D, position in space
@@ -152,8 +154,12 @@ class Planet(SphericalBody):
         @param parent_star: Star, the specific star the planet is orbiting around
         @param prev_planet: previous planet in the star system, if None then the planet is the first
         '''
+        position = Point3(orbital_radius * cos(orbital_angle),
+                          orbital_radius * sin(orbital_angle), 0)
         super(Planet, self).__init__(position, radius, False, player)
         self.orbital_velocity = 0
+        self.orbital_radius = orbital_radius
+        self.orbital_angle = orbital_angle
         self.parent_star = parent_star
         self.prev_planet = prev_planet
         self.next_planet = None
