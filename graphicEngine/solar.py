@@ -140,7 +140,7 @@ class StarDraw(SphericalDraw):
         self.t.star = self.star
         #TODO: There may be a threading problem here so I have left the updating of the time in comments.
         # I have gotten a deadlock error a couple times because of this.. 
-     #   self.t.printTime()
+        self.t.printTime()
 
 class PlanetDraw(SphericalDraw):
     '''

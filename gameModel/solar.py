@@ -6,8 +6,6 @@ Created on 7 janv. 2012
 from observable import Observable
 #from gameEngine.gameEngine import *
 from constants import MAX_NUMBER_OF_PLANETS, MAX_NUMBER_OF_STRUCTURE, LIFETIME, MAX_STAR_RADIUS
-from time import time
-from threading import Timer
 
 import math
 
@@ -74,7 +72,7 @@ class Star(SphericalBody):
         self.lifetime = 0
         self._planets = []
         self.stage = 0
-        self.counter = None
+        self.timer_task = None
     
     def select(self):
         '''
@@ -98,14 +96,12 @@ class Star(SphericalBody):
         self.radius = MAX_STAR_RADIUS
         '''TODO : get the player from the game engine '''
         #self.player = GameEngine.player
-        self.counter = Timer(1.0, self.tackStarLife)
-        self.counter.start()
+        self.timer_task = taskMgr.doMethodLater(1, self.tackStarLife, 'starLifeTick')
         
-    def tackStarLife(self):
-        #elapsed_time = math.floor(time() - self.birth_time)
+    def tackStarLife(self, task):
         self.lifetime = self.lifetime - float(self.getNumberOfActivePlanets())/(2)
         self.notify('updateTimer')
-   #     print self.lifetime
+        print self.lifetime
         if(self.lifetime <= LIFETIME - LIFETIME/6 and self.stage == 1):
             self.stage = 2
             self.notify('starStage2')
@@ -118,13 +114,12 @@ class Star(SphericalBody):
         elif(self.lifetime <= LIFETIME - 2*LIFETIME/3 and self.stage == 4):
             self.stage = 5
             self.notify('starStage5')
-        if(self.lifetime <= 0):
+        elif(self.lifetime <= 0):
             self.stage = 6
             self.notify('starStage6')
+            return task.done
             '''TODO : tell all the other planets to start moving into the black hole '''
-        else:
-            self.counter = Timer(1.0, self.tackStarLife)
-            self.counter.start()
+        return task.again
         
     def addPlanet(self, planet):
         '''
