@@ -141,7 +141,7 @@ class Star(SphericalBody):
         self.radius = MAX_STAR_RADIUS
         '''TODO : get the player from the game engine '''
         #self.player = GameEngine.player
-        self.timer_task = taskMgr.doMethodLater(1, self.tackStarLife, 'starLifeTick')
+        self.timer_task = taskMgr.doMethodLater(1, self.trackStarLife, 'starLifeTick')
         
         '''TODO : display star birth animation '''
         sound1 = base.loader.loadSfx("sound/effects/star/starCreation1.wav")
@@ -158,7 +158,7 @@ class Star(SphericalBody):
         self.star_tex = loader.loadTexture("models/stars/star_stage1_tex.png")
         self.model_path.setTexture(self.star_tex, 1)
         
-    def tackStarLife(self, task):
+    def trackStarLife(self, task):
         self.lifetime = self.lifetime - float(self.getNumberOfActivePlanets())/(2)
         self.updateTimer()
         if(self.lifetime <= LIFETIME - LIFETIME/6 and self.stage == 1):

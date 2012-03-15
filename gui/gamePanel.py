@@ -107,12 +107,13 @@ class GamePanel():
          
     def playerResources(self):
         resources = OnscreenText(text = 'Resources: ', pos = (1.3, 0.3), scale = 0.7, fg = (1, 1, 1, 1))
-        amt = str(self.player.minerals)
-        amount = OnscreenText(text = amt, pos = (5, 0.3), scale = 0.7, fg = (1, 1, 1, 1))
+        amount = OnscreenText(text = str(self.player.minerals), pos = (7, 0.3), scale = 0.7, fg = (1, 1, 1, 1))
         gEngine = OnscreenText(text = 'Gravity Engines: ', pos = (2, -0.7), scale = 0.7, fg = (1, 1, 1, 1))
+        ge_amount = OnscreenText(text = str(self.player.ge_amount), pos = (7, -0.7), scale = 0.7, fg = (1, 1, 1, 1))
         resources.reparentTo(self.mainFrame)
         gEngine.reparentTo(self.mainFrame)
         amount.reparentTo(self.mainFrame)
+        ge_amount.reparentTo(self.mainFrame)
       
     def loadResearchTree(self):
         b1 = DirectButton(text = ("Research Tree", "click!", "roll"), pos = (0, 0, -2.4),
