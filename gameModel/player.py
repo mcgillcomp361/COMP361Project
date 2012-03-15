@@ -16,7 +16,9 @@ class Player(object):
         Constructor
         '''
         self.name = name
-        self.planets = None
+        self.selectedPlanet = None
+        self.selectedUnits = []
+        self.planets = []
         self.structures = None
         self.units = None
         self.minerals = MINERAL_STARTING_AMOUNT

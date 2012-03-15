@@ -130,6 +130,8 @@ class GameEngine(DirectObject.DirectObject):
         '''
         self.player = Player("player")
         self.gP = GamePanel(self.player)
+        self.mouse_events.setPlayer(self.player)
+        
         self.AI = Player("AI")
     
     #Temporary function for adding & testing units

@@ -119,28 +119,33 @@ class Star(SphericalBody):
 #        self.cnode_path.show()
  
     
-    def select(self):
+    def select(self, player):
         '''
+        @param player, the player who has selected
         This method observes the events on the star and calls the related methods
         and notifies the corresponding objects based on the state of the star
         '''
         if(self.activated):
             '''TODO : show star lifetime counter'''
-            pass
+#            print self.player.ge_amount
+#            print self.player
+#            print str(self.player.planets)
         else:
-            self._activateStar()
+            if(player.ge_amount != 0 ):
+                player.ge_amount = player.ge_amount - 1
+                self._activateStar(player)
         
-    def _activateStar(self):
+    def _activateStar(self, player):
         '''
         Activates a constructed dead star object, starting the lifetime counter with the assigned default value while
         the Game Engine calls the graphic engine to display the corresponding animation.
+        @param player, the player who has activated the star
         '''
         self.lifetime = LIFETIME
         self.stage = 1
         self.activated = True
         self.radius = MAX_STAR_RADIUS
-        '''TODO : get the player from the game engine '''
-        #self.player = GameEngine.player
+        self.player = player
         self.timer_task = taskMgr.doMethodLater(1, self.trackStarLife, 'starLifeTick')
         
         '''TODO : display star birth animation '''
@@ -320,21 +325,29 @@ class Planet(SphericalBody):
             self.quad_path.detachNode()
             self.quad_path = None
     
-    def select(self):
+    def select(self, player):
         '''
         This method observes the events on the planet and calls the related methods
         and notifies the corresponding objects based on the state of the planet
+        @param player, the player who has selected
         '''
-        print "prev_planet:" + str(self.prev_planet)
-        print "next_planet:" + str(self.next_planet)
+#        print "prev_planet:" + str(self.prev_planet)
+#        print "next_planet:" + str(self.next_planet)
+#        print self.player
         
         for planet in self.parent_star.planets():
             planet.deactivateHighlight()
         self.activateHighlight()
+        
+        player.selectedPlanet = self
+        if(self.player == player):
+            '''TODO : notify the GUI Panel about the constructions available on this planet '''
+        
         if(not self.activated):
             ''' TODO : get the player who selected the planet '''
-            if((self.prev_planet == None or self.prev_planet.activated) and self.parent_star.activated):
-                self.activatePlanet(None)         
+            if((self.prev_planet == None or self.prev_planet.activated) and \
+                    self.parent_star.activated and self.parent_star.player == player):
+                self.activatePlanet(player)         
         
     def activatePlanet(self, player):
         '''
@@ -343,11 +356,10 @@ class Planet(SphericalBody):
         @param player: Player, the player who controls the planet
         @precondition: MIN_PLANET_VELOCITY < orbital_velocity < MAX_PLANET_VELOCITY
         '''
-        self.player = player
         self.activated = True
-        
-        '''TODO : display planet creation animation '''
-        '''TODO : add energy ray from planet to star that moves with the planet '''
+        player.planets.append(self)
+        self.player = player
+
         
         sound = base.loader.loadSfx("sound/effects/planet/planetCreation.wav")
         sound.setLoop(False)
@@ -356,6 +368,8 @@ class Planet(SphericalBody):
         
         self.radius = MAX_PLANET_RADIUS
         self.model_path.setScale(self.radius)
+        
+        '''TODO : display planet creation animation '''
         
         #rand = random.randrange(1,8,1)
         self.star_tex = loader.loadTexture("models/planets/planet_activated_tex.png")

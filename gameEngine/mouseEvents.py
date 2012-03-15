@@ -29,6 +29,9 @@ class MouseEvents(DirectObject.DirectObject):
         self.accept("mouse1", self.handleMouseClick)
         
     
+    def setPlayer(self, player):
+        self.player = player
+        
     #Use Collision Detection 
     def handleMouseClick(self):
         if base.mouseWatcherNode.hasMouse():
@@ -52,10 +55,10 @@ class MouseEvents(DirectObject.DirectObject):
                     self.selected(pickedObj, 'unit', 'pyUnit')
                     
     def selected(self, pickedObj, tag, python_tag):
-        print 'Player has selected '+ tag + ' ' + pickedObj.getTag(tag)
+#        print 'Player has selected '+ tag + ' ' + pickedObj.getTag(tag)
         model_path = pickedObj.getParent()
         #model_path.notify("starSelected")
         model = model_path.getPythonTag(python_tag)
         if(tag == 'planet'):
             self.selected_planet = model
-        model.select()
+        model.select(self.player)

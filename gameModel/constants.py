@@ -5,7 +5,7 @@ Created on Jan 12, 2012
 
 ''' Environment '''
 #Smaller for easier testing -> instead of searching forever
-UNIVERSE_SCALE = 4000
+UNIVERSE_SCALE = 6000
 MAX_CAMERA_DISTANCE = 15000
 ''' Stars '''
 STAR_BUILD_TIME = 0
@@ -14,7 +14,7 @@ MAX_DEAD_STAR_RADIUS = 6
 MAX_STAR_RADIUS = 8
 MAX_SOLAR_SYSTEM_RADIUS = 100 #could be variable instead
 #make sure the number is satisfactory for UNIVERSE_SCALE
-NUMBER_OF_STARS = 15
+NUMBER_OF_STARS = 10
 LIFETIME = 1800.0 
 ''' should be divisible by 6 '''
 

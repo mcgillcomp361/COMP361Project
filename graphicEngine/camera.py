@@ -75,13 +75,13 @@ class Camera(DirectObject.DirectObject):
          
 
     def zoomOut(self):
-        print "Zoom Out: " ,self.camDist
+#        print "Zoom Out: " ,self.camDist
         if(self.camDist <= self.maxZoomOut):
             self.adjustCamDist(1.1)
         return True
         
     def zoomIn(self):
-        print "Zoom In:",self.camDist
+#        print "Zoom In:",self.camDist
         if(self.camDist >= self.maxZoomIn):
             self.adjustCamDist(0.9)
         return True
