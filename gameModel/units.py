@@ -58,7 +58,7 @@ class Unit(object):
         self.quad_path.setScale(5)
         self.quad_path.setBillboardPointEye()
     
-    def select(self):
+    def select(self, player):
         pass
     
     def startOrbit(self):
@@ -72,12 +72,15 @@ class Unit(object):
         reaches it's destination
         ''' 
         if(target_planet.parent_star==self.host_planet.parent_star):
-            host_planet = target_planet
+            self.host_planet.removeOrbitingUnit(self)
+            self.host_planet = target_planet
+            target_planet.addOrbitingUnit(self)
+            self.point_path.reparentTo(target_planet.point_path)
         else:
             self.deep_space = True
             #TODO : The unit will NOT be select-able for the duration of travel
             #TODO : keep track when the unit reaches the target planet then change the host
-            host_planet = target_planet
+            self.host_planet = target_planet
            
     def attack(self, target_unit):
         '''Deals damage to an opposing unit.'''

@@ -49,6 +49,8 @@ class GameEngine(DirectObject.DirectObject):
         self.startGame(self.all_players)
         #Keyboard events
         self.accept('u', self._addUnit) #temporary function for testing units
+        self.accept('arrow_down', self._moveUnitsNext )
+        self.accept('arrow_up', self._moveUnitsPrev )
     
     def prepareGame(self, number_of_stars, number_of_planets, stars, planets):
         '''
@@ -143,6 +145,20 @@ class GameEngine(DirectObject.DirectObject):
             
             host_planet.addOrbitingUnit(self.unit)
             taskMgr.add(host_planet.drawConnections, 'DrawConnections')
+    
+    def _moveUnitsPrev(self):
+        planet = self.mouse_events.selected_planet
+        if planet != None and planet.next_planet != None:
+            for unit in planet.units():
+                unit.move(planet.next_planet)
+                break
+    
+    def _moveUnitsNext(self):
+        planet = self.mouse_events.selected_planet
+        if planet != None and planet.prev_planet != None:
+            for unit in planet.units():
+                unit.move(planet.prev_planet)
+                break
 
        
 def _isSeparated(neighbors, test_position, mindist):
