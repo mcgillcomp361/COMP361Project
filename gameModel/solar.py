@@ -310,7 +310,7 @@ class Planet(SphericalBody):
         self.quad_path = self.point_path.attachNewNode(cm.generate())        
         self.quad_path.setTransparency(TransparencyAttrib.MAlpha)
         self.quad_path.setTexture(flare_tex)
-        self.quad_path.setColor(Vec4(0.2, 1.0, 0.3, 1))
+        self.quad_path.setColor(Vec4(0.2, 0.3, 1.0, 1))
         self.quad_path.setScale(15)
         self.quad_path.setPos(Vec3(0,0,0))
         self.quad_path.setBillboardPointEye()
@@ -327,10 +327,10 @@ class Planet(SphericalBody):
         '''
         print "prev_planet:" + str(self.prev_planet)
         print "next_planet:" + str(self.next_planet)
-        self.activateHighlight()
+        
         for planet in self.parent_star.planets():
-            if planet != self:
-                planet.deactivateHighlight()
+            planet.deactivateHighlight()
+        self.activateHighlight()
         if(not self.activated):
             ''' TODO : get the player who selected the planet '''
             if((self.prev_planet == None or self.prev_planet.activated) and self.parent_star.activated):

@@ -55,12 +55,7 @@ class MouseEvents(DirectObject.DirectObject):
         print 'Player has selected '+ tag + ' ' + pickedObj.getTag(tag)
         model_path = pickedObj.getParent()
         #model_path.notify("starSelected")
-        planet_model = model_path.getPythonTag(python_tag)
+        model = model_path.getPythonTag(python_tag)
         if(tag == 'planet'):
-            self.selected_planet = planet_model
-        #model_path.notify("star")
-        # Since the stardraw dstar is listening to the model
-        # it will automatically get updated, idem for the
-        # planet below.
-        #graphic_obj.model.radius = graphic_obj.model.radius
-        planet_model.select()
+            self.selected_planet = model
+        model.select()

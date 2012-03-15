@@ -38,7 +38,7 @@ class Unit(object):
         self.point_path = self.host_planet.point_path.attachNewNode("unit_center_node")
         self.model_path = self.point_path.attachNewNode("unit_node")
         self.model_path.setPythonTag('pyUnit', self);
-        self.model_path.setPos(Vec3(0,10,0))
+        self.model_path.setPos(Vec3(0,6,0))
         
         rad = 1
         self.cnode = CollisionNode("coll_sphere_node")
@@ -58,8 +58,11 @@ class Unit(object):
         self.quad_path.setScale(5)
         self.quad_path.setBillboardPointEye()
     
+    def select(self):
+        pass
+    
     def startOrbit(self):
-        self.orbit_period = self.point_path.hprInterval(1, Vec3(-360, 0, 0))
+        self.orbit_period = self.point_path.hprInterval(10, Vec3(-360, 0, 0))
         self.orbit_period.loop()
       
     def move(self, target_planet):
