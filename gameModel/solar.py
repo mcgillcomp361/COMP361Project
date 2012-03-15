@@ -7,6 +7,9 @@ from observable import Observable
 #from gameEngine.gameEngine import *
 from constants import MAX_NUMBER_OF_PLANETS, MAX_NUMBER_OF_STRUCTURE, LIFETIME, MAX_STAR_RADIUS
 from time import time
+from threading import Timer
+
+import math
 
 class SphericalBody(Observable):
     
@@ -23,7 +26,7 @@ class SphericalBody(Observable):
         @param player: the player who owns the solar object
         '''
         super(SphericalBody,self).__init__()
-        self.radius = radius
+        self.radius =  radius 
         self.position = position
         self.activated = activated
         self.player = player
@@ -64,14 +67,16 @@ class Star(SphericalBody):
         @param radius : float, star radius
         @param player: Player, the owner of the star
         @param activated: boolean, determine whether star is activated by the player or not
-        @param birthTime: Time, is the time when the star is initiated
+        @param stage: Integer, is the stage in which the star is in; consists of 6 stages
+        @param counter: Timer, is the count-down timer for the star's life
         '''
         super(Star, self).__init__(position, radius, False, player)
         self.lifetime = 0
         self._planets = []
-        self.birthTime = None
+        self.stage = 0
+        self.counter = None
     
-    def select(self):
+    def select(self, player):
         '''
         This method observes the events on the star and calls the related methods
         and notifies the corresponding objects based on the state of the star
@@ -80,20 +85,44 @@ class Star(SphericalBody):
             self.notify('starLifetime')
         else:
             self.notify('initiateStar')
-            self.activateStar()
+            self.activateStar(player)
         
-    def activateStar(self):
+    def activateStar(self, player):
         '''
         Activates a constructed dead star object, starting the lifetime counter with the assigned default value while
         the Game Engine calls the graphic engine to display the corresponding animation.
         '''
         self.lifetime = LIFETIME
+        self.stage = 1
         self.activated = True
-        '''TODO : get the player from the game engine '''
-        #self.player = GameEngine.player
-        self.birthTime = time()
-        '''TODO : Start the count-down as soon as a star's planet is activated '''
         self.radius = MAX_STAR_RADIUS
+        self.player = player
+        self.counter = Timer(1.0, self.tackStarLife)
+        self.counter.start()
+        
+    def tackStarLife(self):
+        #elapsed_time = math.floor(time() - self.birth_time)
+        self.lifetime = self.lifetime - float(self.getNumberOfActivePlanets())/(2)
+        #print self.lifetime
+        if(self.lifetime <= LIFETIME - LIFETIME/6 and self.stage == 1):
+            self.stage = 2
+            self.notify('starStage2')
+        elif(self.lifetime <= LIFETIME - LIFETIME/3 and self.stage == 2):
+            self.stage = 3
+            self.notify('starStage3')
+        elif(self.lifetime <= LIFETIME - LIFETIME/2 and self.stage == 3):
+            self.stage = 4
+            self.notify('starStage4')
+        elif(self.lifetime <= LIFETIME - 2*LIFETIME/3 and self.stage == 4):
+            self.stage = 5
+            self.notify('starStage5')
+        if(self.lifetime <= 0):
+            self.stage = 6
+            self.notify('starStage6')
+            '''TODO : tell all the other planets to start moving into the black hole '''
+        else:
+            self.counter = Timer(1.0, self.tackStarLife)
+            self.counter.start()
         
     def addPlanet(self, planet):
         '''
@@ -133,9 +162,20 @@ class Star(SphericalBody):
             
     def getNumberOfPlanets(self):
         '''
-        Returns the number of planets currently orbiting the star
+        Returns the number of dead planets currently around the star
         '''
         return len(self._planets)
+    
+    def getNumberOfActivePlanets(self):
+        '''
+        Returns the number of planets currently orbiting the star
+        '''
+        sum = 0
+        for planet in self.planets():
+            if(planet.activated):
+                sum = sum + 1
+        return sum
+                 
 
 
 class Planet(SphericalBody): 
@@ -160,18 +200,18 @@ class Planet(SphericalBody):
         self._orbiting_units = []
         self._surface_structures = []
     
-    def select(self):
+    def select(self, player):
         '''
         This method observes the events on the planet and calls the related methods
         and notifies the corresponding objects based on the state of the planet
         '''
-#        if(self.activated):
-        self.notify('planetSelected')
-        for planet in self.parent_star.planets():
-            if planet != self:
-                planet.notify('planetUnselected')
-        if(not self.activated):
-            ''' TODO : get the player who selected the planet '''
+        if(self.activated):
+            print "prev_planet:" + str(self.prev_planet)
+            print "next_planet:" + str(self.next_planet)
+            print "player:" + str(self.player) 
+            self.notify('planetSelected')
+        else:
+            self.player = player
             if((self.prev_planet == None or self.prev_planet.activated) and self.parent_star.activated):
                 self.notify('initiatePlanet')
                 self.activatePlanet(None)         

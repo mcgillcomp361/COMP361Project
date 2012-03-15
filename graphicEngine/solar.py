@@ -5,12 +5,12 @@ Created on 7 janv. 2012
 '''
 import random
 
-from pandac.PandaModules import CollisionNode, CollisionBox, CollisionSphere, TransparencyAttrib
+from pandac.PandaModules import CollisionNode, CollisionSphere
 #from pandac.PandaModules import Vec3, Point2
-from panda3d.core import Vec3,Vec4,Point2, Point3, BitMask32
+from panda3d.core import Vec3,Vec4,Point2,BitMask32
 from direct.directtools.DirectGeometry import LineNodePath
 from gameModel.constants import MAX_STAR_RADIUS, MAX_PLANET_RADIUS
-from panda3d.core import Filename,Buffer,Shader, CardMaker
+from panda3d.core import Filename,Buffer,Shader
 from panda3d.core import PandaNode,NodePath
 from panda3d.core import AmbientLight,DirectionalLight
 
@@ -62,9 +62,6 @@ class SphericalDraw(object):
         self.cnode_path = render.attachNewNode(self.cnode)
         #For temporary testing, display collision sphere.
 #        self.cnode_path.show()
-    
-    def select(self):
-        self.model.select();
 
 class StarDraw(SphericalDraw):
     '''
@@ -92,6 +89,17 @@ class StarDraw(SphericalDraw):
                 '''TODO : show star lifetime counter'''
         elif event == 'initiateStar':
                 self.initiateStar()
+        elif event == 'starStage2':
+            self.changeStarStage(2)
+        elif event == 'starStage3':
+            self.changeStarStage(3)
+        elif event == 'starStage4':
+            self.changeStarStage(4)
+        elif event == 'starStage5':
+            self.changeStarStage(5)
+        elif event == 'starStage6':
+            '''TODO : black hole animation goes here'''
+            self.changeStarStage(6)
         else:
             raise Exception, "Event received by spherical draw does not exist."
         
@@ -109,9 +117,16 @@ class StarDraw(SphericalDraw):
         
         self.radius = MAX_STAR_RADIUS
         self.model_path.setScale(self.radius)
-        self.star_tex = loader.loadTexture("models/stars/bstar.png")
+        self.star_tex = loader.loadTexture("models/stars/star_stage1_tex.png")
         self.model_path.setTexture(self.star_tex, 1)
 
+    def changeStarStage(self, stage):
+        '''
+        Changes the graphical aspects of the star according to its stage, including any animations needed
+        @param stage : Integer, is the stage in which the star is in; consists of 6 stages
+        '''
+        self.planet_tex = loader.loadTexture("models/stars/star_stage"+str(stage)+"_tex.png")
+        self.model_path.setTexture(self.planet_tex, 1)
 
 class PlanetDraw(SphericalDraw):
     '''
@@ -122,7 +137,6 @@ class PlanetDraw(SphericalDraw):
         super(PlanetDraw, self).__init__(planet, star_point_path)
         self.orbital_velocity = planet.orbital_velocity
         self.spin_velocity = planet.spin_velocity
-        
         #Models & textures
         self.model_path = loader.loadModel("models/planets/planet_sphere")
         self.planet_tex = loader.loadTexture("models/planets/dead_planet_tex.jpg")
@@ -141,36 +155,17 @@ class PlanetDraw(SphericalDraw):
         self.lines = LineNodePath(parent = self.root_path, thickness = 4.0, colorVec = Vec4(1.0, 1.0, 1.0, 1.0))
         self.lines.setColor(Vec4(1.0, 1.0, 1.0, 0.05))
 
-        self.quad_path = None
 #        self.lines.reparentTo(self.point_path)
-    
-    def highlight(self):
-        flare_tex = base.loader.loadTexture("models/units/flare.png")
-        cm = CardMaker('quad')
-        cm.setFrameFullscreenQuad() # so that the center acts as the origin (from -1 to 1)
-        self.quad_path = render.attachNewNode(cm.generate())
-        self.quad_path.reparentTo(self.point_path)
-        
-        self.quad_path.setTransparency(TransparencyAttrib.MAlpha)
-        self.quad_path.setTexture(flare_tex)
-        self.quad_path.setColor(Vec4(0.2, 1.0, 0.3, 1))
-        self.quad_path.setScale(15)
-        self.quad_path.setPos(Vec3(0,0,0))
-        self.quad_path.setBillboardPointEye()
     
     def update(self, event):
         if event == 'initiatePlanet':
-            self.initiatePlanet()
+            self.initiatePlanet()#also know as starStage1
         elif event == 'planetSelected':
-            if not self.quad_path:
-                self.highlight()
-        elif event == 'planetUnselected':
-            if self.quad_path:
-                self.quad_path.detachNode()
-                self.quad_path = None
+            '''TODO: hightlight the planet'''
+            pass
         else:
-            raise Exception, "Event received by PlanetDraw draw does not exist."
-    
+            raise Exception, "Event received by spherical draw does not exist."
+
     def initiatePlanet(self):
         '''TODO : display planet creation animation '''
         '''TODO : add energy ray from planet to star that moves with the planet '''
@@ -215,40 +210,3 @@ class PlanetDraw(SphericalDraw):
         self.lines.drawLines([((0,0, 0),
                                (self.point_path.getX(), self.point_path.getY(), 0))])
         self.lines.create()
-
-
-class UnitDraw(object):
-    def __init__(self, unit, host_draw_planet):
-        self.host_draw_planet = host_draw_planet
-        self.model = unit
-        
-        self.root_path = self.host_draw_planet.point_path.attachNewNode("unit_center_node")
-        self.model_path = self.root_path.attachNewNode("unit_node")
-        self.model_path.setPythonTag('pyUnit', self);
-        self.model_path.setPos(Vec3(0,10,0))
-        
-        rad = 1
-        self.cnode = CollisionNode("coll_sphere_node")
-        self.cnode.addSolid(CollisionBox(Point3(-rad,-rad,-rad),Point3(rad,rad,rad)))
-        self.cnode.setIntoCollideMask(BitMask32.bit(1))
-        self.cnode.setTag('unit', str(id(self)))
-        self.cnode_path = self.model_path.attachNewNode(self.cnode)
-        self.cnode_path.show()
-        
-        
-        self.tex = loader.loadTexture("models/units/flare.png")
-        cm = CardMaker('quad')
-        cm.setFrameFullscreenQuad()
-        self.quad_path = self.model_path.attachNewNode(cm.generate())
-        self.quad_path.setTexture(self.tex)
-        self.quad_path.setTransparency(TransparencyAttrib.MAlpha)
-        self.quad_path.setColor(Vec4(1.0, 0.3, 0.3, 1))
-        self.quad_path.setScale(5)
-        self.quad_path.setBillboardPointEye()
-    
-    def startOrbit(self):
-        self.orbit_period = self.root_path.hprInterval(1, Vec3(-360, 0, 0))
-        self.orbit_period.loop()
-
-    def select(self):
-        pass
