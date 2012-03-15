@@ -14,7 +14,7 @@ class MouseEvents(DirectObject.DirectObject):
     def __init__(self):                
         # Initialize the traverser.
         self.myTraverser = CollisionTraverser()
-        self.selected_planet_pair = (None, None) #model, draw obj
+        self.selected_planet = None
         # Initialize the handler.
         self.myHandler = CollisionHandlerQueue()       
         self.accept("escape", sys.exit) #Exit the program when escape is pressed
@@ -55,12 +55,7 @@ class MouseEvents(DirectObject.DirectObject):
         print 'Player has selected '+ tag + ' ' + pickedObj.getTag(tag)
         model_path = pickedObj.getParent()
         #model_path.notify("starSelected")
-        graphic_obj = model_path.getPythonTag(python_tag)
+        model = model_path.getPythonTag(python_tag)
         if(tag == 'planet'):
-            self.selected_planet_pair = (graphic_obj.model, graphic_obj)
-        #model_path.notify("star")
-        # Since the stardraw dstar is listening to the model
-        # it will automatically get updated, idem for the
-        # planet below.
-        #graphic_obj.model.radius = graphic_obj.model.radius
-        graphic_obj.select()
+            self.selected_planet = model
+        model.select()

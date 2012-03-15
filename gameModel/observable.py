@@ -4,7 +4,6 @@ Created on 25 janv. 2012
 @author: Bazibaz
 '''
 
-#TODO: Could we actually move this to the __init__?
 class Observable(object):
     def __init__(self):
         self._observers = []

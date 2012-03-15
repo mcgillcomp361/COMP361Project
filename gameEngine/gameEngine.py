@@ -16,7 +16,7 @@ from gameModel.units import Unit
 from gameModel.player import *
 from gameModel.solar import Star, Planet
 from graphicEngine.environement import Environement
-from graphicEngine.solar import StarDraw, PlanetDraw, UnitDraw
+#from graphicEngine.solarAnimator import SolarAnimator
 from graphicEngine.camera import Camera
 from gui.gamePanel import GamePanel
 from gameModel.constants import UNIVERSE_SCALE, DEEP_SPACE_DISTANCE, \
@@ -24,6 +24,7 @@ MAX_DEAD_STAR_RADIUS, NUMBER_OF_STARS, MIN_DISTANCE_BETWEEN_PLANETS, \
 MIN_PLANET_VELOCITY, MAX_SOLAR_SYSTEM_RADIUS, MAX_DEAD_PLANET_RADIUS, \
 MAX_NUMBER_OF_PLANETS, MAX_PLANET_VELOCITY
 from panda3d.core import Point3, Vec3
+from direct.task import Task
 
 from mouseEvents import MouseEvents
 
@@ -44,7 +45,7 @@ class GameEngine(DirectObject.DirectObject):
         self.all_stars = []
         self.all_planets = []
         self.prepareGame(NUMBER_OF_STARS, MAX_NUMBER_OF_PLANETS, self.all_stars, self.all_planets)
-        
+                
         self.startGame(self.all_players)
         #Keyboard events
         self.accept('u', self._addUnit) #temporary function for testing units
@@ -70,12 +71,10 @@ class GameEngine(DirectObject.DirectObject):
                                      (random.random()-0.5)*UNIVERSE_SCALE, 0)
             # Given that the star is separated enough from its neighboring stars
             # we can add it to the solar system  
-            if _isSeparated([s[0] for s in stars], new_star_pos, DEEP_SPACE_DISTANCE):
+            if _isSeparated(stars, new_star_pos, DEEP_SPACE_DISTANCE):
                 star = Star(position = new_star_pos, radius = MAX_DEAD_STAR_RADIUS)
-                dstar = StarDraw(star)
                 #Add observer to star model
-                star.attachObserver(dstar);
-                stars.append((star,dstar))
+                self.all_stars.append(star)
                 # Add planets to star
                 prev_p = None
                 radius = MAX_SOLAR_SYSTEM_RADIUS/number_of_planets
@@ -83,20 +82,14 @@ class GameEngine(DirectObject.DirectObject):
                     i = star.getNumberOfPlanets()
                     angle = math.pi*2*random.random()
                     radius += MIN_DISTANCE_BETWEEN_PLANETS + 3*random.random()
-                    #Position is relative to the parent star
-                    new_planet_pos = Point3(radius * math.cos(angle),
-                                            radius * math.sin(angle), 0)
-                    planet = Planet(new_planet_pos, MAX_DEAD_PLANET_RADIUS)
+                    planet = Planet(radius, angle, MAX_DEAD_PLANET_RADIUS, star)
                     planet.parent_star = star
                     planet.prev_planet = prev_p
                     prev_p = planet
-                    # This is probably too slow, we might have to change it later
-                    planet.orbital_velocity = MAX_PLANET_VELOCITY/(number_of_planets-i+1) + (MIN_PLANET_VELOCITY*math.pow(i+2,3))
+                    planet.orbital_velocity = math.pow(MAX_PLANET_VELOCITY - (float(i)/number_of_planets) * (MAX_PLANET_VELOCITY - MIN_PLANET_VELOCITY), 2)
                     planet.spin_velocity = 70
-                    dplanet = PlanetDraw(planet, dstar.point_path)
-                    planet.attachObserver(dplanet);
                     star.addPlanet(planet)
-                    planets.append((planet,dplanet))
+                    self.all_planets.append(planet)
                 
                 for i, planet in enumerate(star.planets()):
                     if i==0:
@@ -124,7 +117,7 @@ class GameEngine(DirectObject.DirectObject):
         #randomly set the camera on one of the stars for the player
         rand = random.randrange(0,NUMBER_OF_STARS,1)
         ''' TODO : camera is not set on the correct position, why ? '''
-        self.game_camera = Camera(self.all_stars[rand][0])
+        self.game_camera = Camera(self.all_stars[rand])
         
         '''TODO : choose between single player or multiplayer '''
         self.singlePlayer()
@@ -141,12 +134,13 @@ class GameEngine(DirectObject.DirectObject):
     
     #Temporary function for adding & testing units
     def _addUnit(self):
-        if self.mouse_events.selected_planet_pair != None:
-            host_planet = self.mouse_events.selected_planet_pair[0]
+        if self.mouse_events.selected_planet != None:
+            host_planet = self.mouse_events.selected_planet
             self.unit = Unit(host_planet, 1,1,1)
+            self.unit.startOrbit()
+            
             host_planet.addOrbitingUnit(self.unit)
-            self.dunit = UnitDraw(self.unit, self.mouse_events.selected_planet_pair[1])
-            self.dunit.startOrbit()
+            taskMgr.add(host_planet.drawConnections, 'DrawConnections')
 
        
 def _isSeparated(neighbors, test_position, mindist):
@@ -161,4 +155,4 @@ def _isSeparated(neighbors, test_position, mindist):
             distance = Vec3(neighbor.position - test_position).length()
             if distance < mindist:
                 return False
-    return True    
+    return True

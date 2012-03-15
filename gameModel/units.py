@@ -5,6 +5,9 @@ Created on Dec 29, 2011
 '''
 from abc import ABCMeta, abstractmethod
 from constants import *
+from pandac.PandaModules import CollisionNode, CollisionBox, CollisionSphere, TransparencyAttrib
+from direct.showbase import DirectObject 
+from panda3d.core import Vec3, Vec4, Point3, BitMask32, CardMaker
 
 class Unit(object):
     __metaclass__ = ABCMeta
@@ -29,6 +32,38 @@ class Unit(object):
         self.damage = damage
         self.deep_space = False
         self._unit_abilities = unit_abilities
+        self.__initSceneGraph()
+    
+    def __initSceneGraph(self):        
+        self.point_path = self.host_planet.point_path.attachNewNode("unit_center_node")
+        self.model_path = self.point_path.attachNewNode("unit_node")
+        self.model_path.setPythonTag('pyUnit', self);
+        self.model_path.setPos(Vec3(0,6,0))
+        
+        rad = 1
+        self.cnode = CollisionNode("coll_sphere_node")
+        self.cnode.addSolid(CollisionBox(Point3(-rad,-rad,-rad),Point3(rad,rad,rad)))
+        self.cnode.setIntoCollideMask(BitMask32.bit(1))
+        self.cnode.setTag('unit', str(id(self)))
+        self.cnode_path = self.model_path.attachNewNode(self.cnode)
+        self.cnode_path.show()
+        
+        tex = loader.loadTexture("models/units/flare.png")
+        cm = CardMaker('quad')
+        cm.setFrameFullscreenQuad()
+        self.quad_path = self.model_path.attachNewNode(cm.generate())
+        self.quad_path.setTexture(tex)
+        self.quad_path.setTransparency(TransparencyAttrib.MAlpha)
+        self.quad_path.setColor(Vec4(1.0, 0.3, 0.3, 1))
+        self.quad_path.setScale(5)
+        self.quad_path.setBillboardPointEye()
+    
+    def select(self):
+        pass
+    
+    def startOrbit(self):
+        self.orbit_period = self.point_path.hprInterval(10, Vec3(-360, 0, 0))
+        self.orbit_period.loop()
       
     def move(self, target_planet):
         '''
@@ -98,4 +133,4 @@ class Hive(Unit):
         Constructor
         @param host_planet : The planet where the unit is constructed
         '''
-        super(Hive, self).__init__(host_planet, HIVE_VELOCITY, HIVE_MAX_ENERGY, HIVE_DAMAGE, []) 
+        super(Hive, self).__init__(host_planet, HIVE_VELOCITY, HIVE_MAX_ENERGY, HIVE_DAMAGE, [])
