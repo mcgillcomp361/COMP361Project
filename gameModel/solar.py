@@ -4,7 +4,16 @@ Created on 7 janv. 2012
 @author: Bazibaz
 '''
 from observable import Observable
-from panda3d.core import Point3
+from pandac.PandaModules import CollisionNode, CollisionBox, CollisionSphere, TransparencyAttrib
+from direct.showbase import DirectObject 
+from panda3d.core import Vec3,Vec4,Point2, Point3, BitMask32
+from direct.directtools.DirectGeometry import LineNodePath
+from gameModel.constants import MAX_STAR_RADIUS, MAX_PLANET_RADIUS
+from gui.Timer import Timer
+from panda3d.core import Filename,Buffer,Shader, CardMaker
+from panda3d.core import PandaNode,NodePath
+from panda3d.core import AmbientLight,DirectionalLight
+from direct.task import Task
 #from gameEngine.gameEngine import *
 from constants import MAX_NUMBER_OF_PLANETS, MAX_NUMBER_OF_STRUCTURE, LIFETIME, MAX_STAR_RADIUS
 import math
@@ -74,6 +83,41 @@ class Star(SphericalBody):
         self._planets = []
         self.stage = 0
         self.timer_task = None
+        
+        '''TODO: move this somewhere else '''
+        self.t = Timer(self) 
+        self.__initSceneGraph()
+    
+    def __initSceneGraph(self):
+        # Parent node for relative position (no scaling)
+        self.point_path = render.attachNewNode("star_node")
+        self.point_path.setPos(self.position)
+        
+        #For transforming the object with scaling, colors, shading, etc.
+        # Hosting the actual 3d model object.
+        #Models & textures
+        self.model_path = loader.loadModel("models/stars/planet_sphere")
+        star_tex = loader.loadTexture("models/stars/white_dwarf2.jpg")
+        self.model_path.setTexture(star_tex, 1)
+        self.model_path.reparentTo(self.point_path)
+        self.model_path.setScale(self.radius)
+        self.model_path.setPythonTag('pyStar', self);
+        
+        # Collision sphere for object picking
+        #-----------------------------------------------------
+        # As described in the Tut-Chessboard.py sample: "If this model was
+        # any more complex than a single polygon, you should set up a collision
+        # sphere around it instead."
+        cnode = CollisionNode("coll_sphere_node")
+        cnode.setTag('star', str(id(self)))
+        #We use no displacement (0,0,0) and no scaling factor (1)
+        cnode.addSolid(CollisionSphere(0,0,0,1))
+        cnode.setIntoCollideMask(BitMask32.bit(1))
+        self.cnode_path = self.model_path.attachNewNode(cnode)
+        
+        #For temporary testing, display collision sphere.
+#        self.cnode_path.show()
+ 
     
     def select(self):
         '''
@@ -81,12 +125,12 @@ class Star(SphericalBody):
         and notifies the corresponding objects based on the state of the star
         '''
         if(self.activated):
-            self.notify('starLifetime')
+            '''TODO : show star lifetime counter'''
+            pass
         else:
-            self.notify('initiateStar')
-            self.activateStar()
+            self._activateStar()
         
-    def activateStar(self):
+    def _activateStar(self):
         '''
         Activates a constructed dead star object, starting the lifetime counter with the assigned default value while
         the Game Engine calls the graphic engine to display the corresponding animation.
@@ -99,27 +143,57 @@ class Star(SphericalBody):
         #self.player = GameEngine.player
         self.timer_task = taskMgr.doMethodLater(1, self.tackStarLife, 'starLifeTick')
         
+        '''TODO : display star birth animation '''
+        sound1 = base.loader.loadSfx("sound/effects/star/starCreation1.wav")
+        sound1.setLoop(False)
+        sound1.setVolume(0.5)
+        sound1.play()
+        sound2 = base.loader.loadSfx("sound/effects/star/starCreation2.wav")
+        sound2.setLoop(False)
+        sound2.setVolume(0.45)
+        sound2.play()
+        
+        self.radius = MAX_STAR_RADIUS
+        self.model_path.setScale(self.radius)
+        self.star_tex = loader.loadTexture("models/stars/star_stage1_tex.png")
+        self.model_path.setTexture(self.star_tex, 1)
+        
     def tackStarLife(self, task):
         self.lifetime = self.lifetime - float(self.getNumberOfActivePlanets())/(2)
-        self.notify('updateTimer')
+        self.updateTimer()
         if(self.lifetime <= LIFETIME - LIFETIME/6 and self.stage == 1):
             self.stage = 2
-            self.notify('starStage2')
+            self.changeStarStage(2)
         elif(self.lifetime <= LIFETIME - LIFETIME/3 and self.stage == 2):
             self.stage = 3
-            self.notify('starStage3')
+            self.changeStarStage(3)
         elif(self.lifetime <= LIFETIME - LIFETIME/2 and self.stage == 3):
             self.stage = 4
-            self.notify('starStage4')
+            self.changeStarStage(4)
         elif(self.lifetime <= LIFETIME - 2*LIFETIME/3 and self.stage == 4):
             self.stage = 5
-            self.notify('starStage5')
+            self.changeStarStage(5)
         elif(self.lifetime <= 0):
             self.stage = 6
-            self.notify('starStage6')
+            self.changeStarStage(6)
             return task.done
             '''TODO : tell all the other planets to start moving into the black hole '''
         return task.again
+        
+    def changeStarStage(self, stage):
+        '''
+        Changes the graphical aspects of the star according to its stage, including any animations needed
+        @param stage : Integer, is the stage in which the star is in; consists of 6 stages
+        '''
+        self.planet_tex = loader.loadTexture("models/stars/star_stage"+str(stage)+"_tex.png")
+        self.model_path.setTexture(self.planet_tex, 1)
+    
+    def updateTimer(self):
+        ''' TODO: move this somewhere else ? Use notify?'''
+        
+        self.t.refresh()
+        self.t.star = self
+        self.t.printTime()
         
     def addPlanet(self, planet):
         '''
@@ -167,11 +241,11 @@ class Star(SphericalBody):
         '''
         Returns the number of planets currently orbiting the star
         '''
-        sum = 0
+        total = 0
         for planet in self.planets():
             if(planet.activated):
-                sum = sum + 1
-        return sum
+                total = total + 1
+        return total
                  
 
 
@@ -180,7 +254,7 @@ class Planet(SphericalBody):
     Planet contains units and structures
     '''
 
-    def __init__(self, orbital_radius, orbital_angle, radius, parent_star=None, prev_planet=None, player=None):
+    def __init__(self, orbital_radius, orbital_angle, radius, parent_star, prev_planet=None, player=None):
         '''
         Constructor for class planet.
         @param position: Point3D, position in space
@@ -200,6 +274,51 @@ class Planet(SphericalBody):
         self.next_planet = None
         self._orbiting_units = []
         self._surface_structures = []
+        self.__initSceneGraph()
+        
+    def __initSceneGraph(self):
+        # Parent node for relative position (no scaling)
+        self.point_path = self.parent_star.point_path.attachNewNode("planet_node")
+        self.point_path.setPos(self.position)
+        
+        #Models & textures
+        self.model_path = loader.loadModel("models/planets/planet_sphere")
+        planet_tex = loader.loadTexture("models/planets/dead_planet_tex.jpg")
+        self.model_path.setTexture(planet_tex, 1)
+        self.model_path.reparentTo(self.point_path)
+        self.model_path.setScale(self.radius)
+        self.model_path.setPythonTag('pyPlanet', self);
+        
+        cnode = CollisionNode("coll_sphere_node")
+        cnode.setTag('planet', str(id(self)))
+        #We use no displacement (0,0,0) and no scaling factor (1)
+        cnode.addSolid(CollisionSphere(0,0,0,1))
+        cnode.setIntoCollideMask(BitMask32.bit(1))
+        # Reparenting the collision sphere so that it 
+        # matches the planet perfectly.
+        self.cnode_path = self.model_path.attachNewNode(cnode)
+        
+        self.connections = LineNodePath(parent = self.parent_star.point_path, thickness = 1.0, colorVec = Vec4(0,0,1.0,0.7))
+        self.connections.create()
+        self.lines = LineNodePath(parent = self.parent_star.point_path, thickness = 4.0, colorVec = Vec4(1.0, 1.0, 1.0, 0.2))
+        self.quad_path = None
+    
+    def activateHighlight(self):
+        flare_tex = base.loader.loadTexture("models/units/flare.png")
+        cm = CardMaker('quad')
+        cm.setFrameFullscreenQuad() # so that the center acts as the origin (from -1 to 1)
+        self.quad_path = self.point_path.attachNewNode(cm.generate())        
+        self.quad_path.setTransparency(TransparencyAttrib.MAlpha)
+        self.quad_path.setTexture(flare_tex)
+        self.quad_path.setColor(Vec4(0.2, 1.0, 0.3, 1))
+        self.quad_path.setScale(15)
+        self.quad_path.setPos(Vec3(0,0,0))
+        self.quad_path.setBillboardPointEye()
+    
+    def deactivateHighlight(self):
+        if self.quad_path:
+            self.quad_path.detachNode()
+            self.quad_path = None
     
     def select(self):
         '''
@@ -208,14 +327,13 @@ class Planet(SphericalBody):
         '''
         print "prev_planet:" + str(self.prev_planet)
         print "next_planet:" + str(self.next_planet)
-        self.notify('planetSelected')
+        self.activateHighlight()
         for planet in self.parent_star.planets():
             if planet != self:
-                planet.notify('planetUnselected')
+                planet.deactivateHighlight()
         if(not self.activated):
             ''' TODO : get the player who selected the planet '''
             if((self.prev_planet == None or self.prev_planet.activated) and self.parent_star.activated):
-                self.notify('initiatePlanet')
                 self.activatePlanet(None)         
         
     def activatePlanet(self, player):
@@ -227,6 +345,66 @@ class Planet(SphericalBody):
         '''
         self.player = player
         self.activated = True
+        
+        '''TODO : display planet creation animation '''
+        '''TODO : add energy ray from planet to star that moves with the planet '''
+        
+        sound = base.loader.loadSfx("sound/effects/planet/planetCreation.wav")
+        sound.setLoop(False)
+        sound.setVolume(0.23)
+        sound.play()
+        
+        self.radius = MAX_PLANET_RADIUS
+        self.model_path.setScale(self.radius)
+        
+        #rand = random.randrange(1,8,1)
+        self.star_tex = loader.loadTexture("models/planets/planet_activated_tex.png")
+        self.model_path.setTexture(self.star_tex, 1)
+        
+        self.startSpin()
+        self.drawLines()
+        self.orbitTask = taskMgr.add(self.stepOrbit, 'planetOrbit')
+    
+    def startSpin(self):
+        self.day_period = self.model_path.hprInterval(self.spin_velocity, Vec3(360, 0, 0))
+        self.day_period.loop()
+    
+    def stepOrbit(self, task):
+        self.orbital_angle = self.orbital_angle + self.orbital_velocity
+        self.orbital_angle = math.fmod(self.orbital_angle, 2.0*math.pi);
+        self.point_path.setPos(self.orbital_radius * math.cos(self.orbital_angle),
+                               self.orbital_radius * math.sin(self.orbital_angle), 0)
+        self.position = self.point_path.getPos()
+        self.drawLines()
+        return task.cont
+    
+    def drawLines(self): 
+        # put some lighting on the line
+        # for some reason the ambient and directional light in the environment drain out
+        # all other colors in the scene
+        # this is a temporary solution just so we can view the lines... the light can be removed and
+        #a glow effect will be added later
+#        alight = AmbientLight('alight')
+#        alnp = render.attachNewNode(alight)
+#        alight.setColor(Vec4(0.2, 0.2, 0.2, 1))
+#        render.setLight(alnp)
+        self.lines.reset()
+        self.lines.drawLines([((0,0, 0),
+                               (self.point_path.getX(), self.point_path.getY(), 0))])
+        self.lines.create()
+    
+    def drawConnections(self, task):
+#        cur_pos = self.point_path.getPos()
+#        paired_pos = pairedPlanetDraw.point_path.getPos()
+#        paired_pos = self.point_path.getRelativePoint(pairedPlanetDraw.point_path, pairedPlanetDraw.point_path.getPos())
+#        print pairedPlanetDraw.point_path.getX(), pairedPlanetDraw.point_path.getY(), pairedPlanetDraw.point_path.getZ()
+        self.connections.reset()
+        if(self.next_planet):
+            point_list = []
+            point_list.append((self.point_path.getPos(), self.next_planet.point_path.getPos()))
+            self.connections.drawLines(point_list)
+            self.connections.create()
+        return task.cont
         
     def changePlayer(self, player):
         '''
