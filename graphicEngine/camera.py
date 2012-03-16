@@ -35,7 +35,7 @@ class Camera(DirectObject.DirectObject):
         # This variable is used as a divisor when calculating how far to move the camera when panning. Higher numbers will yield slower panning 
         # and lower numbers will yield faster panning. This must not be set to 0. 
          
-        self.panZoneSize = .15 
+        self.panZoneSize = .05 
         # This variable controls how close the mouse cursor needs to be to the edge of the screen to start panning the camera. It must be less than 1, 
         # and I recommend keeping it less than .2 
          
