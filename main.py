@@ -15,7 +15,6 @@ from direct.gui.OnscreenText import OnscreenText
 from panda3d.core import *
 
 from gui.menu import Menu
-from gameEngine.gameEngine import GameEngine
 
 class Application(ShowBase):
     def __init__(self):

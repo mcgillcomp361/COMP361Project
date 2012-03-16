@@ -140,7 +140,7 @@ class GamePanel():
         bk_text = "Research Tree" 
         self.textObject = OnscreenText(parent = aspect2d, text = bk_text, pos = (0.0,0.5), 
                                        scale = 0.17,fg=(1,0.5,0.5,1),align=TextNode.ACenter,mayChange=1) 
-       # window = base.openWindow()
+#        window = base.openWindow()
 
     def loadMiniMap(self):
         #TODO: JULIE
@@ -176,7 +176,9 @@ class GamePanel():
         
     ## UNIT SELECTION        
     def selectSwarm(self):
+        from gameEngine.gameEngine import addUnit
         print 'selected swarm'
+        addUnit()
         
     def selectGlobe(self):
         print 'selected globe'
