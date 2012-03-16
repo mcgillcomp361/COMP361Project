@@ -12,7 +12,7 @@ from gameModel.constants import MAX_STAR_RADIUS, MAX_PLANET_RADIUS
 from gui.Timer import Timer
 from panda3d.core import Filename,Buffer,Shader, CardMaker
 from panda3d.core import PandaNode,NodePath
-from panda3d.core import AmbientLight,DirectionalLight
+from panda3d.core import AmbientLight,DirectionalLight, PointLight
 from direct.task import Task
 #from gameEngine.gameEngine import *
 from constants import MAX_NUMBER_OF_PLANETS, MAX_NUMBER_OF_STRUCTURE, LIFETIME, MAX_STAR_RADIUS
@@ -147,6 +147,20 @@ class Star(SphericalBody):
         self.radius = MAX_STAR_RADIUS
         self.player = player
         self.timer_task = taskMgr.doMethodLater(1, self.trackStarLife, 'starLifeTick')
+        
+        point_light = PointLight("starLight")
+        point_light.setColor(Vec4(1.0, 1.0, 1.0, 1.0))
+        pt_node = render.attachNewNode(point_light)
+#        pt_node.setHpr(60, 0, 90)
+        pt_node.setPos(Vec3(0, 0, -40.0))
+        render.setLight(pt_node)
+        
+        point_light = PointLight("starLight")
+        point_light.setColor(Vec4(1.0, 1.0, 1.0, 1.0))
+        pt_node = render.attachNewNode(point_light)
+#        pt_node.setHpr(60, 0, 90)
+        pt_node.setPos(Vec3(0, 0, 40.0))
+        render.setLight(pt_node)
         
         '''TODO : display star birth animation '''
         sound1 = base.loader.loadSfx("sound/effects/star/starCreation1.wav")

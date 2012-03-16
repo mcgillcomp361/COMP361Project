@@ -4,7 +4,7 @@ Created on 25 janv. 2012
 @author: Bazibaz
 '''
 from direct.showbase import DirectObject 
-from pandac.PandaModules import AntialiasAttrib, DirectionalLight, AmbientLight
+from pandac.PandaModules import AntialiasAttrib, DirectionalLight, AmbientLight, Fog
 from panda3d.core import VBase4, Vec4
 from gameModel.constants import UNIVERSE_SCALE
 
@@ -18,14 +18,14 @@ class Environement(DirectObject.DirectObject):
         render.setAntialias(AntialiasAttrib.MMultisample, 1)
 
         #Lighting
-        dirLight = DirectionalLight("directional")
-        dirLight.setColor(Vec4(1.0, 1.0, 1.0, 1.0))
-        dirNode = render.attachNewNode(dirLight)
-        dirNode.setHpr(60, 0, 90)
-        render.setLight(dirNode)
+#        dirLight = DirectionalLight("directional")
+#        dirLight.setColor(Vec4(1.0, 1.0, 1.0, 1.0))
+#        dirNode = render.attachNewNode(dirLight)
+#        dirNode.setHpr(60, 0, 90)
+#        render.setLight(dirNode)
         
         alight = AmbientLight('alight')
-        alight.setColor(VBase4(0.6, 0.6, 0.8, 1))
+        alight.setColor(VBase4(0.5, 0.5, 0.75, 1))
         alnp = render.attachNewNode(alight)
         render.setLight(alnp)
         render.setShaderAuto()
