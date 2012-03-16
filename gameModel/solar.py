@@ -24,6 +24,16 @@ class SphericalBody(Observable):
     '''
     Abstract class defining a radius and a position
     '''
+    star_dead_tex = None
+    star_stage1_tex = None
+    star_stage2_tex = None
+    star_stage3_tex = None
+    star_stage4_tex = None
+    star_stage5_tex = None
+    star_stage6_tex = None
+    dead_planet_tex = None
+    planet_activated_tex = None
+    planet_forge_tex = None
     
     def __init__(self, position, radius, activated, player):
         '''
@@ -39,6 +49,20 @@ class SphericalBody(Observable):
         self.activated = activated
         self.player = player
         self.spin_velocity = 0
+        
+        #Pre_Loading the star textures
+        SphericalBody.star_dead_tex = loader.loadTexture("models/stars/white_dwarf2.jpg")
+        SphericalBody.star_stage1_tex = loader.loadTexture("models/stars/star_stage1_tex.png")
+        SphericalBody.star_stage2_tex = loader.loadTexture("models/stars/star_stage2_tex.png")
+        SphericalBody.star_stage3_tex = loader.loadTexture("models/stars/star_stage3_tex.png")
+        SphericalBody.star_stage4_tex = loader.loadTexture("models/stars/star_stage4_tex.png")
+        SphericalBody.star_stage5_tex = loader.loadTexture("models/stars/star_stage5_tex.png")
+        SphericalBody.star_stage6_tex = loader.loadTexture("models/stars/star_stage6_tex.png")
+        
+        #Pre_Loading the planet textures
+        SphericalBody.dead_planet_tex = loader.loadTexture("models/planets/dead_planet_tex.jpg")
+        SphericalBody.planet_activated_tex = loader.loadTexture("models/planets/planet_activated_tex.png")
+        SphericalBody.planet_forge_tex = loader.loadTexture("models/planets/planet_forge_tex.png")
         
     #def __str__(self) :
     #   '''To String method'''
@@ -97,8 +121,7 @@ class Star(SphericalBody):
         # Hosting the actual 3d model object.
         #Models & textures
         self.model_path = loader.loadModel("models/stars/planet_sphere")
-        star_tex = loader.loadTexture("models/stars/white_dwarf2.jpg")
-        self.model_path.setTexture(star_tex, 1)
+        self.model_path.setTexture(SphericalBody.star_dead_tex, 1)
         self.model_path.reparentTo(self.point_path)
         self.model_path.setScale(self.radius)
         self.model_path.setPythonTag('pyStar', self);
@@ -125,6 +148,7 @@ class Star(SphericalBody):
         This method observes the events on the star and calls the related methods
         and notifies the corresponding objects based on the state of the star
         '''
+        player.selected_star = self
         if(self.activated):
             '''TODO : show star lifetime counter'''
 #            print self.player.ge_amount
@@ -160,8 +184,7 @@ class Star(SphericalBody):
         
         self.radius = MAX_STAR_RADIUS
         self.model_path.setScale(self.radius)
-        self.star_tex = loader.loadTexture("models/stars/star_stage1_tex.png")
-        self.model_path.setTexture(self.star_tex, 1)
+        self.model_path.setTexture(SphericalBody.star_stage1_tex, 1)
         self._activateSunflare()
     
     def _activateSunflare(self):
@@ -181,30 +204,22 @@ class Star(SphericalBody):
         self.updateTimer()
         if(self.lifetime <= LIFETIME - LIFETIME/6 and self.stage == 1):
             self.stage = 2
-            self.changeStarStage(2)
+            self.model_path.setTexture(SphericalBody.star_stage2_tex, 1)
         elif(self.lifetime <= LIFETIME - LIFETIME/3 and self.stage == 2):
             self.stage = 3
-            self.changeStarStage(3)
+            self.model_path.setTexture(SphericalBody.star_stage3_tex, 1)
         elif(self.lifetime <= LIFETIME - LIFETIME/2 and self.stage == 3):
             self.stage = 4
-            self.changeStarStage(4)
+            self.model_path.setTexture(SphericalBody.star_stage4_tex, 1)
         elif(self.lifetime <= LIFETIME - 2*LIFETIME/3 and self.stage == 4):
             self.stage = 5
-            self.changeStarStage(5)
+            self.model_path.setTexture(SphericalBody.star_stage5_tex, 1)
         elif(self.lifetime <= 0):
             self.stage = 6
-            self.changeStarStage(6)
+            self.model_path.setTexture(SphericalBody.star_stage6_tex, 1)
             return task.done
             '''TODO : tell all the other planets to start moving into the black hole '''
         return task.again
-        
-    def changeStarStage(self, stage):
-        '''
-        Changes the graphical aspects of the star according to its stage, including any animations needed
-        @param stage : Integer, is the stage in which the star is in; consists of 6 stages
-        '''
-        self.planet_tex = loader.loadTexture("models/stars/star_stage"+str(stage)+"_tex.png")
-        self.model_path.setTexture(self.planet_tex, 1)
     
     def updateTimer(self):
         ''' TODO: move this somewhere else ? Use notify?'''
@@ -304,8 +319,7 @@ class Planet(SphericalBody):
         
         #Models & textures
         self.model_path = loader.loadModel("models/planets/planet_sphere")
-        planet_tex = loader.loadTexture("models/planets/dead_planet_tex.jpg")
-        self.model_path.setTexture(planet_tex, 1)
+        self.model_path.setTexture(SphericalBody.dead_planet_tex, 1)
         self.model_path.reparentTo(self.point_path)
         self.model_path.setScale(self.radius)
         self.model_path.setPythonTag('pyPlanet', self);
@@ -324,9 +338,13 @@ class Planet(SphericalBody):
         self.lines = LineNodePath(parent = self.parent_star.point_path, thickness = 4.0, colorVec = Vec4(1.0, 1.0, 1.0, 0.2))
         self.quad_path = None
         
-    def setTexture(self, texture):
-        planet_tex = loader.loadTexture(texture)
-        self.model_path.setTexture(planet_tex, 1)
+    def setTexture(self, structureType):
+        '''
+        Used whenever a structure is built on the planet
+        @ StructureType is a string specifying the type of the structure
+        '''
+        if(structureType == "forge"):
+            self.model_path.setTexture(SphericalBody.planet_forge_tex, 1)
     
     def activateHighlight(self, thin):
         if thin:
@@ -400,8 +418,7 @@ class Planet(SphericalBody):
         '''TODO : display planet creation animation '''
         
         #rand = random.randrange(1,8,1)
-        self.star_tex = loader.loadTexture("models/planets/planet_activated_tex.png")
-        self.model_path.setTexture(self.star_tex, 1)
+        self.model_path.setTexture(SphericalBody.planet_activated_tex, 1)
         
         self.startSpin()
         self.drawLines()
