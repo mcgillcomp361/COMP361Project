@@ -25,6 +25,7 @@ class Structure(object):
         '''
         self.energy = energy
         self.host_planet = host_planet
+        self.host_planet.addSurfaceStructure(self)
         
 class Forge(Structure):
     '''
@@ -38,6 +39,8 @@ class Forge(Structure):
         '''
         super(Forge, self).__init__(FORGE_MAX_ENERGY, host_planet)
         self._units_in_construction = [] #Queue for units waiting to be trained.
+        
+        self.host_planet.setTexture("models/planets/planet_forge_tex.png")
         
     '''TODO : manage build time '''
     def addToConstructionQueue(self, unit): 

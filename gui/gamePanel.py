@@ -148,7 +148,7 @@ class GamePanel():
         
     ## CONSTRUCTION SELECTION
     def selectForge(self):
-        print 'selected Forge'
+        self.player.addStructure("forge")
         
     def selectNexus(self):
         print 'selected Nexus'

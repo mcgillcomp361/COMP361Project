@@ -294,6 +294,9 @@ class Planet(SphericalBody):
         self._surface_structures = []
         self.__initSceneGraph()
         
+        
+        self.task_timer = None
+        
     def __initSceneGraph(self):
         # Parent node for relative position (no scaling)
         self.point_path = self.parent_star.point_path.attachNewNode("planet_node")
@@ -320,6 +323,10 @@ class Planet(SphericalBody):
         self.connections.create()
         self.lines = LineNodePath(parent = self.parent_star.point_path, thickness = 4.0, colorVec = Vec4(1.0, 1.0, 1.0, 0.2))
         self.quad_path = None
+        
+    def setTexture(self, texture):
+        planet_tex = loader.loadTexture(texture)
+        self.model_path.setTexture(planet_tex, 1)
     
     def activateHighlight(self, thin):
         if thin:
@@ -360,7 +367,7 @@ class Planet(SphericalBody):
         if self.next_planet != None: self.next_planet.activateHighlight(True) 
         if self.prev_planet != None: self.prev_planet.activateHighlight(True) 
         
-        player.selectedPlanet = self
+        player.selected_planet = self
         if(self.player == player):
             '''TODO : notify the GUI Panel about the constructions available on this planet '''
         

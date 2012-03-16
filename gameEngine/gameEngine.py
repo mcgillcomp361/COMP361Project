@@ -126,25 +126,27 @@ def _singlePlayer():
 
 #Temporary function for adding & testing units
 def addUnit():
-    global mouse_events
-    if mouse_events.selected_planet != None:
-        host_planet = mouse_events.selected_planet
+    global player
+    if player.selected_planet != None and player.selected_planet.player == player:
+        player.minerals = player.minerals - 100 
+        '''TODO: resources management '''
+        host_planet = player.selected_planet
         unit = Unit(host_planet, 1,1,1)
         unit.startOrbit()
         host_planet.addOrbitingUnit(unit)
 #            taskMgr.add(host_planet.drawConnections, 'DrawConnections')
 
 def moveUnitsPrev():
-    global mouse_events
-    planet = mouse_events.selected_planet
+    global player
+    planet = player.selected_planet
     if planet != None and planet.next_planet != None:
         for unit in planet.units():
             unit.move(planet.next_planet)
             break
 
 def moveUnitsNext():
-    global mouse_events
-    planet = mouse_events.selected_planet
+    global player
+    planet = player.selected_planet
     if planet != None and planet.prev_planet != None:
         for unit in planet.units():
             unit.move(planet.prev_planet)
