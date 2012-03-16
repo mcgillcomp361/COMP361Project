@@ -20,15 +20,25 @@ port_address=9099  # same for client and server
  
  # a valid server URL. You can also use a DNS name
  # if the server has one, such as "localhost" or "panda3d.org"
-ip_address="192.168.0.50"
+ip_address="192.168.1.109"
  
  # how long until we give up trying to reach the server?
-timeout_in_miliseconds=3000  # 3 seconds
+timeout_in_miliseconds=6000  # 6 seconds
  
 myConnection=cManager.openTCPClientConnection(ip_address,port_address,timeout_in_miliseconds)
 if myConnection:
   cReader.addConnection(myConnection)  # receive messages from server
-  
+
+def myProcessDataFunction(netDatagram):
+    myIterator = PyDatagramIterator(netDatagram)
+    msgID = myIterator.getUint8()
+    if msgID == PRINT_MESSAGE:
+        messageToPrint = myIterator.getString()
+        print messageToPrint
+
+datagram = NetDatagram()
+if cReader.getData(datagram):
+    myProcessDataFunction(datagram)  
 # Developer-defined constants, telling the server what to do.
 # Your style of how to store this information may differ; this is
 # only one way to tackle the problem
