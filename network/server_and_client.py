@@ -4,6 +4,9 @@ Created on Mar 15, 2012
 @author: Benjamin
 '''
 from direct.task.TaskNew import TaskManager
+#For transmitting information between the server and client
+from direct.distributed.PyDatagram import PyDatagram 
+from direct.distributed.PyDatagramIterator import PyDatagramIterator
 #Network imports
 from pandac.PandaModules import QueuedConnectionManager
 from pandac.PandaModules import QueuedConnectionListener
@@ -36,6 +39,7 @@ class Server():
                 newConnection = newConnection.p()
                 self.activeConnections.append(newConnection) # Remember connection
                 self.cReader.addConnection(newConnection)     # Begin reading connection
+                self.broadCast(newConnection) #Broadcasts the Server Message
         return Task.cont
     
     def tskReaderPolling(self,taskdata):
@@ -54,7 +58,7 @@ class Server():
     '''
     Terminate all connections.
     '''
-    def terminateConnection(self):
+    def terminateAllConnection(self):
         for aClient in self.activeConnections:
             self.cReader.removeConnections(aClient)
         self.activeConnections = []
@@ -65,14 +69,42 @@ class Server():
     Terminate a connection.
     '''
     def terminateConnection(self, aClient):
-        for aClient in self.activeConnections:
-            self.cReader.removeConnections(aClient)
-        self.activeConnections = []
-        #Close our listener
-        self.cManager.closeConnection(self.tcpSocket)
+        self.cReader.removeConnections(aClient)
         
+    '''
+    PyDatagram for messages
+    Arguments: message must be a string
+    '''
+    def messageData(self, message):
+        messDat = PyDatagram()
+        messDat.addUint8(1) #1=TRUE print the message
+        messDat.addString(message)
+        return messDat
+    
+    '''
+    Broadcast Server Message
+    '''
+    def broadCast(self, aClient):
+        message = self.messageData("Welcome to BaziBaz's Server\nConnection has been estabilished\n")
+        self.cWriter.send(message, aClient)
+
+
 class Client():
     def __init__(self):
         self.cManager = QueuedConnectionManager()
         self.cReader = QueuedConnectionReader(self.cManager, 0)
         self.cWriter = ConnectionWriter(self.cManager,0)
+        self.connection = None #Connection with the server
+        
+    def connectToServer(self, ip_address="192.168.1.110", port_address=9099):
+        #How long to wait until we give up connecting
+        timeout = 3000 # 3 seconds
+        self.connection = self.cManager.openTCPClientConnection(ip_address,port_address,timeout)
+        if self.connection:
+            self.cReader.addConnection(self.connection) #Retrieve message from Server
+            
+    '''
+    Closes the connection with the server
+    '''
+    def disconnectServer(self):
+        self.cManager.closeConnection(self.connection)
