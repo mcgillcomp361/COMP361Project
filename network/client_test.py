@@ -3,56 +3,9 @@ Created on Mar 2, 2012
 
 @author: Eran-Tasker
 '''
-from pandac.PandaModules import * 
-import direct.directbase.DirectStart 
-from direct.distributed.PyDatagram import PyDatagram 
-from direct.distributed.PyDatagramIterator import PyDatagramIterator 
-from pandac.PandaModules import QueuedConnectionManager
-from pandac.PandaModules import QueuedConnectionReader
-from pandac.PandaModules import ConnectionWriter
 
-cManager = QueuedConnectionManager()
-cReader = QueuedConnectionReader(cManager, 0)
-cWriter = ConnectionWriter(cManager,0)
+from server_and_client import Client
 
-
-port_address=9099  # same for client and server
- 
- # a valid server URL. You can also use a DNS name
- # if the server has one, such as "localhost" or "panda3d.org"
-ip_address="192.168.1.109"
- 
- # how long until we give up trying to reach the server?
-timeout_in_miliseconds=6000  # 6 seconds
- 
-myConnection=cManager.openTCPClientConnection(ip_address,port_address,timeout_in_miliseconds)
-if myConnection:
-  cReader.addConnection(myConnection)  # receive messages from server
-
-def myProcessDataFunction(netDatagram):
-    myIterator = PyDatagramIterator(netDatagram)
-    msgID = myIterator.getUint8()
-    if msgID == PRINT_MESSAGE:
-        messageToPrint = myIterator.getString()
-        print messageToPrint
-
-datagram = NetDatagram()
-if cReader.getData(datagram):
-    myProcessDataFunction(datagram)  
-# Developer-defined constants, telling the server what to do.
-# Your style of how to store this information may differ; this is
-# only one way to tackle the problem
-PRINT_MESSAGE = 1
- 
-def myNewPyDatagram(self):
-  # Send a test message
-  myPyDatagram = PyDatagram()
-  myPyDatagram.addUint8(PRINT_MESSAGE)
-  myPyDatagram.addString("Hello, world!")
-  return myPyDatagram
-
-cWriter.send(myNewPyDatagram(), aConnection)
-
-
-cManager.closeConnection(myConnection)
-
+Client = Client()
+Client.connectToServer()
+run()

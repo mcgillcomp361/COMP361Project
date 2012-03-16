@@ -162,6 +162,19 @@ class Star(SphericalBody):
         self.model_path.setScale(self.radius)
         self.star_tex = loader.loadTexture("models/stars/star_stage1_tex.png")
         self.model_path.setTexture(self.star_tex, 1)
+        self._activateSunflare()
+    
+    def _activateSunflare(self):
+        flare_tex = base.loader.loadTexture("models/billboards/sunflare.png")
+        cm = CardMaker('quad')
+        cm.setFrameFullscreenQuad() # so that the center acts as the origin (from -1 to 1)
+        self.quad_path = self.point_path.attachNewNode(cm.generate())        
+        self.quad_path.setTransparency(TransparencyAttrib.MAlpha)
+        self.quad_path.setTexture(flare_tex)
+        self.quad_path.setColor(Vec4(1.0, 1.0, 1.0, 1))
+        self.quad_path.setScale(32)
+        self.quad_path.setPos(Vec3(0,0,0))
+        self.quad_path.setBillboardPointEye()
         
     def trackStarLife(self, task):
         self.lifetime = self.lifetime - float(self.getNumberOfActivePlanets())/(2)
@@ -308,15 +321,21 @@ class Planet(SphericalBody):
         self.lines = LineNodePath(parent = self.parent_star.point_path, thickness = 4.0, colorVec = Vec4(1.0, 1.0, 1.0, 0.2))
         self.quad_path = None
     
-    def activateHighlight(self):
-        flare_tex = base.loader.loadTexture("models/units/flare.png")
+    def activateHighlight(self, thin):
+        if thin:
+            flare_tex = base.loader.loadTexture("models/billboards/thin_ring.png")
+        else:
+            flare_tex = base.loader.loadTexture("models/billboards/ring.png")
         cm = CardMaker('quad')
         cm.setFrameFullscreenQuad() # so that the center acts as the origin (from -1 to 1)
         self.quad_path = self.point_path.attachNewNode(cm.generate())        
         self.quad_path.setTransparency(TransparencyAttrib.MAlpha)
         self.quad_path.setTexture(flare_tex)
-        self.quad_path.setColor(Vec4(0.2, 0.3, 1.0, 1))
-        self.quad_path.setScale(15)
+        if thin:
+            self.quad_path.setColor(Vec4(0.2, 0.1, 0.6, 1))
+        else:
+            self.quad_path.setColor(Vec4(0.2, 0.3, 1.0, 1))
+        self.quad_path.setScale(5)
         self.quad_path.setPos(Vec3(0,0,0))
         self.quad_path.setBillboardPointEye()
     
@@ -337,7 +356,9 @@ class Planet(SphericalBody):
         
         for planet in self.parent_star.planets():
             planet.deactivateHighlight()
-        self.activateHighlight()
+        self.activateHighlight(False)
+        if self.next_planet != None: self.next_planet.activateHighlight(True) 
+        if self.prev_planet != None: self.prev_planet.activateHighlight(True) 
         
         player.selectedPlanet = self
         if(self.player == player):
