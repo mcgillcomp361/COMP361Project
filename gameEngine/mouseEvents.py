@@ -18,7 +18,6 @@ class MouseEvents(DirectObject.DirectObject):
         self.accept('arrow_up', moveUnitsPrev )               
         # Initialize the traverser.
         self.myTraverser = CollisionTraverser()
-        self.selected_planet = None
         # Initialize the handler.
         self.myHandler = CollisionHandlerQueue()       
         self.accept("escape", sys.exit) #Exit the program when escape is pressed
@@ -63,6 +62,4 @@ class MouseEvents(DirectObject.DirectObject):
         model_path = pickedObj.getParent()
         #model_path.notify("starSelected")
         model = model_path.getPythonTag(python_tag)
-        if(tag == 'planet'):
-            self.selected_planet = model
         model.select(self.player)

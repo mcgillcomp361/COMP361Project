@@ -25,6 +25,8 @@ MAX_NUMBER_OF_PLANETS, MAX_PLANET_VELOCITY
 from panda3d.core import Point3, Vec3
 from direct.task import Task
 from mouseEvents import MouseEvents
+from gui.gamePanel import GamePanel
+from gui.guiUpdate import guiUpdate
 
 mouse_events = None
 env_graphics = None
@@ -37,12 +39,15 @@ all_planets = []
 _game_camera = None
             
     #Keyboard events
-
+gamePanel = None
+updateGUI = None
 
 def initialize():
-    global mouse_events, env_graphics, all_players
+    global mouse_events, env_graphics, all_players, gamePanel, updateGUI
     mouse_events = MouseEvents()
     env_graphics = Environement()
+    gamePanel = GamePanel(player)
+    updateGUI = guiUpdate(0)
     _prepareGame()
     _startGame(all_players)
 
@@ -50,7 +55,7 @@ def _prepareGame():
     '''
         Sets up the environment of the game
     '''
-    global all_stars, all_planets
+    global all_stars, all_planets, gamePanel, updateGUI
     #Initialize graphics
     max_loop = 0
     while(len(all_stars)< NUMBER_OF_STARS):
@@ -65,6 +70,7 @@ def _prepareGame():
         if _isSeparated(all_stars, new_star_pos, DEEP_SPACE_DISTANCE):
             star = Star(position = new_star_pos, radius = MAX_DEAD_STAR_RADIUS)
             #Add observer to star model
+            star.attachObserver(updateGUI)
             all_stars.append(star)
             # Add planets to star
             prev_p = None
@@ -126,25 +132,30 @@ def _singlePlayer():
 
 #Temporary function for adding & testing units
 def addUnit():
-    global mouse_events
-    if mouse_events.selected_planet != None:
-        host_planet = mouse_events.selected_planet
+    global player
+    if player.selected_planet != None and player.selected_planet.player == player and player.minerals > 0:
+        player.minerals = player.minerals - 100 
+        updateGUI.refreshResources()
+        updateGUI.value = player.minerals
+        updateGUI.printResources()
+        '''TODO: resources management '''
+        host_planet = player.selected_planet
         unit = Unit(host_planet, 1,1,1)
         unit.startOrbit()
         host_planet.addOrbitingUnit(unit)
 #            taskMgr.add(host_planet.drawConnections, 'DrawConnections')
 
 def moveUnitsPrev():
-    global mouse_events
-    planet = mouse_events.selected_planet
+    global player
+    planet = player.selected_planet
     if planet != None and planet.next_planet != None:
         for unit in planet.units():
             unit.move(planet.next_planet)
             break
 
 def moveUnitsNext():
-    global mouse_events
-    planet = mouse_events.selected_planet
+    global player
+    planet = player.selected_planet
     if planet != None and planet.prev_planet != None:
         for unit in planet.units():
             unit.move(planet.prev_planet)

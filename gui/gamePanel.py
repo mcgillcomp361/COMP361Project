@@ -18,7 +18,6 @@ class GamePanel():
         self.player = player
         self.loadResources()
         self.loadMiniMap()
-        self.playerResources()
         self.loadAbilities()
         self.loadUnits()
         self.loadResearchTree()
@@ -103,16 +102,6 @@ class GamePanel():
     def loadAbilities(self):
         #TODO: Julie
         message = "Ability list"   
-         
-    def playerResources(self):
-        resources = OnscreenText(text = 'Resources: ', pos = (1.4, 0.4), scale = 0.7, fg = (1, 1, 1, 1))
-        amount = OnscreenText(text = str(self.player.minerals), pos = (7, 0.4), scale = 0.7, fg = (1, 1, 1, 1))
-        gEngine = OnscreenText(text = 'Gravity Engines: ', pos = (2, -0.7), scale = 0.7, fg = (1, 1, 1, 1))
-        ge_amount = OnscreenText(text = str(self.player.ge_amount), pos = (7, -0.7), scale = 0.7, fg = (1, 1, 1, 1))
-        resources.reparentTo(self.mainFrame)
-        gEngine.reparentTo(self.mainFrame)
-        amount.reparentTo(self.mainFrame)
-        ge_amount.reparentTo(self.mainFrame)
       
     def loadResearchTree(self):
         b1 = DirectButton(text = ("Research Tree", "click!", "roll"), pos = (0, 0, -2.4),
@@ -148,7 +137,7 @@ class GamePanel():
         
     ## CONSTRUCTION SELECTION
     def selectForge(self):
-        print 'selected Forge'
+        self.player.addStructure("forge")
         
     def selectNexus(self):
         print 'selected Nexus'
