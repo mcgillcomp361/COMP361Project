@@ -14,8 +14,8 @@ while Client.connectToServer() == False:
     if attempts == 0:
         exit()
 
-while True:
-    Client.recieveMessage()
+#while True:
+#    Client.recieveMessage()
 
-Client.disconnectServer()
+#Client.disconnectServer()
 run()
