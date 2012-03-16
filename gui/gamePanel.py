@@ -9,13 +9,12 @@ from pandac.PandaModules import *
 class GamePanel(): 
     def __init__(self, player): 
         self.mainFrame = DirectFrame(frameColor= (0,0,0,1),
-            scale=0.05,
-            pos=(0, 0,-0.8),
-            sortOrder=2,
-            geom=loader.loadModel("./models/gui/guiBar.egg"),        
-            geom_scale = (65,5,10),
-            geom_pos = (0,0,0)
+            scale=0.06,
+            pos=(0, 0,-0.7),
+            sortOrder=2,        
         )   
+        geom=OnscreenImage(parent=render2d, image="./models/gui/guiBar.png", scale = (1, 1, 0.3), pos = (0,0,-0.7))
+        geom.setTransparency(True)  
         self.player = player
         self.loadResources()
         self.loadMiniMap()
@@ -28,7 +27,6 @@ class GamePanel():
         b1 = DirectButton(image = "./models/gui/structures/structure1.png", frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
                           image_scale = (0.55, 1, 0.55), pos=(-29.6,0,0.7),borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                           relief=2, command=self.selectForge)
-
         b2 = DirectButton(image = "./models/gui/structures/structure2.png",frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
                           image_scale = (0.55, 1, 0.55), pos=(-28.1,0,0.7), borderWidth = (0.005, 0.005),  text_align = TextNode.ALeft,
                           relief=2, command=self.selectNexus)
@@ -107,8 +105,8 @@ class GamePanel():
         message = "Ability list"   
          
     def playerResources(self):
-        resources = OnscreenText(text = 'Resources: ', pos = (1.3, 0.3), scale = 0.7, fg = (1, 1, 1, 1))
-        amount = OnscreenText(text = str(self.player.minerals), pos = (7, 0.3), scale = 0.7, fg = (1, 1, 1, 1))
+        resources = OnscreenText(text = 'Resources: ', pos = (1.4, 0.4), scale = 0.7, fg = (1, 1, 1, 1))
+        amount = OnscreenText(text = str(self.player.minerals), pos = (7, 0.4), scale = 0.7, fg = (1, 1, 1, 1))
         gEngine = OnscreenText(text = 'Gravity Engines: ', pos = (2, -0.7), scale = 0.7, fg = (1, 1, 1, 1))
         ge_amount = OnscreenText(text = str(self.player.ge_amount), pos = (7, -0.7), scale = 0.7, fg = (1, 1, 1, 1))
         resources.reparentTo(self.mainFrame)
@@ -146,7 +144,7 @@ class GamePanel():
 
     def loadMiniMap(self):
         #TODO: JULIE
-        minimap =  DirectFrame(pos=(1,-1,-1), frameSize=(0.3, 0.5, 0.0, 0.35), frameColor = (0, 0, 0, 1) )
+        pass
         
     ## CONSTRUCTION SELECTION
     def selectForge(self):
