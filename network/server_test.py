@@ -3,6 +3,9 @@ Created on Feb 16, 2012
 
 @author: Eran-Tasker
 '''
+#These two lines allow the server and client to run without the window
+#from pandac.PandaModules import ConfigVariableString 
+#ConfigVariableString("window-type", "none").setValue("none")
 from server_and_client import Server
 
 Server = Server()

@@ -3,6 +3,9 @@ Created on Mar 15, 2012
 
 @author: Benjamin
 '''
+#These two lines allow the server and client to run without the window
+#from pandac.PandaModules import ConfigVariableString 
+#ConfigVariableString("window-type", "none").setValue("none")
 from panda3d.core import *
 from direct.task import Task
 import direct.directbase.DirectStart
