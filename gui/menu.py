@@ -3,8 +3,8 @@ from direct.gui.OnscreenText import OnscreenText
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
-from gameEngine.gameEngine import GameEngine
- 
+from gameEngine import gameEngine
+from gui.gamePanel import GamePanel
 
 class Menu(): 
     def __init__(self): 
@@ -62,7 +62,8 @@ class Menu():
         print 'starting game'
         self.mainFrame.destroy()
         self.b.destroy()
-        self.ge = GameEngine()
+        gameEngine.initialize()
+        self.gamePanel = GamePanel(gameEngine.player)
 
     def mainMenu(self):
         self.mainFrame.destroy()

@@ -18,147 +18,137 @@ from gameModel.solar import Star, Planet
 from graphicEngine.environement import Environement
 #from graphicEngine.solarAnimator import SolarAnimator
 from graphicEngine.camera import Camera
-from gui.gamePanel import GamePanel
 from gameModel.constants import UNIVERSE_SCALE, DEEP_SPACE_DISTANCE, \
 MAX_DEAD_STAR_RADIUS, NUMBER_OF_STARS, MIN_DISTANCE_BETWEEN_PLANETS, \
 MIN_PLANET_VELOCITY, MAX_SOLAR_SYSTEM_RADIUS, MAX_DEAD_PLANET_RADIUS, \
 MAX_NUMBER_OF_PLANETS, MAX_PLANET_VELOCITY
 from panda3d.core import Point3, Vec3
 from direct.task import Task
-
 from mouseEvents import MouseEvents
 
-class GameEngine(DirectObject.DirectObject):
+mouse_events = None
+env_graphics = None
+player = None
+AI = None
+all_players = []
+all_stars = []
+all_planets = []
+
+_game_camera = None
+            
+    #Keyboard events
+
+
+def initialize():
+    global mouse_events, env_graphics, all_players
+    mouse_events = MouseEvents()
+    env_graphics = Environement()
+    _prepareGame()
+    _startGame(all_players)
+
+def _prepareGame():
     '''
-    This class acts as the connection between the game model and the graphic engine.
-    '''    
-    def __init__(self):
-        '''
-        Constructor
-        '''
-        self.mouse_events = MouseEvents()
-        
-        self.player = None
-        self.AI = None
-        
-        self.all_players = []
-        self.all_stars = []
-        self.all_planets = []
-        self.prepareGame(NUMBER_OF_STARS, MAX_NUMBER_OF_PLANETS, self.all_stars, self.all_planets)
-                
-        self.startGame(self.all_players)
-        #Keyboard events
-        self.accept('u', self._addUnit) #temporary function for testing units
-        self.accept('arrow_down', self._moveUnitsNext )
-        self.accept('arrow_up', self._moveUnitsPrev )
-    
-    def prepareGame(self, number_of_stars, number_of_planets, stars, planets):
-        '''
         Sets up the environment of the game
-        @param number_of_stars : int, the desired number of stars 
-        @precondition: number_of_stars > 0
-        @param number_of_stars : int, the desired number of planets orbiting each star
-        @precondition number_of_planets > 0
-        @param stars : Star, list of the stars
-        '''
-        #Initialize graphics
-        self.env_graphics = Environement()
-        max_loop = 0
-        while(len(stars)< number_of_stars):
-            new_star_pos = Point3()
-            if (len(stars)==0):
-                new_star_pos = Point3(0,0,0)
-            else:
-                new_star_pos= Point3((random.random()-0.5)*UNIVERSE_SCALE,
-                                     (random.random()-0.5)*UNIVERSE_SCALE, 0)
-            # Given that the star is separated enough from its neighboring stars
-            # we can add it to the solar system  
-            if _isSeparated(stars, new_star_pos, DEEP_SPACE_DISTANCE):
-                star = Star(position = new_star_pos, radius = MAX_DEAD_STAR_RADIUS)
-                #Add observer to star model
-                self.all_stars.append(star)
-                # Add planets to star
-                prev_p = None
-                radius = MAX_SOLAR_SYSTEM_RADIUS/number_of_planets
-                while(star.getNumberOfPlanets() < number_of_planets):
-                    i = star.getNumberOfPlanets()
-                    angle = math.pi*2*random.random()
-                    radius += MIN_DISTANCE_BETWEEN_PLANETS + 3*random.random()
-                    planet = Planet(radius, angle, MAX_DEAD_PLANET_RADIUS, star)
-                    planet.parent_star = star
-                    planet.prev_planet = prev_p
-                    prev_p = planet
-                    planet.orbital_velocity = math.pow(MAX_PLANET_VELOCITY - (float(i)/number_of_planets) * (MAX_PLANET_VELOCITY - MIN_PLANET_VELOCITY), 2)
-                    planet.spin_velocity = 70
-                    star.addPlanet(planet)
-                    self.all_planets.append(planet)
+    '''
+    global all_stars, all_planets
+    #Initialize graphics
+    max_loop = 0
+    while(len(all_stars)< NUMBER_OF_STARS):
+        new_star_pos = Point3()
+        if (len(all_stars)==0):
+            new_star_pos = Point3(0,0,0)
+        else:
+            new_star_pos= Point3((random.random()-0.5)*UNIVERSE_SCALE,
+                                 (random.random()-0.5)*UNIVERSE_SCALE, 0)
+        # Given that the star is separated enough from its neighboring stars
+        # we can add it to the solar system  
+        if _isSeparated(all_stars, new_star_pos, DEEP_SPACE_DISTANCE):
+            star = Star(position = new_star_pos, radius = MAX_DEAD_STAR_RADIUS)
+            #Add observer to star model
+            all_stars.append(star)
+            # Add planets to star
+            prev_p = None
+            radius = MAX_SOLAR_SYSTEM_RADIUS/MAX_NUMBER_OF_PLANETS
+            while(star.getNumberOfPlanets() < MAX_NUMBER_OF_PLANETS):
+                i = star.getNumberOfPlanets()
+                angle = math.pi*2*random.random()
+                radius += MIN_DISTANCE_BETWEEN_PLANETS + 3*random.random()
+                planet = Planet(radius, angle, MAX_DEAD_PLANET_RADIUS, star)
+                planet.parent_star = star
+                planet.prev_planet = prev_p
+                prev_p = planet
+                planet.orbital_velocity = math.pow(MAX_PLANET_VELOCITY - (float(i)/MAX_NUMBER_OF_PLANETS) * (MAX_PLANET_VELOCITY - MIN_PLANET_VELOCITY), 2)
+                planet.spin_velocity = 70
+                star.addPlanet(planet)
+                all_planets.append(planet)
+            
+            for i, planet in enumerate(star.planets()):
+                if i==0:
+                    continue
+                planet.prev_planet.next_planet = planet
                 
-                for i, planet in enumerate(star.planets()):
-                    if i==0:
-                        continue
-                    planet.prev_planet.next_planet = planet
-                    
-                    
-            #Safety check so that we don't loop forever without knowing why
-            max_loop = max_loop + 1
-            if max_loop > 10*number_of_stars:
-                raise Exception("Cannot add all stars based on the current parameters.")
-            
-    def startGame(self, players):
-        '''
-        Start a prepared game, executes the codes that are common to both modes of the game and then enters
-        either the single player mode or the multiplayer mode based on the players choice.
-        @param players: the list of the players ready to play
-        '''
+                
+        #Safety check so that we don't loop forever without knowing why
+        max_loop = max_loop + 1
+        if max_loop > 10*NUMBER_OF_STARS:
+            raise Exception("Cannot add all stars based on the current parameters.")
         
-        ''' TODO : music should be self.music so it can be changed later on '''
-        music = base.loader.loadSfx("sound/music/music1.mp3")
-        music.setLoop(True)
-        music.play()
-        
-        #randomly set the camera on one of the stars for the player
-        rand = random.randrange(0,NUMBER_OF_STARS,1)
-        ''' TODO : camera is not set on the correct position, why ? '''
-        self.game_camera = Camera(self.all_stars[rand])
-        
-        '''TODO : choose between single player or multiplayer '''
-        self.singlePlayer()
-        #multiPlayer(players)
-            
-    def singlePlayer(self):
-        '''
-        Run a single player game with an AI player
-        @players : the player
-        '''
-        self.player = Player("player")
-        self.gP = GamePanel(self.player)
-        self.mouse_events.setPlayer(self.player)
-        
-        self.AI = Player("AI")
+def _startGame(players):
+    '''
+    Start a prepared game, executes the codes that are common to both modes of the game and then enters
+    either the single player mode or the multiplayer mode based on the players choice.
+    @param players: the list of the players ready to play
+    '''
     
-    #Temporary function for adding & testing units
-    def _addUnit(self):
-        if self.mouse_events.selected_planet != None:
-            host_planet = self.mouse_events.selected_planet
-            self.unit = Unit(host_planet, 1,1,1)
-            self.unit.startOrbit()
-            
-            host_planet.addOrbitingUnit(self.unit)
+    ''' TODO : music should be self.music so it can be changed later on '''
+    music = base.loader.loadSfx("sound/music/music1.mp3")
+    music.setLoop(True)
+    music.play()
+    
+    #randomly set the camera on one of the stars for the player
+    rand = random.randrange(0,NUMBER_OF_STARS,1)
+    ''' TODO : camera is not set on the correct position, why ? '''
+    game_camera = Camera(all_stars[rand])
+    
+    '''TODO : choose between single player or multiplayer '''
+    _singlePlayer()
+    #multiPlayer(players)
+        
+def _singlePlayer():
+    '''
+    Run a single player game with an AI player
+    @players : the player
+    '''
+    global player, mouse_events, AI
+    player = Player("player")
+    mouse_events.setPlayer(player)
+    AI = Player("AI")
+
+#Temporary function for adding & testing units
+def addUnit():
+    global mouse_events
+    if mouse_events.selected_planet != None:
+        host_planet = mouse_events.selected_planet
+        unit = Unit(host_planet, 1,1,1)
+        unit.startOrbit()
+        host_planet.addOrbitingUnit(unit)
 #            taskMgr.add(host_planet.drawConnections, 'DrawConnections')
-    
-    def _moveUnitsPrev(self):
-        planet = self.mouse_events.selected_planet
-        if planet != None and planet.next_planet != None:
-            for unit in planet.units():
-                unit.move(planet.next_planet)
-                break
-    
-    def _moveUnitsNext(self):
-        planet = self.mouse_events.selected_planet
-        if planet != None and planet.prev_planet != None:
-            for unit in planet.units():
-                unit.move(planet.prev_planet)
-                break
+
+def moveUnitsPrev():
+    global mouse_events
+    planet = mouse_events.selected_planet
+    if planet != None and planet.next_planet != None:
+        for unit in planet.units():
+            unit.move(planet.next_planet)
+            break
+
+def moveUnitsNext():
+    global mouse_events
+    planet = mouse_events.selected_planet
+    if planet != None and planet.prev_planet != None:
+        for unit in planet.units():
+            unit.move(planet.prev_planet)
+            break
 
        
 def _isSeparated(neighbors, test_position, mindist):

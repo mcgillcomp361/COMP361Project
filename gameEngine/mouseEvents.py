@@ -9,9 +9,13 @@ from pandac.PandaModules import CollisionTraverser, CollisionHandlerQueue, Colli
 from pandac.PandaModules import CollisionNode
 from panda3d.core import BitMask32
 
+
 class MouseEvents(DirectObject.DirectObject):
     
-    def __init__(self):                
+    def __init__(self): 
+        from gameEngine import moveUnitsNext, moveUnitsPrev
+        self.accept('arrow_down', moveUnitsNext )
+        self.accept('arrow_up', moveUnitsPrev )               
         # Initialize the traverser.
         self.myTraverser = CollisionTraverser()
         self.selected_planet = None
