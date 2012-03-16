@@ -9,11 +9,11 @@ from pandac.PandaModules import *
 class GamePanel(): 
     def __init__(self, player): 
         self.mainFrame = DirectFrame(frameColor= (0,0,0,1),
-            scale=0.06,
+            scale=0.05,
             pos=(0, 0,-0.7),
             sortOrder=2,        
         )   
-        geom=OnscreenImage(parent=render2d, image="./models/gui/guiBar.png", scale = (1, 1, 0.3), pos = (0,0,-0.7))
+        geom=OnscreenImage(parent=render2d, image="./models/gui/guiBarV2.png", scale = (1, 1, 0.3), pos = (0,0,-0.7))
         geom.setTransparency(True)  
         self.player = player
         self.loadResources()
@@ -25,31 +25,31 @@ class GamePanel():
         
     def loadResources(self):
         b1 = DirectButton(image = "./models/gui/structures/structure1.png", frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                          image_scale = (0.55, 1, 0.55), pos=(-29.6,0,0.7),borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          image_scale = (0.65, 1, 0.65), pos=(-29.6,0,0.85),borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                           relief=2, command=self.selectForge)
         b2 = DirectButton(image = "./models/gui/structures/structure2.png",frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                          image_scale = (0.55, 1, 0.55), pos=(-28.1,0,0.7), borderWidth = (0.005, 0.005),  text_align = TextNode.ALeft,
+                          image_scale = (0.65, 1, 0.65), pos=(-28.1,0,0.85), borderWidth = (0.005, 0.005),  text_align = TextNode.ALeft,
                           relief=2, command=self.selectNexus)
         b3 = DirectButton(image = "./models/gui/structures/structure3.png",frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                          image_scale = (0.55, 1, 0.55), pos=(-26.6,0, 0.7), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          image_scale = (0.65, 1, 0.65), pos=(-26.6,0, 0.85), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                           relief=2, command=self.selectExtractor)
         b4 = DirectButton(image = "./models/gui/structures/structure4.png", frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                          image_scale = (0.55, 1, 0.55), pos=(-25.1,0, 0.7), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          image_scale = (0.65, 1, 0.65), pos=(-25.1,0, 0.85), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                           relief=2, command=self.selectPD1)
         b5 = DirectButton(image = "./models/gui/structures/structure5.png", frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                          image_scale = (0.55, 1, 0.55), pos=(-29.6,0, -0.6), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          image_scale = (0.65, 1, 0.65), pos=(-29.6,0, -0.75), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                           relief=2, command=self.selectPhylon)
         b6 = DirectButton(image = "./models/gui/structures/structure6.png", frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                          image_scale = (0.55, 1, 0.55), pos=(-28.1,0, -0.6), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          image_scale = (0.65, 1, 0.65), pos=(-28.1,0, -0.75), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                           relief=2, command=self.selectPD2)
         b7 = DirectButton(image = "./models/gui/structures/structure7.png", frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                          image_scale = (0.55, 1, 0.55), pos=(-29.6,0, -2.0), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          image_scale = (0.65, 1, 0.65), pos=(-29.6,0, -2.3), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                           relief=2, command=self.selectGC)
         b8 = DirectButton(image = "./models/gui/structures/structure8.png", frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                          image_scale = (0.55, 1, 0.55), pos=(-28.1,0, -2.0), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          image_scale = (0.65, 1, 0.65), pos=(-28.1,0, -2.3), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                           relief=2, command=self.selectPD3)
         b9 = DirectButton(image = "./models/gui/structures/structure9.png", frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                          image_scale = (0.55, 1, 0.55), pos=(-29.6,0, -3.3), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          image_scale = (0.65, 1, 0.65), pos=(-29.6,0, -3.90), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                           relief=2, command=self.selectPD4)    
         b1.reparentTo(self.mainFrame)
         b2.reparentTo(self.mainFrame)
@@ -63,31 +63,31 @@ class GamePanel():
         
     def loadUnits(self):
         b1 = DirectButton(image = "./models/gui/units/unit1.png", frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                          image_scale = (0.55, 1, 0.55), pos=(-21,0,0.7),borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          image_scale = (0.65, 1, 0.65), pos=(-21,0,0.85),borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                           relief=2, command=self.selectSwarm)
         b2 = DirectButton(image = "./models/gui/units/unit2.png",frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                          image_scale = (0.55, 1, 0.55), pos=(-19.5,0,0.7), borderWidth = (0.005, 0.005),  text_align = TextNode.ALeft,
+                          image_scale = (0.65, 1, 0.65), pos=(-19.5,0,0.85), borderWidth = (0.005, 0.005),  text_align = TextNode.ALeft,
                           relief=2, command=self.selectGlobe)
         b3 = DirectButton(image = "./models/gui/units/unit3.png",frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                          image_scale = (0.55, 1, 0.55), pos=(-18,0, 0.7), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          image_scale = (0.65, 1, 0.65), pos=(-18,0, 0.85), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                           relief=2, command=self.selectAnalyzer)
         b4 = DirectButton(image = "./models/gui/units/unit4.png", frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                          image_scale = (0.55, 1, 0.55), pos=(-21,0, -0.6), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          image_scale = (0.65, 1, 0.65), pos=(-21,0, -0.75), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                           relief=2, command=self.selectSphere)
         b5 = DirectButton(image = "./models/gui/units/unit5.png", frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                          image_scale = (0.55, 1, 0.55), pos=(-19.5,0, -0.6), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          image_scale = (0.65, 1, 0.65), pos=(-19.5,0, -0.75), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                           relief=2, command=self.selectHive)
         b6 = DirectButton(image = "./models/gui/units/unit6.png", frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                          image_scale = (0.55, 1, 0.55), pos=(-21,0, -2), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          image_scale = (0.65, 1, 0.65), pos=(-21,0, -2.3), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                           relief=2, command=self.selectPlanetarium)
         b7 = DirectButton(image = "./models/gui/units/unit7.png", frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                          image_scale = (0.55, 1, 0.55), pos=(-19.5,0, -2.0), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          image_scale = (0.65, 1, 0.65), pos=(-19.5,0, -2.3), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                           relief=2, command=self.selectMathematica)
         b8 = DirectButton(image = "./models/gui/units/unit8.png", frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                          image_scale = (0.55, 1, 0.55), pos=(-18,0, -2.0), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          image_scale = (0.65, 1, 0.65), pos=(-18,0, -2.3), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                           relief=2, command=self.selectBHG)
         b9 = DirectButton(image = "./models/gui/units/unit9.png", frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
-                          image_scale = (0.55, 1, 0.55), pos=(-21,0, -3.3), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          image_scale = (0.65, 1, 0.65), pos=(-21,0, -3.9), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
                           relief=2, command=self.selectSwarm) #TODO: reusing swarm here...         
         b1.reparentTo(self.mainFrame)
         b2.reparentTo(self.mainFrame)
