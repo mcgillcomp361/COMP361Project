@@ -10,12 +10,14 @@ from direct.showbase.DirectObject import DirectObject
 #For transmitting information between the server and client
 from direct.distributed.PyDatagram import PyDatagram 
 from direct.distributed.PyDatagramIterator import PyDatagramIterator
+from pandac.PandaModules import NetDatagram
 #Network imports
 from pandac.PandaModules import QueuedConnectionManager
 from pandac.PandaModules import QueuedConnectionListener
 from pandac.PandaModules import QueuedConnectionReader
 from pandac.PandaModules import ConnectionWriter
 
+PRINT_MESSAGE = 1 #1=TRUE print the message
 
 class Server(DirectObject):
     def __init__(self):
@@ -82,7 +84,7 @@ class Server(DirectObject):
     '''
     def messageData(self, message):
         messDat = PyDatagram()
-        messDat.addUint8(1) #1=TRUE print the message
+        messDat.addUint8(PRINT_MESSAGE)
         messDat.addString(message)
         return messDat
     
@@ -106,7 +108,22 @@ class Client(DirectObject):
         self.connection = self.cManager.openTCPClientConnection(ip_address,port_address,timeout)
         if self.connection:
             self.cReader.addConnection(self.connection) #Retrieve message from Server
+            return True #We connected
+        return False #We couldn't succeed
+    
+    def processMsgData(self, dataGram):
+        iterator = PyDatagramIterator(dataGram)
+        msgID = iterator.getUint8()
+        if msgID == PRINT_MESSAGE:
+            msg = iterator.getString()
+            print msg
+    
+    def recieveMessage(self):
+        datagram = NetDatagram() #Needed to store the message or data recieved
+        if self.cReader.getData(datagram):
+            self.processMsgData(datagram)
             
+    
     '''
     Closes the connection with the server
     '''
