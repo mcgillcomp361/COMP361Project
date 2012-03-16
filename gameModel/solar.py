@@ -158,6 +158,7 @@ class Star(SphericalBody):
             if(player.ge_amount != 0 ):
                 player.ge_amount = player.ge_amount - 1
                 self._activateStar(player)
+                self.notify("updateGE")
         
     def _activateStar(self, player):
         '''
@@ -171,6 +172,7 @@ class Star(SphericalBody):
         self.radius = MAX_STAR_RADIUS
         self.player = player
         self.timer_task = taskMgr.doMethodLater(1, self.trackStarLife, 'starLifeTick')
+        player.selected_star = self
         
         '''TODO : display star birth animation '''
         sound1 = base.loader.loadSfx("sound/effects/star/starCreation1.wav")
@@ -222,11 +224,7 @@ class Star(SphericalBody):
         return task.again
     
     def updateTimer(self):
-        ''' TODO: move this somewhere else ? Use notify?'''
-        
-        self.t.refresh()
-        self.t.star = self
-        self.t.printTime()
+        self.notify("updateTime")
         
     def addPlanet(self, planet):
         '''

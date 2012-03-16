@@ -17,6 +17,7 @@ class Player(object):
         '''
         self.name = name
         self.selected_planet = None
+        self.selected_star = None
         self.selecteUnit = None
         self.selectedUnits = []
         self.planets = []
