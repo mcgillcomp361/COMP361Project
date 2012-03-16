@@ -3,7 +3,10 @@ Created on Mar 15, 2012
 
 @author: Benjamin
 '''
-from direct.task.TaskNew import TaskManager
+from panda3d.core import *
+from direct.task import Task
+import direct.directbase.DirectStart
+from direct.showbase.DirectObject import DirectObject
 #For transmitting information between the server and client
 from direct.distributed.PyDatagram import PyDatagram 
 from direct.distributed.PyDatagramIterator import PyDatagramIterator
@@ -13,7 +16,8 @@ from pandac.PandaModules import QueuedConnectionListener
 from pandac.PandaModules import QueuedConnectionReader
 from pandac.PandaModules import ConnectionWriter
 
-class Server():
+
+class Server(DirectObject):
     def __init__(self):
         self.cManager = QueuedConnectionManager()
         self.cListener = QueuedConnectionListener(self.cManager, 0)
@@ -27,7 +31,8 @@ class Server():
         backlog=1000 #If we ignore 1,000 connection attempts, something is wrong!
         self.tcpSocket = self.cManager.openTCPServerRendezvous(port_address,backlog)
  
-        self.cListener.addConnection(tcpSocket)
+        self.cListener.addConnection(self.tcpSocket)
+        self.setTaskManagers() #Set the Managers
         
     def tskListenerPolling(self,taskdata):
         if self.cListener.newConnectionAvailable():
@@ -52,8 +57,8 @@ class Server():
         return Task.cont
     
     def setTaskManagers(self):
-        taskMgr.add(tskListenerPolling,"Poll the connection listener",-39)
-        taskMgr.add(tskReaderPolling,"Poll the connection reader",-40)
+        taskMgr.add(self.tskListenerPolling,"Poll the connection listener",-39)
+        taskMgr.add(self.tskReaderPolling,"Poll the connection reader",-40)
         
     '''
     Terminate all connections.
@@ -88,8 +93,7 @@ class Server():
         message = self.messageData("Welcome to BaziBaz's Server\nConnection has been estabilished\n")
         self.cWriter.send(message, aClient)
 
-
-class Client():
+class Client(DirectObject):
     def __init__(self):
         self.cManager = QueuedConnectionManager()
         self.cReader = QueuedConnectionReader(self.cManager, 0)
