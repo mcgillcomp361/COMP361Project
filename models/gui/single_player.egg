@@ -1,0 +1,45 @@
+<Comment> {
+  "egg-texture-cards -o single_player.egg 'Single Player over.png' 'Single Player.png'"
+}
+<Texture> "Single Player over" {
+  "Single Player over.png"
+}
+<Texture> "Single Player" {
+  "Single Player.png"
+}
+<Group> {
+  <Switch> { 1 }
+  <Scalar> fps { 2 }
+  <VertexPool> vpool {
+    <Vertex> 0 {
+      -0.5 0.5 0
+      <UV> { 0 1 }
+    }
+    <Vertex> 1 {
+      -0.5 -0.5 0
+      <UV> { 0 0 }
+    }
+    <Vertex> 2 {
+      0.5 -0.5 0
+      <UV> { 1 0 }
+    }
+    <Vertex> 3 {
+      0.5 0.5 0
+      <UV> { 1 1 }
+    }
+  }
+  <Group> "Single Player over" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Single Player over" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Single Player" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Single Player" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+}

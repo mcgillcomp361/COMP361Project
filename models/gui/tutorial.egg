@@ -1,0 +1,45 @@
+<Comment> {
+  "egg-texture-cards -o tutorial.egg tutorial.png tutorial_over.png"
+}
+<Texture> tutorial_over {
+  tutorial_over.png
+}
+<Texture> tutorial {
+  tutorial.png
+}
+<Group> {
+  <Switch> { 1 }
+  <Scalar> fps { 2 }
+  <VertexPool> vpool {
+    <Vertex> 0 {
+      -0.5 0.5 0
+      <UV> { 0 1 }
+    }
+    <Vertex> 1 {
+      -0.5 -0.5 0
+      <UV> { 0 0 }
+    }
+    <Vertex> 2 {
+      0.5 -0.5 0
+      <UV> { 1 0 }
+    }
+    <Vertex> 3 {
+      0.5 0.5 0
+      <UV> { 1 1 }
+    }
+  }
+  <Group> tutorial {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { tutorial }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> tutorial_over {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { tutorial_over }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+}

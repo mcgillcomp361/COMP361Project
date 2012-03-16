@@ -1,0 +1,45 @@
+<Comment> {
+  "egg-texture-cards -o exit.egg exit.png exit_over.png"
+}
+<Texture> exit_over {
+  exit_over.png
+}
+<Texture> exit {
+  exit.png
+}
+<Group> {
+  <Switch> { 1 }
+  <Scalar> fps { 2 }
+  <VertexPool> vpool {
+    <Vertex> 0 {
+      -0.5 0.5 0
+      <UV> { 0 1 }
+    }
+    <Vertex> 1 {
+      -0.5 -0.5 0
+      <UV> { 0 0 }
+    }
+    <Vertex> 2 {
+      0.5 -0.5 0
+      <UV> { 1 0 }
+    }
+    <Vertex> 3 {
+      0.5 0.5 0
+      <UV> { 1 1 }
+    }
+  }
+  <Group> exit {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { exit }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> exit_over {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { exit_over }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+}
