@@ -49,7 +49,7 @@ class Unit(object):
         self.cnode_path = self.model_path.attachNewNode(self.cnode)
         self.cnode_path.show()
         
-        tex = loader.loadTexture("models/units/flare.png")
+        tex = loader.loadTexture("models/billboards/flare.png")
         cm = CardMaker('quad')
         cm.setFrameFullscreenQuad()
         self.quad_path = self.model_path.attachNewNode(cm.generate())

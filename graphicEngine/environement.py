@@ -25,7 +25,7 @@ class Environement(DirectObject.DirectObject):
         render.setLight(dirNode)
         
         alight = AmbientLight('alight')
-        alight.setColor(VBase4(0.2, 0.2, 0.4, 1))
+        alight.setColor(VBase4(0.6, 0.6, 0.8, 1))
         alnp = render.attachNewNode(alight)
         render.setLight(alnp)
         render.setShaderAuto()
