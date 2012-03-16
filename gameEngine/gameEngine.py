@@ -144,7 +144,7 @@ class GameEngine(DirectObject.DirectObject):
             self.unit.startOrbit()
             
             host_planet.addOrbitingUnit(self.unit)
-            taskMgr.add(host_planet.drawConnections, 'DrawConnections')
+#            taskMgr.add(host_planet.drawConnections, 'DrawConnections')
     
     def _moveUnitsPrev(self):
         planet = self.mouse_events.selected_planet

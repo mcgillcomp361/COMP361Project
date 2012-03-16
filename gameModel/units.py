@@ -6,7 +6,8 @@ Created on Dec 29, 2011
 from abc import ABCMeta, abstractmethod
 from constants import *
 from pandac.PandaModules import CollisionNode, CollisionBox, CollisionSphere, TransparencyAttrib
-from direct.showbase import DirectObject 
+from direct.showbase import DirectObject
+from direct.interval.IntervalGlobal import *
 from panda3d.core import Vec3, Vec4, Point3, BitMask32, CardMaker
 
 class Unit(object):
@@ -72,16 +73,39 @@ class Unit(object):
         reaches it's destination
         ''' 
         if(target_planet.parent_star==self.host_planet.parent_star):
+#            relativePos = target_planet.point_path.getPos(self.point_path)
+            relativePos = self.point_path.getPos(target_planet.point_path)
             self.host_planet.removeOrbitingUnit(self)
             self.host_planet = target_planet
             target_planet.addOrbitingUnit(self)
             self.point_path.reparentTo(target_planet.point_path)
+            self.point_path.setPos(relativePos)
+            myseq = Sequence(
+                LerpPosInterval(self.point_path,
+                    3.0,
+                    Point3(0,0,0),
+#                    startPos=None,
+#                    other=self.host_planet.parent_star.point_path,
+                    blendType='easeInOut',
+                    bakeInStart=0
+                )
+#                Func(self._changeHostPlanet, target_planet)
+            )
+            myseq.start()
         else:
             self.deep_space = True
             #TODO : The unit will NOT be select-able for the duration of travel
             #TODO : keep track when the unit reaches the target planet then change the host
             self.host_planet = target_planet
-           
+    
+    def _changeHostPlanet(self, target_planet):
+        relativePos = target_planet.point_path.getPos(self.point_path)
+        self.host_planet.removeOrbitingUnit(self)
+        self.host_planet = target_planet
+        target_planet.addOrbitingUnit(self)
+        self.point_path.reparentTo(target_planet.point_path)
+        self.point_path.setPos(relativePos)
+            
     def attack(self, target_unit):
         '''Deals damage to an opposing unit.'''
         #TODO: Does this make sense, what if there is an interruption or a movement by the player
