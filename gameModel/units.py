@@ -141,7 +141,7 @@ class Swarm(Unit):
         @param host_planet : The planet where the unit is constructed
         '''
         super(Swarm, self).__init__(host_planet, player, SWARM_VELOCITY, SWARM_MAX_ENERGY, SWARM_DAMAGE, []) 
-        
+             
 class Horde(Unit):
     '''
     Subclass of Units, Tier 2 Horde
