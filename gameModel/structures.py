@@ -63,6 +63,7 @@ class Nexus(Structure):
         @param host_planet : The planet where the structure is constructed on
         '''
         super(Nexus, self).__init__(NEXUS_MAX_ENERGY, host_planet)
+        self.host_planet.setTexture("nexus")
 
 
 class Extractor(Structure):
@@ -78,8 +79,9 @@ class Extractor(Structure):
         @param host_planet : The planet where the structure is constructed on
         '''
         super(Extractor, self).__init__(EXTRACTOR_MAX_ENERGY, host_planet)
-  
-     
+        self.host_planet.setTexture("extractor")
+
+
 class Phylon(Structure):
     '''
     Subclass of Structure that focuses on Tier II mineral harvesting.
@@ -93,6 +95,7 @@ class Phylon(Structure):
         @param host_planet : The planet where the structure is constructed on
         '''
         super(Phylon, self).__init__(PHYLON_MAX_ENERGY, host_planet)
+        self.host_planet.setTexture("phylon")
 
 
 class GeneratorCore(Structure):
@@ -108,6 +111,7 @@ class GeneratorCore(Structure):
         @param host_planet : The planet where the structure is constructed on
         '''
         super(GeneratorCore, self).__init__(GENERATOR_CORE_MAX_ENERGY, host_planet) 
+        self.host_planet.setTexture("generatorCore")
 
                
 class PlanetaryDefenseI(Structure):

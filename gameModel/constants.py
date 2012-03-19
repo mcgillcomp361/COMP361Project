@@ -15,7 +15,7 @@ MAX_STAR_RADIUS = 8
 MAX_SOLAR_SYSTEM_RADIUS = 100 #could be variable instead
 #make sure the number is satisfactory for UNIVERSE_SCALE
 NUMBER_OF_STARS = 10
-LIFETIME = 300.0 
+LIFETIME = 1800.0 
 ''' should be divisible by 6 '''
 
 ''' Planets '''
@@ -40,7 +40,7 @@ STRUCTURE_TYPE = ["Forge","Nexus","Extractor","Phylon","GeneratorCore","Planetar
 MAX_NUMBER_OF_STRUCTURE = 4
 FORGE_DESCRIPTION = "These are complex production facilities that cover entire continents. It allows construction of all the unlocked units on that specific planet"
 FORGE_MAX_ENERGY = 1200
-FORGE_BUILD_TIME = 1
+FORGE_BUILD_TIME = 30
 NEXUS_DESCRIPTION = "This massive complex is used to research the ancient technology and speed up evolution"
 NEXUS_MAX_ENERGY = 1000
 NEXUS_BUILD_TIME = 50

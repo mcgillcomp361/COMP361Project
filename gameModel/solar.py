@@ -34,6 +34,10 @@ class SphericalBody(Observable):
     dead_planet_tex = None
     planet_activated_tex = None
     planet_forge_tex = None
+    planet_nexus_tex = None
+    planet_extractor_tex = None
+    planet_phylon_tex = None
+    planet_generatorCore_tex = None
     
     def __init__(self, position, radius, activated, player):
         '''
@@ -63,6 +67,10 @@ class SphericalBody(Observable):
         SphericalBody.dead_planet_tex = loader.loadTexture("models/planets/dead_planet_tex.jpg")
         SphericalBody.planet_activated_tex = loader.loadTexture("models/planets/planet_activated_tex.png")
         SphericalBody.planet_forge_tex = loader.loadTexture("models/planets/planet_forge_tex.png")
+        SphericalBody.planet_nexus_tex = loader.loadTexture("models/planets/planet_nexus_tex.png")
+        SphericalBody.planet_extractor_tex = loader.loadTexture("models/planets/planet_extractor_tex.png")
+        SphericalBody.planet_phylon_tex = loader.loadTexture("models/planets/planet_phylon_tex.png")
+        SphericalBody.planet_generatorCore_tex = loader.loadTexture("models/planets/planet_generatorCore_tex.png")
         
     #def __str__(self) :
     #   '''To String method'''
@@ -357,6 +365,14 @@ class Planet(SphericalBody):
         '''
         if(structureType == "forge"):
             self.model_path.setTexture(SphericalBody.planet_forge_tex, 1)
+        elif(structureType == "nexus"):
+            self.model_path.setTexture(SphericalBody.planet_nexus_tex, 1)
+        elif(structureType == "extractor"):
+            self.model_path.setTexture(SphericalBody.planet_extractor_tex, 1)
+        elif(structureType == "phylon"):
+            self.model_path.setTexture(SphericalBody.planet_phylon_tex, 1)
+        elif(structureType == "generatorCore"):
+            self.model_path.setTexture(SphericalBody.planet_generatorCore_tex, 1)
     
     def activateHighlight(self, thin):
         if thin:

@@ -140,22 +140,22 @@ class GamePanel():
         self.player.addStructure("forge")
         
     def selectNexus(self):
-        print 'selected Nexus'
+        self.player.addStructure("nexus")
         
     def selectExtractor(self): 
-        print 'selectedExtractor'
+        self.player.addStructure("extractor")
+        
+    def selectPhylon(self):
+        self.player.addStructure("phylon")
+        
+    def selectGC(self):
+        self.player.addStructure("generatorCore")
         
     def selectPD1(self):
         print 'selected pd1'
-        
-    def selectPhylon(self):
-        print 'selected phylon'
     
     def selectPD2(self):
         print 'selected PD2'
-        
-    def selectGC(self):
-        print 'selected GC'
         
     def selectPD3(self):
         print 'selected PD3'
@@ -165,9 +165,7 @@ class GamePanel():
         
     ## UNIT SELECTION        
     def selectSwarm(self):
-        from gameEngine.gameEngine import addUnit
-        print 'selected swarm'
-        addUnit()
+        self.player.addUnit("swarm")
         
     def selectGlobe(self):
         print 'selected globe'

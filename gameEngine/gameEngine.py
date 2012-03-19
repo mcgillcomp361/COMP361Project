@@ -129,22 +129,7 @@ def _singlePlayer():
     player = Player("player")
     mouse_events.setPlayer(player)
     AI = Player("AI")
-
-#Temporary function for adding & testing units
-def addUnit():
-    global player
-    if player.selected_planet != None and player.selected_planet.player == player and player.minerals > 0:
-        player.minerals = player.minerals - 100 
-        updateGUI.refreshResources()
-        updateGUI.value = player.minerals
-        updateGUI.printResources()
-        '''TODO: resources management '''
-        host_planet = player.selected_planet
-        unit = Unit(host_planet, 1,1,1)
-        unit.startOrbit()
-        host_planet.addOrbitingUnit(unit)
-#            taskMgr.add(host_planet.drawConnections, 'DrawConnections')
-
+    
 def moveUnitsPrev():
     global player
     planet = player.selected_planet
@@ -160,7 +145,6 @@ def moveUnitsNext():
         for unit in planet.units():
             unit.move(planet.prev_planet)
             break
-
        
 def _isSeparated(neighbors, test_position, mindist):
     '''

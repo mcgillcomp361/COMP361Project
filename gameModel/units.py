@@ -16,7 +16,7 @@ class Unit(object):
     General information and functions of units.
     '''
 
-    def __init__(self, host_planet, max_velocity, energy, damage, unit_abilities=[]):
+    def __init__(self, host_planet, player, max_velocity, energy, damage, unit_abilities=[]):
         '''
         Constructor
         @param host_planet : the current planet where the unit is being built
@@ -28,10 +28,12 @@ class Unit(object):
         self.host_planet = host_planet
         #TODO : calculate starting position base on host_planet
         self.position = None
+        self.player = player
         self.max_velocity = max_velocity
         self.energy = energy
         self.damage = damage
         self.deep_space = False
+        self.host_planet.addOrbitingUnit(self)
         self._unit_abilities = unit_abilities
         self.__initSceneGraph()
     
@@ -133,31 +135,31 @@ class Swarm(Unit):
     '''
     Subclass of Units, Tier 1 Swarm
     '''
-    def __init__(self, host_planet):
+    def __init__(self, host_planet, player):
         '''
         Constructor
         @param host_planet : The planet where the unit is constructed
         '''
-        super(Swarm, self).__init__(host_planet, SWARM_VELOCITY, SWARM_MAX_ENERGY, SWARM_DAMAGE, []) 
+        super(Swarm, self).__init__(host_planet, player, SWARM_VELOCITY, SWARM_MAX_ENERGY, SWARM_DAMAGE, []) 
         
 class Horde(Unit):
     '''
     Subclass of Units, Tier 2 Horde
     '''
-    def __init__(self, host_planet):
+    def __init__(self, host_planet, player):
         '''
         Constructor
         @param host_planet : The planet where the unit is constructed
         '''
-        super(Horde, self).__init__(host_planet, HORDE_VELOCITY, HORDE_MAX_ENERGY, HORDE_DAMAGE, []) 
+        super(Horde, self).__init__(host_planet, player, HORDE_VELOCITY, HORDE_MAX_ENERGY, HORDE_DAMAGE, []) 
         
 class Hive(Unit):
     '''
     Subclass of Units, Tier 3 Hive
     '''
-    def __init__(self, host_planet):
+    def __init__(self, host_planet, player):
         '''
         Constructor
         @param host_planet : The planet where the unit is constructed
         '''
-        super(Hive, self).__init__(host_planet, HIVE_VELOCITY, HIVE_MAX_ENERGY, HIVE_DAMAGE, [])
+        super(Hive, self).__init__(host_planet, player, HIVE_VELOCITY, HIVE_MAX_ENERGY, HIVE_DAMAGE, [])
