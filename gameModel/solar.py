@@ -330,7 +330,8 @@ class Planet(SphericalBody):
         self.__initSceneGraph()
         
         
-        self.task_timer = None
+        self.task_structure_timer = None
+        self.task_unit_timer = None
         
     def __initSceneGraph(self):
         # Parent node for relative position (no scaling)
@@ -584,3 +585,22 @@ class Planet(SphericalBody):
         Returns the number of surface structures from the planet
         '''
         len(self._surface_structures)
+        
+    def hasStructure(self, structure):
+        '''
+        Returns true if a type of the structure already exists on the planet
+        @structure: String, the desired structure type
+        '''
+        from structures import Forge, Nexus, Extractor, Phylon, GeneratorCore
+        for surface_structure in self._surface_structures:
+            if(structure == "forge" and type(surface_structure) == Forge):
+                return True
+            elif(structure == "nexus" and type(surface_structure) == Nexus):
+                return True
+            elif(structure == "extractor" and type(surface_structure) == Extractor):
+                return True
+            elif(structure == "phylon" and type(surface_structure) == Phylon):
+                return True
+            elif(structure == "generatorCore" and type(surface_structure) == GeneratorCore):
+                return True
+        return False
