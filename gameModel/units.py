@@ -139,7 +139,7 @@ class Swarm(Unit):
         @param host_planet : The planet where the unit is constructed
         '''
         super(Swarm, self).__init__(host_planet, player, SWARM_VELOCITY, SWARM_MAX_ENERGY, SWARM_DAMAGE, [])
-        self.quad_path.setColor(Vec4(1.0, 0.0, 0.0, 1))
+        self.quad_path.setColor(Vec4(0.6, 0.1, 0.1, 1))
         self.quad_path.setScale(2)
                    
 class Horde(Unit):
@@ -152,7 +152,7 @@ class Horde(Unit):
         @param host_planet : The planet where the unit is constructed
         '''
         super(Horde, self).__init__(host_planet, player, HORDE_VELOCITY, HORDE_MAX_ENERGY, HORDE_DAMAGE, []) 
-        self.quad_path.setColor(Vec4(0.2, 0.2, 1.0, 1))
+        self.quad_path.setColor(Vec4(0.4, 0.2, 0.2, 1))
         self.quad_path.setScale(6)
         
 class Hive(Unit):
@@ -165,5 +165,83 @@ class Hive(Unit):
         @param host_planet : The planet where the unit is constructed
         '''
         super(Hive, self).__init__(host_planet, player, HIVE_VELOCITY, HIVE_MAX_ENERGY, HIVE_DAMAGE, [])
-        self.quad_path.setColor(Vec4(0.0, 0.8, 0.0, 1))
+        self.quad_path.setColor(Vec4(0.0, 0.2, 0.4, 1))
         self.quad_path.setScale(12)
+        
+class Globe(Unit):
+    '''
+    Subclass of Units, Tier 1 Globe
+    '''
+    def __init__(self, host_planet, player):
+        '''
+        Constructor
+        @param host_planet : The planet where the unit is constructed
+        '''
+        super(Globe, self).__init__(host_planet, player, GLOBE_VELOCITY, GLOBE_MAX_ENERGY, GLOBE_DAMAGE, [])
+        self.quad_path.setColor(Vec4(0.2, 0.6, 0.2, 1))
+        self.quad_path.setScale(2)
+
+class Sphere(Unit):
+    '''
+    Subclass of Units, Tier 2 Sphere
+    '''
+    def __init__(self, host_planet, player):
+        '''
+        Constructor
+        @param host_planet : The planet where the unit is constructed
+        '''
+        super(Sphere, self).__init__(host_planet, player, SPHERE_VELOCITY, SPHERE_MAX_ENERGY, SPHERE_DAMAGE, [])
+        self.quad_path.setColor(Vec4(0.2, 0.4, 0.2, 1))
+        self.quad_path.setScale(6)
+
+class Planetarium(Unit):
+    '''
+    Subclass of Units, Tier 3 Planetarium
+    '''
+    def __init__(self, host_planet, player):
+        '''
+        Constructor
+        @param host_planet : The planet where the unit is constructed
+        '''
+        super(Planetarium, self).__init__(host_planet, player, PLANETARIUM_VELOCITY, PLANETARIUM_MAX_ENERGY, PLANETARIUM_DAMAGE, [])
+        self.quad_path.setColor(Vec4(0.4, 0.0, 0.2, 1))
+        self.quad_path.setScale(12)
+
+class Analyzer(Unit):
+    '''
+    Subclass of Units, Tier 1 Analyzer
+    '''
+    def __init__(self, host_planet, player):
+        '''
+        Constructor
+        @param host_planet : The planet where the unit is constructed
+        '''
+        super(Analyzer, self).__init__(host_planet, player, ANALYZER_VELOCITY, ANALYZER_MAX_ENERGY, ANALYZER_DAMAGE, [])
+        self.quad_path.setColor(Vec4(0.2, 0.2, 0.6, 1))
+        self.quad_path.setScale(3)
+
+class Mathematica(Unit):
+    '''
+    Subclass of Units, Tier 3 Mathematica
+    '''
+    def __init__(self, host_planet, player):
+        '''
+        Constructor
+        @param host_planet : The planet where the unit is constructed
+        '''
+        super(Mathematica, self).__init__(host_planet, player, MATHEMATICA_VELOCITY, MATHEMATICA_MAX_ENERGY, MATHEMATICA_DAMAGE, [])
+        self.quad_path.setColor(Vec4(0.2, 0.2, 0.3, 1))
+        self.quad_path.setScale(6)
+
+class BlackHoleGenerator(Unit):
+    '''
+    Subclass of Units, Tier 4 BlackHoleGenerator
+    '''
+    def __init__(self, host_planet, player):
+        '''
+        Constructor
+        @param host_planet : The planet where the unit is constructed
+        '''
+        super(BlackHoleGenerator, self).__init__(host_planet, player, BLACK_HOLE_GENERATOR_VELOCITY, BLACK_HOLE_GENERATOR_MAX_ENERGY, BLACK_HOLE_GENERATOR_DAMAGE, [])
+        self.quad_path.setColor(Vec4(0.5, 0.5, 0.7, 1))
+        self.quad_path.setScale(4)

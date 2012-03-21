@@ -31,7 +31,7 @@ MAX_PLANET_VELOCITY = 0.08
 DEEP_SPACE_DISTANCE = UNIVERSE_SCALE*MAX_NUMBER_OF_PLANETS/50
 
 ''' Resources '''
-MINERAL_STARTING_AMOUNT = 1000
+MINERAL_STARTING_AMOUNT = 10000
 GRAVITY_ENGINE_STARTING_AMOUNT = 3
 
 ''' Structures '''
@@ -98,6 +98,42 @@ HIVE_DAMAGE = 12
 HIVE_VELOCITY = 1
 HIVE_BUILD_TIME = 60
 HIVE_MINERAL_COST = 230
+GLOBE_DESCRIPTION = "This basic synthetic machine built from the remains of the ancient technology is used as a major combat unit. It is much more effective than the swarm but it costs more minerals to be built"
+GLOBE_MAX_ENERGY = 160
+GLOBE_DAMAGE = 6
+GLOBE_VELOCITY = 1
+GLOBE_BUILD_TIME = 25
+GLOBE_MINERAL_COST = 100
+SPHERE_DESCRIPTION = "A synthetic machine based on the Globe design but much more effective in combat and can also repair any units close by. Although, it requires more minerals to be built and is slower"
+SPHERE_MAX_ENERGY = 270
+SPHERE_DAMAGE = 8
+SPHERE_VELOCITY = 1
+SPHERE_BUILD_TIME = 45
+SPHERE_MINERAL_COST = 150
+PLANETARIUM_DESCRIPTION = "A massive synthetic machine based on the Sphere design with devastating power which can also repair any units close by. Although, it requires more minerals to be built and is much slower"
+PLANETARIUM_MAX_ENERGY = 600
+PLANETARIUM_DAMAGE = 13
+PLANETARIUM_VELOCITY = 1
+PLANETARIUM_BUILD_TIME = 70
+PLANETARIUM_MINERAL_COST = 300
+ANALYZER_DESCRIPTION = "A living supercomputer made out of thousands of artificial brains is used to monitor every activity in a galaxy. Very weak and has no combat capabilities but it can detect cloaked units"
+ANALYZER_MAX_ENERGY = 130
+ANALYZER_DAMAGE = 0
+ANALYZER_VELOCITY = 1
+ANALYZER_BUILD_TIME = 20
+ANALYZER_MINERAL_COST = 80
+MATHEMATICA_DESCRIPTION = "The ultimate form of Artificial Intelligence, a supercomputer god made out of millions of artificial brains is used to monitor every activity in the universe. Much stronger than analyzer but  has no combat capabilities. It can detect cloaked units"
+MATHEMATICA_MAX_ENERGY = 300
+MATHEMATICA_DAMAGE = 0
+MATHEMATICA_VELOCITY = 1
+MATHEMATICA_BUILD_TIME = 50
+MATHEMATICA_MINERAL_COST = 210
+BLACK_HOLE_GENERATOR_DESCRIPTION = "The ultimate Weapon. Creates a black hole in a star. It is very slow"
+BLACK_HOLE_GENERATOR_MAX_ENERGY = 400
+BLACK_HOLE_GENERATOR_DAMAGE = 0
+BLACK_HOLE_GENERATOR_VELOCITY = 1
+BLACK_HOLE_GENERATOR_BUILD_TIME = 90
+BLACK_HOLE_GENERATOR_MINERAL_COST = 350
 
 ''' Abilities '''
 

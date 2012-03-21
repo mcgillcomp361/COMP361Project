@@ -5,9 +5,10 @@ Created on Jan 2, 2012
 '''
 from constants import MINERAL_STARTING_AMOUNT, GRAVITY_ENGINE_STARTING_AMOUNT, \
                     FORGE_BUILD_TIME, NEXUS_BUILD_TIME, EXTRACTOR_BUILD_TIME, PHYLON_BUILD_TIME, GENERATOR_CORE_BUILD_TIME, \
-                    SWARM_BUILD_TIME, SWARM_MINERAL_COST, \
-                    HORDE_BUILD_TIME, HORDE_MINERAL_COST, \
-                    HIVE_BUILD_TIME, HIVE_MINERAL_COST
+                    SWARM_BUILD_TIME, SWARM_MINERAL_COST, GLOBE_BUILD_TIME, GLOBE_MINERAL_COST, ANALYZER_BUILD_TIME, ANALYZER_MINERAL_COST, \
+                    HORDE_BUILD_TIME, HORDE_MINERAL_COST, SPHERE_BUILD_TIME, SPHERE_MINERAL_COST, \
+                    HIVE_BUILD_TIME, HIVE_MINERAL_COST, PLANETARIUM_BUILD_TIME, PLANETARIUM_MINERAL_COST, MATHEMATICA_BUILD_TIME, MATHEMATICA_MINERAL_COST, \
+                    BLACK_HOLE_GENERATOR_BUILD_TIME, BLACK_HOLE_GENERATOR_MINERAL_COST
 from structures import *
 from units import *
 
@@ -32,7 +33,6 @@ class Player(object):
         self.ge_amount = GRAVITY_ENGINE_STARTING_AMOUNT
         
     ''' TODO: use Multi-Texturing '''
-    ''' TODO: add different units, units have different models and animations '''
     ''' TODO: complete all the condition checks(e.g. tech tier, existent structure, ...) '''
     
     def addStructure(self, structure):
@@ -82,7 +82,7 @@ class Player(object):
             self.structures.append(generatorCore)
             planet.task_structure_timer = None
             return task.done
-      
+
     def addUnit(self, unit):
         '''
         constructing a unit using the forge
@@ -103,6 +103,31 @@ class Player(object):
                 self.minerals = self.minerals - HIVE_MINERAL_COST
 #               taskMgr.add(host_planet.drawConnections, 'DrawConnections')
                 self.selected_planet.task_unit_timer = taskMgr.doMethodLater(1, self._constructHive, 'buildHive', extraArgs =[self.selected_planet], appendTask=True)
+            elif(unit == "globe" and self.minerals > GLOBE_MINERAL_COST):
+                self.minerals = self.minerals - GLOBE_MINERAL_COST
+#               taskMgr.add(host_planet.drawConnections, 'DrawConnections')
+                self.selected_planet.task_unit_timer = taskMgr.doMethodLater(1, self._constructGlobe, 'buildGlobe', extraArgs =[self.selected_planet], appendTask=True)
+            elif(unit == "sphere" and self.minerals > SPHERE_MINERAL_COST):
+                self.minerals = self.minerals - SPHERE_MINERAL_COST
+#               taskMgr.add(host_planet.drawConnections, 'DrawConnections')
+                self.selected_planet.task_unit_timer = taskMgr.doMethodLater(1, self._constructSphere, 'buildSphere', extraArgs =[self.selected_planet], appendTask=True)
+            elif(unit == "planetarium" and self.minerals > PLANETARIUM_MINERAL_COST):
+                self.minerals = self.minerals - PLANETARIUM_MINERAL_COST
+#               taskMgr.add(host_planet.drawConnections, 'DrawConnections')
+                self.selected_planet.task_unit_timer = taskMgr.doMethodLater(1, self._constructPlanetarium, 'buildPlanetarium', extraArgs =[self.selected_planet], appendTask=True)
+            elif(unit == "analyzer" and self.minerals > ANALYZER_MINERAL_COST):
+                self.minerals = self.minerals - ANALYZER_MINERAL_COST
+#               taskMgr.add(host_planet.drawConnections, 'DrawConnections')
+                self.selected_planet.task_unit_timer = taskMgr.doMethodLater(1, self._constructAnalyzer, 'buildAnalyzer', extraArgs =[self.selected_planet], appendTask=True)
+            elif(unit == "mathematica" and self.minerals > MATHEMATICA_MINERAL_COST):
+                self.minerals = self.minerals - MATHEMATICA_MINERAL_COST
+#               taskMgr.add(host_planet.drawConnections, 'DrawConnections')
+                self.selected_planet.task_unit_timer = taskMgr.doMethodLater(1, self._constructMathematica, 'buildMathematica', extraArgs =[self.selected_planet], appendTask=True)
+            elif(unit == "blackHoleGenerator" and self.minerals > BLACK_HOLE_GENERATOR_MINERAL_COST):
+                self.minerals = self.minerals - BLACK_HOLE_GENERATOR_MINERAL_COST
+#               taskMgr.add(host_planet.drawConnections, 'DrawConnections')
+                self.selected_planet.task_unit_timer = taskMgr.doMethodLater(1, self._constructBlackHoleGenerator, 'buildBlackHoleGenerator', extraArgs =[self.selected_planet], appendTask=True)
+            
             from gameEngine.gameEngine import updateGUI
             updateGUI.refreshResources()
             updateGUI.value = self.minerals
@@ -126,6 +151,48 @@ class Player(object):
             hive = Hive(planet, self)
             hive.startOrbit()
             self.units.append(hive)
+            planet.task_unit_timer = None
+            return task.done
+        
+    def _constructGlobe(self, planet, task):
+            globe = Globe(planet, self)
+            globe.startOrbit()
+            self.units.append(globe)
+            planet.task_unit_timer = None
+            return task.done
+        
+    def _constructSphere(self, planet, task):
+            sphere = Sphere(planet, self)
+            sphere.startOrbit()
+            self.units.append(sphere)
+            planet.task_unit_timer = None
+            return task.done
+        
+    def _constructPlanetarium(self, planet, task):
+            planetarium = Planetarium(planet, self)
+            planetarium.startOrbit()
+            self.units.append(planetarium)
+            planet.task_unit_timer = None
+            return task.done
+        
+    def _constructAnalyzer(self, planet, task):
+            analyzer = Analyzer(planet, self)
+            analyzer.startOrbit()
+            self.units.append(analyzer)
+            planet.task_unit_timer = None
+            return task.done
+        
+    def _constructMathematica(self, planet, task):
+            mathematica = Mathematica(planet, self)
+            mathematica.startOrbit()
+            self.units.append(mathematica)
+            planet.task_unit_timer = None
+            return task.done
+        
+    def _constructBlackHoleGenerator(self, planet, task):
+            blackHoleGenerator = BlackHoleGenerator(planet, self)
+            blackHoleGenerator.startOrbit()
+            self.units.append(blackHoleGenerator)
             planet.task_unit_timer = None
             return task.done
     

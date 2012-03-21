@@ -168,25 +168,25 @@ class GamePanel():
         self.player.addUnit("swarm")
         
     def selectGlobe(self):
-        print 'selected globe'
+        self.player.addUnit("globe")
         
     def selectAnalyzer(self):
-        print 'selected analyzer'
+        self.player.addUnit("analyzer")
         
     def selectHorde(self):
         self.player.addUnit("horde")
         
     def selectSphere(self):
-        print 'selected sphere'
+        self.player.addUnit("sphere")
         
     def selectHive(self):
         self.player.addUnit("hive")
         
     def selectPlanetarium(self):
-        print 'selected planetarium'
+        self.player.addUnit("planetarium")
         
     def selectMathematica(self):
-        print 'selected mathematica'
+        self.player.addUnit("mathematica")
 
     def selectBHG(self):
-        print 'selected black hole generator'
+        self.player.addUnit("blackHoleGenerator")
