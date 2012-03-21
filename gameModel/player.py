@@ -45,13 +45,13 @@ class Player(object):
             if(structure == "forge"):
                 self.selected_planet.task_structure_timer = taskMgr.doMethodLater(2, self._constructForge, 'buildForge', extraArgs =[self.selected_planet], appendTask=True)
             elif(structure == "nexus"):
-                self.selected_planet.task_structure_timer = taskMgr.doMethodLater(NEXUS_BUILD_TIME, self._constructNexus, 'buildNexus', extraArgs =[self.selected_planet], appendTask=True)
+                self.selected_planet.task_structure_timer = taskMgr.doMethodLater(2, self._constructNexus, 'buildNexus', extraArgs =[self.selected_planet], appendTask=True)
             elif(structure == "extractor"):
-                self.selected_planet.task_structure_timer = taskMgr.doMethodLater(EXTRACTOR_BUILD_TIME, self._constructExtractor, 'buildExtractor', extraArgs =[self.selected_planet], appendTask=True)
+                self.selected_planet.task_structure_timer = taskMgr.doMethodLater(2, self._constructExtractor, 'buildExtractor', extraArgs =[self.selected_planet], appendTask=True)
             elif(structure == "phylon"):
-                self.selected_planet.task_structure_timer = taskMgr.doMethodLater(PHYLON_BUILD_TIME, self._constructPhylon, 'buildPhylon', extraArgs =[self.selected_planet], appendTask=True)
+                self.selected_planet.task_structure_timer = taskMgr.doMethodLater(2, self._constructPhylon, 'buildPhylon', extraArgs =[self.selected_planet], appendTask=True)
             elif(structure == "generatorCore"):
-                self.selected_planet.task_structure_timer = taskMgr.doMethodLater(GENERATOR_CORE_BUILD_TIME, self._constructGeneratorCore, 'buildGeneratorCore', extraArgs =[self.selected_planet], appendTask=True)
+                self.selected_planet.task_structure_timer = taskMgr.doMethodLater(2, self._constructGeneratorCore, 'buildGeneratorCore', extraArgs =[self.selected_planet], appendTask=True)
 
     def _constructForge(self, planet, task):
             forge = Forge(planet)

@@ -4,7 +4,7 @@ Created on 7 janv. 2012
 @author: Bazibaz
 '''
 from observable import Observable
-from pandac.PandaModules import CollisionNode, CollisionBox, CollisionSphere, TransparencyAttrib
+from pandac.PandaModules import CollisionNode, CollisionBox, CollisionSphere, TransparencyAttrib, TextureStage, Texture
 from direct.showbase import DirectObject 
 from panda3d.core import Vec3,Vec4,Point2, Point3, BitMask32
 from direct.directtools.DirectGeometry import LineNodePath
@@ -334,6 +334,15 @@ class Planet(SphericalBody):
         self.task_unit_timer = None
         
     def __initSceneGraph(self):
+
+        #load various texture stages of the planet
+        self.forge_tex = TextureStage('forge')
+        self.forge_tex.setMode(TextureStage.MDecal)
+        self.nexus_tex = TextureStage('nexus')
+        self.nexus_tex.setMode(TextureStage.MDecal)
+        self.extractor_phylon_ge_tex = TextureStage('extractor_phylon_ge')
+        self.extractor_phylon_ge_tex.setMode(TextureStage.MDecal)
+        
         # Parent node for relative position (no scaling)
         self.point_path = self.parent_star.point_path.attachNewNode("planet_node")
         self.point_path.setPos(self.position)
@@ -365,15 +374,25 @@ class Planet(SphericalBody):
         @ StructureType is a string specifying the type of the structure
         '''
         if(structureType == "forge"):
-            self.model_path.setTexture(SphericalBody.planet_forge_tex, 1)
+            #SphericalBody.planet_forge_tex.setWrapU(Texture.WMInvalid)
+            #SphericalBody.planet_forge_tex.setWrapV(Texture.WMInvalid)
+            self.model_path.setTexture(self.forge_tex, SphericalBody.planet_forge_tex)
+            #self.model_path.getTexture().setWrapU(Texture.WMClamp)
+            #self.model_path.getTexture().setWrapV(Texture.WMClamp)
+            self.model_path.setTexOffset(self.forge_tex, 0, 0)
+            #self.model_path.setTexScale(self.forge_tex, -4, -2)
         elif(structureType == "nexus"):
-            self.model_path.setTexture(SphericalBody.planet_nexus_tex, 1)
+            self.model_path.setTexture(self.nexus_tex, SphericalBody.planet_nexus_tex)
+            self.model_path.setTexOffset(self.nexus_tex, 0, 10)
         elif(structureType == "extractor"):
-            self.model_path.setTexture(SphericalBody.planet_extractor_tex, 1)
+            self.model_path.setTexture(self.extractor_phylon_ge_tex, SphericalBody.planet_extractor_tex)
+            self.model_path.setTexOffset(self.extractor_phylon_ge_tex, 0, 20)
         elif(structureType == "phylon"):
-            self.model_path.setTexture(SphericalBody.planet_phylon_tex, 1)
+            self.model_path.setTexture(self.extractor_phylon_ge_tex, SphericalBody.planet_phylon_tex)
+            self.model_path.setTexOffset(self.extractor_phylon_ge_tex, 0, 20)
         elif(structureType == "generatorCore"):
-            self.model_path.setTexture(SphericalBody.planet_generatorCore_tex, 1)
+            self.model_path.setTexture(self.extractor_phylon_ge_tex, SphericalBody.planet_generatorCore_tex)
+            self.model_path.setTexOffset(self.extractor_phylon_ge_tex, 0, 20)
     
     def activateHighlight(self, thin):
         if thin:
