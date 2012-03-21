@@ -57,8 +57,6 @@ class Unit(object):
         self.quad_path = self.model_path.attachNewNode(cm.generate())
         self.quad_path.setTexture(tex)
         self.quad_path.setTransparency(TransparencyAttrib.MAlpha)
-        self.quad_path.setColor(Vec4(1.0, 0.3, 0.3, 1))
-        self.quad_path.setScale(5)
         self.quad_path.setBillboardPointEye()
     
     def select(self, player):
@@ -140,8 +138,10 @@ class Swarm(Unit):
         Constructor
         @param host_planet : The planet where the unit is constructed
         '''
-        super(Swarm, self).__init__(host_planet, player, SWARM_VELOCITY, SWARM_MAX_ENERGY, SWARM_DAMAGE, []) 
-             
+        super(Swarm, self).__init__(host_planet, player, SWARM_VELOCITY, SWARM_MAX_ENERGY, SWARM_DAMAGE, [])
+        self.quad_path.setColor(Vec4(1.0, 0.0, 0.0, 1))
+        self.quad_path.setScale(2)
+                   
 class Horde(Unit):
     '''
     Subclass of Units, Tier 2 Horde
@@ -152,6 +152,8 @@ class Horde(Unit):
         @param host_planet : The planet where the unit is constructed
         '''
         super(Horde, self).__init__(host_planet, player, HORDE_VELOCITY, HORDE_MAX_ENERGY, HORDE_DAMAGE, []) 
+        self.quad_path.setColor(Vec4(0.2, 0.2, 1.0, 1))
+        self.quad_path.setScale(6)
         
 class Hive(Unit):
     '''
@@ -163,3 +165,5 @@ class Hive(Unit):
         @param host_planet : The planet where the unit is constructed
         '''
         super(Hive, self).__init__(host_planet, player, HIVE_VELOCITY, HIVE_MAX_ENERGY, HIVE_DAMAGE, [])
+        self.quad_path.setColor(Vec4(0.0, 0.8, 0.0, 1))
+        self.quad_path.setScale(12)

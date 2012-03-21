@@ -5,7 +5,9 @@ Created on Jan 2, 2012
 '''
 from constants import MINERAL_STARTING_AMOUNT, GRAVITY_ENGINE_STARTING_AMOUNT, \
                     FORGE_BUILD_TIME, NEXUS_BUILD_TIME, EXTRACTOR_BUILD_TIME, PHYLON_BUILD_TIME, GENERATOR_CORE_BUILD_TIME, \
-                    SWARM_BUILD_TIME, SWARM_MINERAL_COST
+                    SWARM_BUILD_TIME, SWARM_MINERAL_COST, \
+                    HORDE_BUILD_TIME, HORDE_MINERAL_COST, \
+                    HIVE_BUILD_TIME, HIVE_MINERAL_COST
 from structures import *
 from units import *
 
@@ -29,11 +31,9 @@ class Player(object):
         self.minerals = MINERAL_STARTING_AMOUNT
         self.ge_amount = GRAVITY_ENGINE_STARTING_AMOUNT
         
-    ''' ATTENTION : Two processes per planet can run at the same time. One for unit and one for structure.
-        Only one of the same type can be running at every-time per planet. '''
-        
     ''' TODO: use Multi-Texturing '''
     ''' TODO: add different units, units have different models and animations '''
+    ''' TODO: complete all the condition checks(e.g. tech tier, existent structure, ...) '''
     
     def addStructure(self, structure):
         '''
@@ -43,21 +43,20 @@ class Player(object):
            self.selected_planet.player == self and self.selected_planet.task_structure_timer == None and \
            self.selected_planet.hasStructure(structure) == False):
             if(structure == "forge"):
-                self.selected_planet.task_structure_timer = taskMgr.doMethodLater(2, self._constructForge, 'buildForge', extraArgs =[self.selected_planet], appendTask=True)
+                self.selected_planet.task_structure_timer = taskMgr.doMethodLater(1, self._constructForge, 'buildForge', extraArgs =[self.selected_planet], appendTask=True)
             elif(structure == "nexus"):
-                self.selected_planet.task_structure_timer = taskMgr.doMethodLater(2, self._constructNexus, 'buildNexus', extraArgs =[self.selected_planet], appendTask=True)
-            elif(structure == "extractor"):
-                self.selected_planet.task_structure_timer = taskMgr.doMethodLater(2, self._constructExtractor, 'buildExtractor', extraArgs =[self.selected_planet], appendTask=True)
-            elif(structure == "phylon"):
-                self.selected_planet.task_structure_timer = taskMgr.doMethodLater(2, self._constructPhylon, 'buildPhylon', extraArgs =[self.selected_planet], appendTask=True)
+                self.selected_planet.task_structure_timer = taskMgr.doMethodLater(NEXUS_BUILD_TIME, self._constructNexus, 'buildNexus', extraArgs =[self.selected_planet], appendTask=True)
+            elif(structure == "extractor" and self.selected_planet.hasStructure("phylon") == False and self.selected_planet.hasStructure("generatorCore") == False):
+                self.selected_planet.task_structure_timer = taskMgr.doMethodLater(EXTRACTOR_BUILD_TIME, self._constructExtractor, 'buildExtractor', extraArgs =[self.selected_planet], appendTask=True)
+            elif(structure == "phylon" and self.selected_planet.hasStructure("generatorCore") == False):
+                self.selected_planet.task_structure_timer = taskMgr.doMethodLater(PHYLON_BUILD_TIME, self._constructPhylon, 'buildPhylon', extraArgs =[self.selected_planet], appendTask=True)
             elif(structure == "generatorCore"):
-                self.selected_planet.task_structure_timer = taskMgr.doMethodLater(2, self._constructGeneratorCore, 'buildGeneratorCore', extraArgs =[self.selected_planet], appendTask=True)
+                self.selected_planet.task_structure_timer = taskMgr.doMethodLater(GENERATOR_CORE_BUILD_TIME, self._constructGeneratorCore, 'buildGeneratorCore', extraArgs =[self.selected_planet], appendTask=True)
 
     def _constructForge(self, planet, task):
             forge = Forge(planet)
             self.structures.append(forge)
             planet.task_structure_timer = None
-            print "built forge"
             return task.done
 
     def _constructNexus(self, planet, task):
@@ -89,16 +88,21 @@ class Player(object):
         constructing a unit using the forge
         '''
         
-        ''' TODO: check for forge to be present on the planet'''
-        
         if(self.selected_planet != None and self.selected_planet.activated == True and \
            self.selected_planet.player == self and self.selected_planet.task_unit_timer == None and \
            self.selected_planet.hasStructure("forge")):
             if(unit == "swarm" and self.minerals > SWARM_MINERAL_COST):
                 self.minerals = self.minerals - SWARM_MINERAL_COST
 #               taskMgr.add(host_planet.drawConnections, 'DrawConnections')
-                self.selected_planet.task_unit_timer = taskMgr.doMethodLater(SWARM_BUILD_TIME, self._constructSwarm, 'buildSwarm', extraArgs =[self.selected_planet], appendTask=True)         
-                
+                self.selected_planet.task_unit_timer = taskMgr.doMethodLater(1, self._constructSwarm, 'buildSwarm', extraArgs =[self.selected_planet], appendTask=True)         
+            elif(unit == "horde" and self.minerals > HORDE_MINERAL_COST):
+                self.minerals = self.minerals - HORDE_MINERAL_COST
+#               taskMgr.add(host_planet.drawConnections, 'DrawConnections')
+                self.selected_planet.task_unit_timer = taskMgr.doMethodLater(1, self._constructHorde, 'buildHorde', extraArgs =[self.selected_planet], appendTask=True)
+            elif(unit == "hive" and self.minerals > HIVE_MINERAL_COST):
+                self.minerals = self.minerals - HIVE_MINERAL_COST
+#               taskMgr.add(host_planet.drawConnections, 'DrawConnections')
+                self.selected_planet.task_unit_timer = taskMgr.doMethodLater(1, self._constructHive, 'buildHive', extraArgs =[self.selected_planet], appendTask=True)
             from gameEngine.gameEngine import updateGUI
             updateGUI.refreshResources()
             updateGUI.value = self.minerals
@@ -108,6 +112,20 @@ class Player(object):
             swarm = Swarm(planet, self)
             swarm.startOrbit()
             self.units.append(swarm)
+            planet.task_unit_timer = None
+            return task.done
+        
+    def _constructHorde(self, planet, task):
+            horde = Horde(planet, self)
+            horde.startOrbit()
+            self.units.append(horde)
+            planet.task_unit_timer = None
+            return task.done
+        
+    def _constructHive(self, planet, task):
+            hive = Hive(planet, self)
+            hive.startOrbit()
+            self.units.append(hive)
             planet.task_unit_timer = None
             return task.done
     

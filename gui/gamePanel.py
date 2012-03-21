@@ -174,13 +174,13 @@ class GamePanel():
         print 'selected analyzer'
         
     def selectHorde(self):
-        print 'selected horde'
+        self.player.addUnit("horde")
         
     def selectSphere(self):
         print 'selected sphere'
         
     def selectHive(self):
-        print 'selected hive'
+        self.player.addUnit("hive")
         
     def selectPlanetarium(self):
         print 'selected planetarium'
