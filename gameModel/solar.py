@@ -145,28 +145,51 @@ class Star(SphericalBody):
         cnode.addSolid(CollisionSphere(0,0,0,1))
         cnode.setIntoCollideMask(BitMask32.bit(1))
         self.cnode_path = self.model_path.attachNewNode(cnode)
-        
         #For temporary testing, display collision sphere.
 #        self.cnode_path.show()
+        self.quad_path = None
  
+    def activateHighlight(self, thin):
+        if thin:
+            flare_tex = base.loader.loadTexture("models/billboards/thin_ring.png")
+        else:
+            flare_tex = base.loader.loadTexture("models/billboards/ring.png")
+        cm = CardMaker('quad')
+        cm.setFrameFullscreenQuad() # so that the center acts as the origin (from -1 to 1)
+        self.quad_path = self.point_path.attachNewNode(cm.generate())        
+        self.quad_path.setTransparency(TransparencyAttrib.MAlpha)
+        self.quad_path.setTexture(flare_tex)
+        if thin:
+            self.quad_path.setColor(Vec4(0.6, 0.1, 0.2, 1))
+        else:
+            self.quad_path.setColor(Vec4(1.0, 0.3, 0.2, 1))
+        self.quad_path.setScale(12)
+        self.quad_path.setPos(Vec3(0,0,0))
+        self.quad_path.setBillboardPointEye()
     
+    def deactivateHighlight(self):
+        if self.quad_path:
+            self.quad_path.detachNode()
+            self.quad_path = None
+
     def select(self, player):
         '''
         @param player, the player who has selected
         This method observes the events on the star and calls the related methods
         and notifies the corresponding objects based on the state of the star
         '''
+        player.selected_planet = None
+        
+        for planet in self.planets():
+            planet.deactivateHighlight()
+        self.activateHighlight(False)
+        
+        if(player.ge_amount != 0 and self.activated == False and \
+           player.selected_star == self):
+            player.ge_amount = player.ge_amount - 1
+            self._activateStar(player)
+            self.notify("updateGE")
         player.selected_star = self
-        if(self.activated):
-            '''TODO : show star lifetime counter'''
-#            print self.player.ge_amount
-#            print self.player
-#            print str(self.player.planets)
-        else:
-            if(player.ge_amount != 0 ):
-                player.ge_amount = player.ge_amount - 1
-                self._activateStar(player)
-                self.notify("updateGE")
         
     def _activateStar(self, player):
         '''
@@ -427,21 +450,23 @@ class Planet(SphericalBody):
 #        print "next_planet:" + str(self.next_planet)
 #        print self.player
         
+        player.selected_star = None
+        
+        self.parent_star.deactivateHighlight()
         for planet in self.parent_star.planets():
             planet.deactivateHighlight()
         self.activateHighlight(False)
         if self.next_planet != None: self.next_planet.activateHighlight(True) 
         if self.prev_planet != None: self.prev_planet.activateHighlight(True) 
-        
-        player.selected_planet = self
+
         if(self.player == player):
             '''TODO : notify the GUI Panel about the constructions available on this planet '''
         
-        if(not self.activated):
-            ''' TODO : get the player who selected the planet '''
+        if(not self.activated and player.selected_planet == self):
             if((self.prev_planet == None or self.prev_planet.activated) and \
                     self.parent_star.activated and self.parent_star.player == player):
-                self.activatePlanet(player)         
+                self.activatePlanet(player)
+        player.selected_planet = self         
         
     def activatePlanet(self, player):
         '''

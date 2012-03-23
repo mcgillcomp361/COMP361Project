@@ -18,11 +18,12 @@ class guiUpdate():
         self.geAmount = OnscreenText(text=' ', pos=(0.4, -0.75), scale=0.05, fg=(1, 1, 1, 1))
         
     def update(self, event):
-        if (event == "updateTime"):
-            self.refreshTime()            
+        if (event == "updateTime"):          
             from gameEngine.gameEngine import player
-            self.value = player.selected_star.lifetime
-            self.printTime()
+            if(player.selected_star != None):
+                self.refreshTime() 
+                self.value = player.selected_star.lifetime
+                self.printTime()
         if (event == "updateMinerals"):
             self.refreshResources()
             from gameEngine.gameEngine import player

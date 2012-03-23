@@ -28,7 +28,7 @@ class MouseEvents(DirectObject.DirectObject):
         self.pickerRay = CollisionRay()
         self.pickerNode.addSolid(self.pickerRay)
         self.myTraverser.addCollider(self.pickerNP, self.myHandler)
-        
+        ''' the player has to double click a star or planet in order to activate them '''
         self.accept("mouse1", self.handleMouseClick)
         
     
