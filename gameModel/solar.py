@@ -151,14 +151,15 @@ class Star(SphericalBody):
  
     def activateHighlight(self, thin):
         if thin:
-            flare_tex = base.loader.loadTexture("models/billboards/thin_ring.png")
+            tex = base.loader.loadTexture("models/billboards/thin_ring.png")
         else:
-            flare_tex = base.loader.loadTexture("models/billboards/ring.png")
-        cm = CardMaker('quad')
+            tex = base.loader.loadTexture("models/billboards/ring.png")
+        cm = CardMaker('highlight')
         cm.setFrameFullscreenQuad() # so that the center acts as the origin (from -1 to 1)
         self.quad_path = self.point_path.attachNewNode(cm.generate())        
         self.quad_path.setTransparency(TransparencyAttrib.MAlpha)
-        self.quad_path.setTexture(flare_tex)
+        self.highlight_ts = TextureStage('flare')
+        self.quad_path.setTexture(self.highlight_ts, tex)
         if thin:
             self.quad_path.setColor(Vec4(0.6, 0.1, 0.2, 1))
         else:
@@ -180,15 +181,15 @@ class Star(SphericalBody):
         '''
         player.selected_planet = None
         
-        for planet in self.planets():
-            planet.deactivateHighlight()
-        self.activateHighlight(False)
-        
         if(player.ge_amount != 0 and self.activated == False and \
            player.selected_star == self):
             player.ge_amount = player.ge_amount - 1
             self._activateStar(player)
             self.notify("updateGE")
+        else:
+            for planet in self.planets():
+                planet.deactivateHighlight()
+            self.activateHighlight(False)
         player.selected_star = self
         
     def _activateStar(self, player):
@@ -235,16 +236,19 @@ class Star(SphericalBody):
         self._activateSunflare()
     
     def _activateSunflare(self):
+        self.deactivateHighlight()
         flare_tex = base.loader.loadTexture("models/billboards/sunflare.png")
-        cm = CardMaker('quad')
+        cm = CardMaker('flare')
         cm.setFrameFullscreenQuad() # so that the center acts as the origin (from -1 to 1)
-        self.quad_path = self.point_path.attachNewNode(cm.generate())        
-        self.quad_path.setTransparency(TransparencyAttrib.MAlpha)
-        self.quad_path.setTexture(flare_tex)
-        self.quad_path.setColor(Vec4(1.0, 1.0, 1.0, 1))
-        self.quad_path.setScale(32)
-        self.quad_path.setPos(Vec3(0,0,0))
-        self.quad_path.setBillboardPointEye()
+        self.flare_path = self.point_path.attachNewNode(cm.generate())        
+        self.flare_path.setTransparency(TransparencyAttrib.MAlpha)
+        self.flare_ts = TextureStage('flare')
+#        self.flare_ts.setMode(TextureStage.MModulateGlow)
+        self.flare_path.setTexture(self.flare_ts,flare_tex)
+        self.flare_path.setColor(Vec4(1.0, 1.0, 1.0, 1))
+        self.flare_path.setScale(32)
+        self.flare_path.setPos(Vec3(0,0,0))
+        self.flare_path.setBillboardPointEye()
         
     def trackStarLife(self, task):
         self.lifetime = self.lifetime - float(self.getNumberOfActivePlanets())/(2)
