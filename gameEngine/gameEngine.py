@@ -14,6 +14,7 @@ sys.path.append("..")
 
 from gameModel.units import Unit
 from gameModel.player import *
+from gameModel.ai import *
 from gameModel.solar import Star, Planet
 from graphicEngine.environement import Environement
 #from graphicEngine.solarAnimator import SolarAnimator
@@ -21,7 +22,7 @@ from graphicEngine.camera import Camera
 from gameModel.constants import UNIVERSE_SCALE, DEEP_SPACE_DISTANCE, \
 MAX_DEAD_STAR_RADIUS, NUMBER_OF_STARS, MIN_DISTANCE_BETWEEN_PLANETS, \
 MIN_PLANET_VELOCITY, MAX_SOLAR_SYSTEM_RADIUS, MAX_DEAD_PLANET_RADIUS, \
-MAX_NUMBER_OF_PLANETS, MAX_PLANET_VELOCITY
+MAX_NUMBER_OF_PLANETS, MAX_PLANET_VELOCITY, AI_INITIATION_TIME
 from panda3d.core import Point3, Vec3
 from direct.task import Task
 from mouseEvents import MouseEvents
@@ -31,7 +32,8 @@ from gui.guiUpdate import guiUpdate
 mouse_events = None
 env_graphics = None
 player = None
-AI = None
+ai = None
+ai_task = None
 all_players = []
 all_stars = []
 all_planets = []
@@ -125,10 +127,11 @@ def _singlePlayer():
     Run a single player game with an AI player
     @players : the player
     '''
-    global player, mouse_events, AI
+    global player, mouse_events, ai
     player = Player("player")
     mouse_events.setPlayer(player)
-    AI = Player("AI")
+    ai = AI("Alien")
+    ai_task = taskMgr.doMethodLater(AI_INITIATION_TIME, _initiateAI, 'initiateAI')
     
 def moveUnitsPrev():
     global player
@@ -159,3 +162,8 @@ def _isSeparated(neighbors, test_position, mindist):
             if distance < mindist:
                 return False
     return True
+
+def _initiateAI(self):
+    global all_stars, all_planets, ai
+    ai.activateStar(all_stars)
+    

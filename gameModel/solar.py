@@ -184,7 +184,7 @@ class Star(SphericalBody):
         if(player.ge_amount != 0 and self.activated == False and \
            player.selected_star == self):
             player.ge_amount = player.ge_amount - 1
-            self._activateStar(player)
+            self.activateStar(player)
             self.notify("updateGE")
         else:
             from gameEngine.gameEngine import all_stars 
@@ -198,7 +198,7 @@ class Star(SphericalBody):
             
         player.selected_star = self
         
-    def _activateStar(self, player):
+    def activateStar(self, player):
         '''
         Activates a constructed dead star object, starting the lifetime counter with the assigned default value while
         the Game Engine calls the graphic engine to display the corresponding animation.
@@ -481,8 +481,8 @@ class Planet(SphericalBody):
             if self.prev_planet != None: self.prev_planet.activateHighlight(True)
             self.activateHighlight(False)
         
-        player.selected_planet = self         
-        
+        player.selected_planet = self
+            
     def activatePlanet(self, player):
         '''
         Activates a constructed dead planet object, starting the orbital movement with the assigned value while
