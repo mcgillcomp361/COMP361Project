@@ -187,9 +187,15 @@ class Star(SphericalBody):
             self._activateStar(player)
             self.notify("updateGE")
         else:
-            for planet in self.planets():
+            from gameEngine.gameEngine import all_stars 
+            for star in all_stars:
+                if(star != self):
+                    star.deactivateHighlight()
+            from gameEngine.gameEngine import all_planets
+            for planet in all_planets:
                 planet.deactivateHighlight()
             self.activateHighlight(False)
+            
         player.selected_star = self
         
     def _activateStar(self, player):
@@ -455,13 +461,6 @@ class Planet(SphericalBody):
 #        print self.player
         
         player.selected_star = None
-        
-        self.parent_star.deactivateHighlight()
-        for planet in self.parent_star.planets():
-            planet.deactivateHighlight()
-        self.activateHighlight(False)
-        if self.next_planet != None: self.next_planet.activateHighlight(True) 
-        if self.prev_planet != None: self.prev_planet.activateHighlight(True) 
 
         if(self.player == player):
             '''TODO : notify the GUI Panel about the constructions available on this planet '''
@@ -470,6 +469,18 @@ class Planet(SphericalBody):
             if((self.prev_planet == None or self.prev_planet.activated) and \
                     self.parent_star.activated and self.parent_star.player == player):
                 self.activatePlanet(player)
+        else:
+            from gameEngine.gameEngine import all_stars 
+            for star in all_stars:
+                star.deactivateHighlight()
+            from gameEngine.gameEngine import all_planets
+            for planet in all_planets:
+                if(self != planet or self.next_planet != planet or self.prev_planet != planet):
+                    planet.deactivateHighlight()
+            if self.next_planet != None: self.next_planet.activateHighlight(True) 
+            if self.prev_planet != None: self.prev_planet.activateHighlight(True)
+            self.activateHighlight(False)
+        
         player.selected_planet = self         
         
     def activatePlanet(self, player):
