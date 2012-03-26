@@ -34,6 +34,7 @@ class Player(object):
         
     ''' TODO: use Multi-Texturing '''
     ''' TODO: complete all the condition checks(e.g. tech tier, existent structure, ...) '''
+    ''' TODO: keep track of mines and resource generation and gravity engine construction '''
     
     def addStructure(self, structure):
         '''

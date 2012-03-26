@@ -127,11 +127,11 @@ def _singlePlayer():
     Run a single player game with an AI player
     @players : the player
     '''
-    global player, mouse_events, ai
+    global player, mouse_events, ai, all_stars
     player = Player("player")
     mouse_events.setPlayer(player)
     ai = AI("Alien")
-    ai_task = taskMgr.doMethodLater(AI_INITIATION_TIME, _initiateAI, 'initiateAI')
+    _runAI()
     
 def moveUnitsPrev():
     global player
@@ -163,7 +163,17 @@ def _isSeparated(neighbors, test_position, mindist):
                 return False
     return True
 
-def _initiateAI(self):
-    global all_stars, all_planets, ai
-    ai.activateStar(all_stars)
+'''
+This is the AI section which the game engine manages
+'''
+def _runAI():
+    global ai_task
+    ai_task = taskMgr.doMethodLater(AI_INITIATION_TIME, _initiateAI, 'initiateAI') 
+    
+def _initiateAI(task):
+    global all_stars, ai, ai_task 
+    ai.activateRandomStar(all_stars)
+    ai_task = None
+    return task.done
+    
     

@@ -271,6 +271,7 @@ class Star(SphericalBody):
         elif(self.lifetime <= LIFETIME - 2*LIFETIME/3 and self.stage == 4):
             self.stage = 5
             self.model_path.setTexture(SphericalBody.star_stage5_tex, 1)
+            ''' TODO: notify AI to moves its units '''
         elif(self.lifetime <= 0):
             self.stage = 6
             self.model_path.setTexture(SphericalBody.star_stage6_tex, 1)
@@ -310,6 +311,18 @@ class Star(SphericalBody):
         for planet in self._planets:
             yield planet
     
+    def getPlanetAt(self, orbit):
+        '''
+        returns the planet object at the specified orbit number
+        @param orbit, Integer : the orbit of the planet
+        '''
+        tmp = 0
+        for planet in self.planets():
+            if(orbit == tmp):
+                return planet
+            else:
+                tmp = tmp + 1
+        
     def getPlanet(self, planet):
         '''
         Returns the index of the given planet from list of planets 
@@ -600,7 +613,7 @@ class Planet(SphericalBody):
         '''
         Returns the number of hosted units from the planet
         '''
-        len(self._orbiting_units)
+        return len(self._orbiting_units)
             
     def addSurfaceStructure(self, structure):
         ''' 
@@ -643,7 +656,7 @@ class Planet(SphericalBody):
         '''
         Returns the number of surface structures from the planet
         '''
-        len(self._surface_structures)
+        return len(self._surface_structures)
         
     def hasStructure(self, structure):
         '''

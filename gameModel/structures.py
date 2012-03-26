@@ -11,6 +11,8 @@ PLANETARY_DEFENSE_II_DAMAGE, PLANETARY_DEFENSE_III_MAX_ENERGY, PLANETARY_DEFENSE
 
 _default_energy = 0
 
+''' TODO : add the planet defence model and functionality '''
+
 class Structure(object):
     __metaclass__ = ABCMeta
     '''
