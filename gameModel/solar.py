@@ -374,10 +374,13 @@ class Planet(SphericalBody):
         self._orbiting_units = []
         self._surface_structures = []
         self.__initSceneGraph()
-        
-        
+               
+        '''For the Player'''
         self.task_structure_timer = None
         self.task_unit_timer = None
+        '''For the AI'''
+        self.task_structure_timers = []
+        self.task_unit_timers = []
         
     def __initSceneGraph(self):
 
