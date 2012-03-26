@@ -617,6 +617,17 @@ class Planet(SphericalBody):
         Returns the number of hosted units from the planet
         '''
         return len(self._orbiting_units)
+    
+    def getNumberOfUnits(self, player):
+        '''
+        Returns the number of hosted units from the planet that belongs to the player
+        @param player, the owner of the units
+        '''
+        num = 0
+        for unit in self.units():
+            if(unit.player == player):
+                num = num + 1
+        return num
             
     def addSurfaceStructure(self, structure):
         ''' 

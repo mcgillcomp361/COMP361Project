@@ -9,13 +9,14 @@ from constants import MINERAL_STARTING_AMOUNT, GRAVITY_ENGINE_STARTING_AMOUNT, A
                     HORDE_BUILD_TIME, HORDE_MINERAL_COST, SPHERE_BUILD_TIME, SPHERE_MINERAL_COST, \
                     HIVE_BUILD_TIME, HIVE_MINERAL_COST, PLANETARIUM_BUILD_TIME, PLANETARIUM_MINERAL_COST, MATHEMATICA_BUILD_TIME, MATHEMATICA_MINERAL_COST, \
                     BLACK_HOLE_GENERATOR_BUILD_TIME, BLACK_HOLE_GENERATOR_MINERAL_COST, MAX_NUMBER_OF_STRUCTURE, \
-                    NUMBER_OF_STARS, MAX_NUMBER_OF_PLANETS, AI_ACTIVATE_PLANET_WAIT_TIME, AI_START_CONSTRUCTION_WAIT_TIME, AI_MAX_NUMBER_OF_UNITS, AI_ACCELERATION_TIME
+                    NUMBER_OF_STARS, MAX_NUMBER_OF_PLANETS, AI_ACTIVATE_PLANET_WAIT_TIME, AI_START_CONSTRUCTION_WAIT_TIME, AI_MAX_NUMBER_OF_UNITS, AI_ACCELERATION_TIME, AI_UNIT_CONSTRUCTION_WAIT_TIME
 from structures import *
 from units import *
 from solar import *
 import random
 
-'''TODO : add mineral and gravity engine functionality to the AI agent '''        
+'''TODO : add mineral and gravity engine functionality to the AI agent or should we not ??? '''  
+'''TODO : construct different strategy routines for the AI agent : assault, defence, evacuate '''      
 
 class AI(object):
     '''
@@ -59,28 +60,30 @@ class AI(object):
     def _activatePlanet(self, planet):
         if(planet.activated == False):
             planet.activatePlanet(self)
-            if(planet.player == self):
-                self._startConstruction(planet)
-            
-    def _startConstruction(self, planet):
+            if(planet.player == self):#for extra check
+                task_structure_timer = taskMgr.doMethodLater(AI_START_CONSTRUCTION_WAIT_TIME, self._startConstruction, 'AIbuildForge', extraArgs =[planet], appendTask=True)
+                planet.task_structure_timers.append(task_structure_timer)
+
+    def _startConstruction(self, planet, task):
         if(planet.player == self):
             if(planet.hasStructure("forge")==False):
-                ''' Build Forge at all times '''
-                task_structure_timer1 = taskMgr.doMethodLater(FORGE_BUILD_TIME, self._constructForge, 'AIbuildForge', extraArgs =[planet], appendTask=True)
-                planet.task_structure_timers.append(task_structure_timer1)
-            
+                self._constructForge(planet)
+                planet.task_structure_timers.remove(task)
+
             structureType = random.randrange(1, 5, 1)
             if(structureType == 1 and planet.hasStructure("nexus")==False):
-                task_structure_timer2 = taskMgr.doMethodLater(NEXUS_BUILD_TIME, self._constructNexus, 'AIbuildNexus', extraArgs =[planet], appendTask=True)
+                task_structure_timer = taskMgr.doMethodLater(NEXUS_BUILD_TIME, self._constructNexus, 'AIbuildNexus', extraArgs =[planet], appendTask=True)
             elif(structureType == 2 and planet.hasStructure("extractor")==False and planet.hasStructure("phylon")==False and planet.hasStructure("generatorCore")==False):
-                task_structure_timer2 = taskMgr.doMethodLater(EXTRACTOR_BUILD_TIME, self._constructExtractor, 'AIbuildExtractor', extraArgs =[planet], appendTask=True)
+                task_structure_timer = taskMgr.doMethodLater(EXTRACTOR_BUILD_TIME, self._constructExtractor, 'AIbuildExtractor', extraArgs =[planet], appendTask=True)
             elif(structureType == 3 and planet.hasStructure("phylon")==False and planet.hasStructure("generatorCore")==False):
-                task_structure_timer2 = taskMgr.doMethodLater(PHYLON_BUILD_TIME, self._constructPhylon, 'AIbuildPhylon', extraArgs =[planet], appendTask=True)
+                task_structure_timer = taskMgr.doMethodLater(PHYLON_BUILD_TIME, self._constructPhylon, 'AIbuildPhylon', extraArgs =[planet], appendTask=True)
             elif(structureType == 4 and planet.hasStructure("generatorCore")==False):
-                task_structure_timer2 = taskMgr.doMethodLater(GENERATOR_CORE_BUILD_TIME, self._constructGeneratorCore, 'AIbuildGeneratorCore', extraArgs =[planet], appendTask=True)
-            planet.task_structure_timers.append(task_structure_timer2)
+                task_structure_timer = taskMgr.doMethodLater(GENERATOR_CORE_BUILD_TIME, self._constructGeneratorCore, 'AIbuildGeneratorCore', extraArgs =[planet], appendTask=True)
+            planet.task_structure_timers.append(task_structure_timer)
             
-            if(planet.getNumberOfUnits()<AI_MAX_NUMBER_OF_UNITS):
+            '''TODO : construct defensive structures '''
+            
+            if(planet.getNumberOfUnits(self) < AI_MAX_NUMBER_OF_UNITS):
                 unit_type = random.randrange(0, 100, 1)
                 if(0 <= unit_type and unit_type < 60):
                     ''' 60% chance of constructing units of tier I '''
@@ -92,11 +95,11 @@ class AI(object):
                     ''' 10% chance of constructing units of tier III '''
                     self._constructUnitTierIII(planet, 0, None)
 
-    def _constructForge(self, planet, task):
+            return task.done
+
+    def _constructForge(self, planet):
         forge = Forge(planet)
         self.structures.append(forge)
-        planet.task_structure_timers.remove(task)
-        return task.done
         
     def _constructNexus(self, planet, task):
         nexus = Nexus(planet)
@@ -138,7 +141,7 @@ class AI(object):
             if(task==None):return
             else:return task.done
         else:
-            new_task = taskMgr.doMethodLater(AI_START_CONSTRUCTION_WAIT_TIME, self._constructUnitTierI, 'AIconstructUnitTierI', extraArgs =[planet, units_in_construction], appendTask=True)
+            new_task = taskMgr.doMethodLater(AI_UNIT_CONSTRUCTION_WAIT_TIME, self._constructUnitTierI, 'AIconstructUnitTierI', extraArgs =[planet, units_in_construction], appendTask=True)
             
     def _constructUnitTierII(self, planet, units_in_construction, task):
         units_in_construction = units_in_construction + 1
@@ -153,11 +156,11 @@ class AI(object):
             task_unit_timer =  taskMgr.doMethodLater(SWARM_BUILD_TIME, self._constructSwarm, 'AIbuildSwarm', extraArgs =[planet], appendTask=True) 
         
         planet.task_unit_timers.append(task_unit_timer)
-        if(units_in_construction >= AI_MAX_NUMBER_OF_UNITS):
+        if(units_in_construction >= AI_MAX_NUMBER_OF_UNITS-1):
             if(task==None):return
             else:return task.done
         else:
-            new_task = taskMgr.doMethodLater(AI_START_CONSTRUCTION_WAIT_TIME, self._constructUnitTierII, 'AIconstructUnitTierII', extraArgs =[planet, units_in_construction], appendTask=True)
+            new_task = taskMgr.doMethodLater(AI_UNIT_CONSTRUCTION_WAIT_TIME, self._constructUnitTierII, 'AIconstructUnitTierII', extraArgs =[planet, units_in_construction], appendTask=True)
             
     def _constructUnitTierIII(self, planet, units_in_construction, task):
         units_in_construction = units_in_construction + 1
@@ -171,11 +174,11 @@ class AI(object):
             task_unit_timer =  taskMgr.doMethodLater(MATHEMATICA_BUILD_TIME, self._constructMathematica, 'AIbuildMathematica', extraArgs =[planet], appendTask=True)  
         
         planet.task_unit_timers.append(task_unit_timer)
-        if(units_in_construction >= AI_MAX_NUMBER_OF_UNITS-1):
+        if(units_in_construction >= AI_MAX_NUMBER_OF_UNITS-2):
             if(task==None):return
             else:return task.done
         else:
-            new_task = taskMgr.doMethodLater(AI_START_CONSTRUCTION_WAIT_TIME, self._constructUnitTierIII, 'AIconstructUnitTierIII', extraArgs =[planet, units_in_construction], appendTask=True)
+            new_task = taskMgr.doMethodLater(AI_UNIT_CONSTRUCTION_WAIT_TIME, self._constructUnitTierIII, 'AIconstructUnitTierIII', extraArgs =[planet, units_in_construction], appendTask=True)
 
     def _constructSwarm(self, planet, task):
         swarm = Swarm(planet, self)
