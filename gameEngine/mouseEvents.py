@@ -13,9 +13,17 @@ from panda3d.core import BitMask32
 class MouseEvents(DirectObject.DirectObject):
     
     def __init__(self): 
-        from gameEngine import moveUnitsNext, moveUnitsPrev
-        self.accept('arrow_down', moveUnitsNext )
-        self.accept('arrow_up', moveUnitsPrev )          
+#        from gameEngine import moveUnitsNext, moveUnitsPrev
+#        self.accept('arrow_down', moveUnitsNext )
+#        self.accept('arrow_up', moveUnitsPrev )          
+        self.accept('arrow_up-repeat', self.moveCameraUp)
+        self.accept('arrow_up', self.moveCameraUp)
+        self.accept('arrow_down-repeat', self.moveCameraDown)
+        self.accept('arrow_down', self.moveCameraDown)
+        self.accept('arrow_left-repeat', self.moveCameraLeft)
+        self.accept('arrow_left', self.moveCameraLeft) 
+        self.accept('arrow_right-repeat', self.moveCameraRight)
+        self.accept('arrow_right', self.moveCameraRight)               
         # Initialize the traverser.
         self.myTraverser = CollisionTraverser()
         # Initialize the handler.
@@ -34,8 +42,22 @@ class MouseEvents(DirectObject.DirectObject):
     
     def setPlayer(self, player):
         self.player = player
+    
+    def setCamera(self, camera):
+        self.camera = camera
         
-    #Use Collision Detection 
+    def moveCameraUp(self):
+        self.camera.camera_direction = "moveUp"
+        
+    def moveCameraDown(self):  
+        self.camera.camera_direction = "moveDown" 
+    
+    def moveCameraLeft(self):
+        self.camera.camera_direction = "moveLeft"
+    
+    def moveCameraRight(self):
+        self.camera.camera_direction = "moveRight"   
+    
     def handleMouseClick(self):
         if base.mouseWatcherNode.hasMouse():
             #get the mouse position

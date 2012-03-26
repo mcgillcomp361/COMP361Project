@@ -107,7 +107,7 @@ def _startGame(players):
     either the single player mode or the multiplayer mode based on the players choice.
     @param players: the list of the players ready to play
     '''
-    
+    global _game_camera
     ''' TODO : music should be self.music so it can be changed later on '''
     music = base.loader.loadSfx("sound/music/music1.mp3")
     music.setLoop(True)
@@ -116,7 +116,7 @@ def _startGame(players):
     #randomly set the camera on one of the stars for the player
     rand = random.randrange(0,NUMBER_OF_STARS,1)
     ''' TODO : camera is not set on the correct position, why ? '''
-    game_camera = Camera(all_stars[rand])
+    _game_camera = Camera(all_stars[rand])
     
     '''TODO : choose between single player or multiplayer '''
     _singlePlayer()
@@ -127,9 +127,10 @@ def _singlePlayer():
     Run a single player game with an AI player
     @players : the player
     '''
-    global player, mouse_events, ai, all_stars
+    global player, mouse_events, ai, all_stars, _game_camera
     player = Player("player")
     mouse_events.setPlayer(player)
+    mouse_events.setCamera(_game_camera)
     ai = AI("Alien")
     _runAI()
     

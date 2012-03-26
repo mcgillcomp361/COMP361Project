@@ -125,12 +125,111 @@ class GamePanel():
         aspectRatio = 1.33
         aspect2d = render2d.attachNewNode(PGTop("aspect2d")) 
         aspect2d.setScale(1.0 / aspectRatio, 1.0, 1.0) 
- 
-        bk_text = "Research Tree" 
-        self.textObject = OnscreenText(parent = aspect2d, text = bk_text, pos = (0.0,0.5), 
-                                       scale = 0.17,fg=(1,0.5,0.5,1),align=TextNode.ACenter,mayChange=1) 
-#        window = base.openWindow()
+  
+        self.image = OnscreenImage(parent=render2d, image="./models/gui/research_tree.png", scale = (1, 1, 1), pos = (0,0,0))
 
+        #add buttons Tier 1        
+        #Add units
+        b1 = DirectButton(image = "./models/gui/units/unit1.png", frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
+                          image_scale = (0.08, 1, 0.08), pos=(-0.72,0,0.44),borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          relief=2, command=self.selectSwarm)
+        b2 = DirectButton(image = "./models/gui/units/unit2.png",frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
+                          image_scale = (0.08, 1, 0.08), pos=(-0.52,0,0.44), borderWidth = (0.005, 0.005),  text_align = TextNode.ALeft,
+                          relief=2, command=self.selectGlobe)
+        b3 = DirectButton(image = "./models/gui/units/unit3.png",frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
+                          image_scale = (0.08, 1, 0.08), pos=(-0.32,0, 0.44), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          relief=2, command=self.selectAnalyzer)
+        #Add abilities      
+        #Add constructions
+        b4 = DirectButton(image = "./models/gui/structures/structure1.png", frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
+                          image_scale = (0.08, 1, 0.08), pos=(0,0,0.44),borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          relief=2, command=self.selectForge)
+        b5 = DirectButton(image = "./models/gui/structures/structure2.png",frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
+                          image_scale = (0.08, 1, 0.08), pos=(0.2,0,0.44), borderWidth = (0.005, 0.005),  text_align = TextNode.ALeft,
+                          relief=2, command=self.selectNexus)
+        b6 = DirectButton(image = "./models/gui/structures/structure3.png",frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
+                          image_scale = (0.08, 1, 0.08), pos=(0.4,0, 0.44), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          relief=2, command=self.selectExtractor)
+        b7 = DirectButton(image = "./models/gui/structures/structure4.png", frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
+                          image_scale = (0.08, 1, 0.08), pos=(0.6,0, 0.44), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          relief=2, command=self.selectPD1)
+        
+        #Tier 2 
+        
+        #Add Units
+        b8 = DirectButton(image = "./models/gui/units/unit4.png", frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
+                          image_scale = (0.08, 1, 0.08), pos=(-0.72,0, 0.05), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          relief=2, command=self.selectSphere)
+        b9 = DirectButton(image = "./models/gui/units/unit5.png", frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
+                          image_scale = (0.08, 1, 0.08), pos=(-0.52,0, 0.05), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          relief=2, command=self.selectHive)
+        
+        #Add Abilities
+        
+        #Add Constructions
+        b10 = DirectButton(image = "./models/gui/structures/structure5.png", frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
+                          image_scale = (0.08, 1, 0.08), pos=(0,0, 0.05), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          relief=2, command=self.selectPhylon)
+        b11 = DirectButton(image = "./models/gui/structures/structure6.png", frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
+                          image_scale = (0.08, 1, 0.08), pos=(0.2,0, 0.05), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          relief=2, command=self.selectPD2)
+        
+        #Tier 3
+        
+        #Add Units
+        b12 = DirectButton(image = "./models/gui/units/unit6.png", frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
+                          image_scale = (0.08, 1, 0.08), pos=(-0.72,0, -0.3), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          relief=2, command=self.selectPlanetarium)
+        b13 = DirectButton(image = "./models/gui/units/unit7.png", frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
+                          image_scale = (0.08, 1, 0.08), pos=(-0.52,0, -0.3), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          relief=2, command=self.selectMathematica)
+        b14 = DirectButton(image = "./models/gui/units/unit8.png", frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
+                          image_scale = (0.08, 1, 0.08), pos=(-0.32,0, -0.3), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          relief=2, command=self.selectBHG)
+        
+        #Add Abilities
+        #Add Constructions
+        b15 = DirectButton(image = "./models/gui/structures/structure7.png", frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
+                          image_scale = (0.08, 1, 0.08), pos=(0,0, -0.3), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          relief=2, command=self.selectGC)
+        b16 = DirectButton(image = "./models/gui/structures/structure8.png", frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
+                          image_scale = (0.08, 1, 0.08), pos=(0.2,0, -0.3), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          relief=2, command=self.selectPD3)
+        
+        #Tier 4
+        
+        #Add Units
+        b17 = DirectButton(image = "./models/gui/units/unit9.png", frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
+                          image_scale = (0.08, 1, 0.08), pos=(-0.72,0, -0.7), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          relief=2, command=self.selectSwarm) #TODO: reusing swarm here...   
+        
+        #Add Abilities
+        #Add Constructions
+        b18 = DirectButton(image = "./models/gui/structures/structure9.png", frameColor=(0, 0,0, 0),text_fg=(1,1,1,1),
+                          image_scale = (0.08, 1, 0.08), pos=(0,0, -0.7), borderWidth = (0.005, 0.005), text_align = TextNode.ALeft,
+                          relief=2, command=self.selectPD4) 
+        
+        b1.reparentTo(self.image)
+        b2.reparentTo(self.image)
+        b3.reparentTo(self.image)        
+        b4.reparentTo(self.image)
+        b5.reparentTo(self.image)
+        b6.reparentTo(self.image)
+        b7.reparentTo(self.image)
+        b8.reparentTo(self.image)
+        b9.reparentTo(self.image)
+        b10.reparentTo(self.image)
+        b11.reparentTo(self.image)
+        
+        b12.reparentTo(self.image)
+        b13.reparentTo(self.image)
+        b14.reparentTo(self.image)
+        b15.reparentTo(self.image)
+        b16.reparentTo(self.image)
+        
+        b17.reparentTo(self.image)
+        b18.reparentTo(self.image)
+        
     def loadMiniMap(self):
         #TODO: JULIE
         pass

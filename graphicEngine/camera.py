@@ -69,6 +69,8 @@ class Camera(DirectObject.DirectObject):
         self.accept("wheel_down",self.zoomOut)
         # sets up the camera handler to detet when the mouse wheel is rolled upwards and uses a lambda function to call the
         # adjustCamDist function  with the argument 1.1 
+        
+        self.camera_direction = None
          
         taskMgr.add(self.camMoveTask,'camMoveTask') 
         # sets the camMoveTask to be run every frame 
@@ -204,22 +206,23 @@ class Camera(DirectObject.DirectObject):
                 # these two booleans are used to denote if the camera needs to pan. X and Y refer to the mouse position that causes the 
                 # panning. X is the left or right edge of the screen, Y is the top or bottom. 
                  
-                if self.my > (1 - self.panZoneSize): 
+                if self.my > (1 - self.panZoneSize) or self.camera_direction=="moveDown":
                     angleradiansX1 = base.camera.getH() * (math.pi / 180.0) 
                     panRate1 = (1 - self.my - self.panZoneSize) * (self.camDist / self.panRateDivisor) 
                     moveY = True 
-                if self.my < (-1 + self.panZoneSize): 
+                if self.my < (-1 + self.panZoneSize) or self.camera_direction=="moveUp": 
                     angleradiansX1 = base.camera.getH() * (math.pi / 180.0)+math.pi 
                     panRate1 = (1 + self.my - self.panZoneSize)*(self.camDist / self.panRateDivisor) 
                     moveY = True 
-                if self.mx > (1 - self.panZoneSize): 
+                if self.mx > (1 - self.panZoneSize) or self.camera_direction=="moveLeft": 
                     angleradiansX2 = base.camera.getH() * (math.pi / 180.0)+math.pi*0.5 
                     panRate2 = (1 - self.mx - self.panZoneSize) * (self.camDist / self.panRateDivisor) 
                     moveX = True 
-                if self.mx < (-1 + self.panZoneSize): 
+                if self.mx < (-1 + self.panZoneSize) or self.camera_direction=="moveRight": 
                     angleradiansX2 = base.camera.getH() * (math.pi / 180.0)-math.pi*0.5 
                     panRate2 = (1 + self.mx - self.panZoneSize) * (self.camDist / self.panRateDivisor) 
-                    moveX = True 
+                    moveX = True
+                self.camera_direction=None 
                 # These four blocks check to see if the mouse cursor is close enough to the edge of the screen to start panning and then 
                 # perform part of the math necessary to find the new camera position. Once again, the math is a bit above my head, so 
                 # I can't properly explain it. These blocks also set the move booleans to true so that the next lines will move the camera. 
@@ -245,7 +248,7 @@ class Camera(DirectObject.DirectObject):
                 # on the position of the target. The x and y values are clamped to the pan limits before they are applied. 
             #print(self.target) 
             self.mx=mpos.getX() 
-            self.my=mpos.getY() 
+            self.my=mpos.getY()
             # The old mouse positions are updated to the current mouse position as the final step. 
              
         return task.cont
