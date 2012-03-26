@@ -8,7 +8,7 @@ from pandac.PandaModules import CollisionNode, CollisionBox, CollisionSphere, Tr
 from direct.showbase import DirectObject 
 from panda3d.core import Vec3,Vec4,Point2, Point3, BitMask32
 from direct.directtools.DirectGeometry import LineNodePath
-from gameModel.constants import MAX_STAR_RADIUS, MAX_PLANET_RADIUS
+from gameModel.constants import MAX_STAR_RADIUS, MAX_PLANET_RADIUS, PLANET_SPIN_VELOCITY
 from gui.Timer import Timer
 from panda3d.core import Filename,Buffer,Shader, CardMaker
 from panda3d.core import PandaNode,NodePath
@@ -17,6 +17,8 @@ from direct.task import Task
 #from gameEngine.gameEngine import *
 from constants import MAX_NUMBER_OF_PLANETS, MAX_NUMBER_OF_STRUCTURE, LIFETIME, MAX_STAR_RADIUS
 import math
+
+from graphicEngine import shapes
 
 
 class SphericalBody(Observable):
@@ -52,7 +54,6 @@ class SphericalBody(Observable):
         self.position = position
         self.activated = activated
         self.player = player
-        self.spin_velocity = 0
         
         #Pre_Loading the star textures
         SphericalBody.star_dead_tex = loader.loadTexture("models/stars/white_dwarf2.jpg")
@@ -128,6 +129,8 @@ class Star(SphericalBody):
         #For transforming the object with scaling, colors, shading, etc.
         # Hosting the actual 3d model object.
         #Models & textures
+        self.flare_ts = TextureStage('flare')
+        self.flare_ts.setMode(TextureStage.MModulateGlow)
         self.model_path = loader.loadModel("models/stars/planet_sphere")
         self.model_path.setTexture(SphericalBody.star_dead_tex, 1)
         self.model_path.reparentTo(self.point_path)
@@ -161,7 +164,7 @@ class Star(SphericalBody):
         self.highlight_ts = TextureStage('flare')
         self.quad_path.setTexture(self.highlight_ts, tex)
         if thin:
-            self.quad_path.setColor(Vec4(0.6, 0.1, 0.2, 1))
+            self.quad_path.setColor(Vec4(1.0, 1.0, 1.0, 1))
         else:
             self.quad_path.setColor(Vec4(1.0, 0.3, 0.2, 1))
         self.quad_path.setScale(12)
@@ -212,18 +215,18 @@ class Star(SphericalBody):
         self.timer_task = taskMgr.doMethodLater(1, self.trackStarLife, 'starLifeTick')
         player.selected_star = self
         
-        point_light = PointLight("starLight")
-        point_light.setColor(Vec4(1.0, 1.0, 1.0, 1.0))
-        pt_node = render.attachNewNode(point_light)
-#        pt_node.setHpr(60, 0, 90)
-        pt_node.setPos(Vec3(0, 0, -40.0))
-        render.setLight(pt_node)
+#        point_light = PointLight("starLight")
+#        point_light.setColor(Vec4(1.0, 1.0, 1.0, 1.0))
+#        pt_node = render.attachNewNode(point_light)
+##        pt_node.setHpr(60, 0, 90)
+#        pt_node.setPos(Vec3(0, 0, -40.0))
+#        render.setLight(pt_node)
         
         point_light = PointLight("starLight")
         point_light.setColor(Vec4(1.0, 1.0, 1.0, 1.0))
+        point_light.setPoint(Point3(0, 0, 0))
         pt_node = render.attachNewNode(point_light)
 #        pt_node.setHpr(60, 0, 90)
-        pt_node.setPos(Vec3(0, 0, 40.0))
         render.setLight(pt_node)
         
         '''TODO : display star birth animation '''
@@ -238,7 +241,7 @@ class Star(SphericalBody):
         
         self.radius = MAX_STAR_RADIUS
         self.model_path.setScale(self.radius)
-        self.model_path.setTexture(SphericalBody.star_stage1_tex, 1)
+        self.model_path.setTexture(self.flare_ts, SphericalBody.star_stage1_tex)
         self._activateSunflare()
     
     def _activateSunflare(self):
@@ -248,8 +251,6 @@ class Star(SphericalBody):
         cm.setFrameFullscreenQuad() # so that the center acts as the origin (from -1 to 1)
         self.flare_path = self.point_path.attachNewNode(cm.generate())        
         self.flare_path.setTransparency(TransparencyAttrib.MAlpha)
-        self.flare_ts = TextureStage('flare')
-#        self.flare_ts.setMode(TextureStage.MModulateGlow)
         self.flare_path.setTexture(self.flare_ts,flare_tex)
         self.flare_path.setColor(Vec4(1.0, 1.0, 1.0, 1))
         self.flare_path.setScale(32)
@@ -261,16 +262,16 @@ class Star(SphericalBody):
         self.updateTimer()
         if(self.lifetime <= LIFETIME - LIFETIME/6 and self.stage == 1):
             self.stage = 2
-            self.model_path.setTexture(SphericalBody.star_stage2_tex, 1)
+            self.model_path.setTexture(self.flare_ts, SphericalBody.star_stage2_tex)
         elif(self.lifetime <= LIFETIME - LIFETIME/3 and self.stage == 2):
             self.stage = 3
-            self.model_path.setTexture(SphericalBody.star_stage3_tex, 1)
+            self.model_path.setTexture(self.flare_ts, SphericalBody.star_stage3_tex)
         elif(self.lifetime <= LIFETIME - LIFETIME/2 and self.stage == 3):
             self.stage = 4
-            self.model_path.setTexture(SphericalBody.star_stage4_tex, 1)
+            self.model_path.setTexture(self.flare_ts, SphericalBody.star_stage4_tex)
         elif(self.lifetime <= LIFETIME - 2*LIFETIME/3 and self.stage == 4):
             self.stage = 5
-            self.model_path.setTexture(SphericalBody.star_stage5_tex, 1)
+            self.model_path.setTexture(self.flare_ts, SphericalBody.star_stage5_tex)
             ''' TODO: notify AI to moves its units '''
         elif(self.lifetime <= 0):
             self.stage = 6
@@ -366,6 +367,7 @@ class Planet(SphericalBody):
                           orbital_radius * math.sin(orbital_angle), 0)
         super(Planet, self).__init__(position, radius, False, player)
         self.orbital_velocity = 0
+        self.max_orbital_velocity = 0
         self.orbital_radius = orbital_radius
         self.orbital_angle = orbital_angle
         self.parent_star = parent_star
@@ -412,8 +414,6 @@ class Planet(SphericalBody):
         # matches the planet perfectly.
         self.cnode_path = self.model_path.attachNewNode(cnode)
         
-        self.connections = LineNodePath(parent = self.parent_star.point_path, thickness = 1.0, colorVec = Vec4(0,0,1.0,0.7))
-        self.connections.create()
         self.lines = LineNodePath(parent = self.parent_star.point_path, thickness = 4.0, colorVec = Vec4(1.0, 1.0, 1.0, 0.2))
         self.quad_path = None
         
@@ -454,7 +454,7 @@ class Planet(SphericalBody):
         self.quad_path.setTransparency(TransparencyAttrib.MAlpha)
         self.quad_path.setTexture(flare_tex)
         if thin:
-            self.quad_path.setColor(Vec4(0.2, 0.1, 0.6, 1))
+            self.quad_path.setColor(Vec4(1,1,1, 1))
         else:
             self.quad_path.setColor(Vec4(0.2, 0.3, 1.0, 1))
         self.quad_path.setScale(5)
@@ -525,12 +525,30 @@ class Planet(SphericalBody):
         self.model_path.setTexture(SphericalBody.planet_activated_tex, 1)
         
         self.startSpin()
-        self.drawLines()
-        self.orbitTask = taskMgr.add(self.stepOrbit, 'planetOrbit')
+        taskMgr.setupTaskChain('orbitChain')
+        taskMgr.add(self.accelerateOrbit, 'accelerateOrbit', taskChain = 'orbitChain')
+        self.orbitTask = taskMgr.add(self.stepOrbit, 'stepOrbit', taskChain = 'orbitChain')
+        
+        self.orbit_path = shapes.makeArc(360, int(self.orbital_radius))
+        self.orbit_path.reparentTo(self.parent_star.point_path)
+        self.orbit_path.setScale(self.orbital_radius)
     
     def startSpin(self):
-        self.day_period = self.model_path.hprInterval(self.spin_velocity, Vec3(360, 0, 0))
+        self.day_period = self.model_path.hprInterval(PLANET_SPIN_VELOCITY, Vec3(360, 0, 0))
         self.day_period.loop()
+        
+    def accelerateOrbit(self, task):
+        
+        self.orbital_angle = self.orbital_angle + self.orbital_velocity
+        self.orbital_angle = math.fmod(self.orbital_angle, 2.0*math.pi);
+        self.point_path.setPos(self.orbital_radius * math.cos(self.orbital_angle),
+                               self.orbital_radius * math.sin(self.orbital_angle), 0)
+        self.position = self.point_path.getPos()
+        self.orbital_velocity = self.orbital_velocity + 0.0001
+        if self.orbital_velocity > self.max_orbital_velocity:
+            return task.done
+        else:
+            return task.cont
     
     def stepOrbit(self, task):
         self.orbital_angle = self.orbital_angle + self.orbital_velocity
@@ -538,7 +556,6 @@ class Planet(SphericalBody):
         self.point_path.setPos(self.orbital_radius * math.cos(self.orbital_angle),
                                self.orbital_radius * math.sin(self.orbital_angle), 0)
         self.position = self.point_path.getPos()
-        self.drawLines()
         return task.cont
     
     def drawLines(self): 

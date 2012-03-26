@@ -85,7 +85,7 @@ def _prepareGame():
                 planet.parent_star = star
                 planet.prev_planet = prev_p
                 prev_p = planet
-                planet.orbital_velocity = math.pow(MAX_PLANET_VELOCITY - (float(i)/MAX_NUMBER_OF_PLANETS) * (MAX_PLANET_VELOCITY - MIN_PLANET_VELOCITY), 2)
+                planet.max_orbital_velocity = math.pow(MAX_PLANET_VELOCITY - (float(i)/MAX_NUMBER_OF_PLANETS) * (MAX_PLANET_VELOCITY - MIN_PLANET_VELOCITY), 2)
                 planet.spin_velocity = 70
                 star.addPlanet(planet)
                 all_planets.append(planet)

@@ -17,7 +17,7 @@ class Observable(object):
             self._observers.remove(observer)
         except ValueError:
             pass
-
+    
     def notify(self, event, modifier=None):
         for observer in self._observers:
             if modifier != observer:

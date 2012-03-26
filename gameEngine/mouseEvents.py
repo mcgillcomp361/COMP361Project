@@ -15,11 +15,11 @@ class MouseEvents(DirectObject.DirectObject):
     def __init__(self): 
         from gameEngine import moveUnitsNext, moveUnitsPrev
         self.accept('arrow_down', moveUnitsNext )
-        self.accept('arrow_up', moveUnitsPrev )               
+        self.accept('arrow_up', moveUnitsPrev )          
         # Initialize the traverser.
         self.myTraverser = CollisionTraverser()
         # Initialize the handler.
-        self.myHandler = CollisionHandlerQueue()       
+        self.myHandler = CollisionHandlerQueue()
         self.accept("escape", sys.exit) #Exit the program when escape is pressed
         base.disableMouse()
         self.pickerNode = CollisionNode('mouseRay')
