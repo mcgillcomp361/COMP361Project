@@ -15,7 +15,6 @@ from units import *
 from solar import *
 import random
 
-'''TODO : add mineral and gravity engine functionality to the AI agent or should we not ??? '''  
 '''TODO : construct different strategy routines for the AI agent : assault, defence, evacuate '''      
 
 class AI(object):
@@ -58,14 +57,14 @@ class AI(object):
             task = taskMgr.doMethodLater(AI_ACTIVATE_PLANET_WAIT_TIME - AI_ACCELERATION_TIME*orbit, self._activatePlanetsLoop, 'AIactivatePlanet', extraArgs =[orbit, star], appendTask=True)
         
     def _activatePlanet(self, planet):
-        if(planet.activated == False):
+        if(planet.activated == False and planet != None):
             planet.activatePlanet(self)
             if(planet.player == self):#for extra check
                 task_structure_timer = taskMgr.doMethodLater(AI_START_CONSTRUCTION_WAIT_TIME, self._startConstruction, 'AIbuildForge', extraArgs =[planet], appendTask=True)
                 planet.task_structure_timers.append(task_structure_timer)
 
     def _startConstruction(self, planet, task):
-        if(planet.player == self):
+        if(planet.player == self and planet.parent_star.lifetime > 0):
             if(planet.hasStructure("forge")==False):
                 self._constructForge(planet)
                 planet.task_structure_timers.remove(task)
@@ -128,6 +127,9 @@ class AI(object):
     def _constructUnitTierI(self, planet, units_in_construction, task):
         units_in_construction = units_in_construction + 1
         
+        if(planet.parent_star.lifetime <= 0):
+            return task.done
+        
         unit_type = random.randrange(0, 3, 1)
         if(unit_type == 0):
             task_unit_timer =  taskMgr.doMethodLater(SWARM_BUILD_TIME, self._constructSwarm, 'AIbuildSwarm', extraArgs =[planet], appendTask=True)
@@ -142,9 +144,13 @@ class AI(object):
             else:return task.done
         else:
             new_task = taskMgr.doMethodLater(AI_UNIT_CONSTRUCTION_WAIT_TIME, self._constructUnitTierI, 'AIconstructUnitTierI', extraArgs =[planet, units_in_construction], appendTask=True)
+            if(task!=None):return task.done
             
     def _constructUnitTierII(self, planet, units_in_construction, task):
         units_in_construction = units_in_construction + 1
+        
+        if(planet.parent_star.lifetime <= 0):
+            return task.done
         
         unit_type = random.randrange(0, 3, 1)
         if(unit_type == 0):
@@ -161,9 +167,13 @@ class AI(object):
             else:return task.done
         else:
             new_task = taskMgr.doMethodLater(AI_UNIT_CONSTRUCTION_WAIT_TIME, self._constructUnitTierII, 'AIconstructUnitTierII', extraArgs =[planet, units_in_construction], appendTask=True)
+            if(task!=None):return task.done
             
     def _constructUnitTierIII(self, planet, units_in_construction, task):
         units_in_construction = units_in_construction + 1
+        
+        if(planet.parent_star.lifetime <= 0):
+            return task.done
         
         unit_type = random.randrange(0, 3, 1)
         if(unit_type == 0):
@@ -179,6 +189,7 @@ class AI(object):
             else:return task.done
         else:
             new_task = taskMgr.doMethodLater(AI_UNIT_CONSTRUCTION_WAIT_TIME, self._constructUnitTierIII, 'AIconstructUnitTierIII', extraArgs =[planet, units_in_construction], appendTask=True)
+            if(task!=None):return task.done
 
     def _constructSwarm(self, planet, task):
         swarm = Swarm(planet, self)

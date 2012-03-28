@@ -117,7 +117,6 @@ class Star(SphericalBody):
         self.stage = 0
         self.timer_task = None
         
-        '''TODO: move this somewhere else '''
         self.t = Timer(self) 
         self.__initSceneGraph()
     
@@ -197,7 +196,8 @@ class Star(SphericalBody):
             from gameEngine.gameEngine import all_planets
             for planet in all_planets:
                 planet.deactivateHighlight()
-            self.activateHighlight(False)
+            '''TODO: fix the conflict problem with highlight and star flare ''' 
+            #self.activateHighlight(False)
             
         player.selected_star = self
         
@@ -274,12 +274,39 @@ class Star(SphericalBody):
             self.model_path.setTexture(self.flare_ts, SphericalBody.star_stage5_tex)
             ''' TODO: notify AI to moves its units '''
         elif(self.lifetime <= 0):
+            self.lifetime = 0
             self.stage = 6
             self.model_path.setTexture(SphericalBody.star_stage6_tex, 1)
+            timer_destruction= taskMgr.doMethodLater(1, self._consumeSolarSystem, 'consumeSolarSystem')
             return task.done
-            '''TODO : tell all the other planets to start moving into the black hole '''
         return task.again
     
+    def _consumeSolarSystem(self, task):
+        for planet in self.planets():
+            ''' TODO: move it smoothly '''
+            ''' TODO: make the unactivated planets move '''
+            planet.orbital_radius = planet.orbital_radius - 1
+            planet.max_orbital_velocity = planet.max_orbital_velocity + 0.0002
+            planet.orbital_velocity = planet.orbital_velocity + 0.0002
+            #taskMgr.add(planet.accelerateOrbit, 'accelerateOrbit', taskChain = 'orbitChain')
+            if(planet.orbital_radius <= 0):
+                self._consumePlanet(planet)
+                if(planet.next_planet == None):
+                    planet = None
+                    return task.done
+                planet = None
+        return task.again
+    
+    def _consumePlanet(self, planet):
+        ''' TODO : remove planet properly, destroy orbiting unit and surface structures'''
+        self.removePlanet(planet)
+        planet.orbital_radius = 0
+        planet.max_orbital_velocity = 0
+        planet.orbital_velocity = 0
+        ''' TODO : delete planet model '''
+        planet._consumeUnits()
+        planet._consumeStructures()
+        
     def updateTimer(self):
         self.notify("updateTime")
         
@@ -645,7 +672,51 @@ class Planet(SphericalBody):
             if(unit.player == player):
                 num = num + 1
         return num
+    
+    def _task_unit_timers(self):
+        '''
+        Generator that iterates over the hosted units construction tasks.
+        '''
+        for task_unit in self.task_unit_timers:
+            yield task_unit
             
+    def _task_structure_timers(self):
+        '''
+        Generator that iterates over the surface structure construction tasks.
+        '''
+        for task_structure in self.task_structure_timers:
+            yield task_structure
+            
+    def _consumeUnits(self):
+        if(self.task_unit_timer!=None):
+            taskMgr.remove(self.task_unit_timer)
+            self.task_unit_timer = None
+        for task in self._task_unit_timers():
+            if(task!=None):
+                taskMgr.remove(task)
+                self.task_unit_timers.remove(task)
+                task = None
+        for unit in self.units():
+            unit.player.units.remove(unit)
+            self.removeOrbitingUnit(unit)
+            ''' TODO: remove unit model and its abilities if any'''
+            unit = None
+        
+    def _consumeStructures(self):
+        if(self.task_structure_timer!=None):
+            taskMgr.remove(self.task_structure_timer)
+            self.task_structure_timer = None
+        for task in self._task_structure_timers():
+            if(task!=None):
+                taskMgr.remove(task)
+                self.task_structure_timers.remove(task)
+                task = None
+        for structure in self.structures():
+            self.player.structures.remove(structure)
+            self.removeSurfaceStructure(structure)
+            ''' TODO: remove structure texture'''
+            structure = None
+       
     def addSurfaceStructure(self, structure):
         ''' 
         Add a structure to the surface structures by the planet
