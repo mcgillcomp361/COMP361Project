@@ -15,7 +15,7 @@ from panda3d.core import PandaNode,NodePath
 from panda3d.core import AmbientLight,DirectionalLight, PointLight
 from direct.task import Task
 #from gameEngine.gameEngine import *
-from constants import MAX_NUMBER_OF_PLANETS, MAX_NUMBER_OF_STRUCTURE, LIFETIME, MAX_STAR_RADIUS
+from constants import MAX_NUMBER_OF_PLANETS, MAX_NUMBER_OF_STRUCTURE, LIFETIME, MAX_STAR_RADIUS, AI_ESCAPE_WAIT_TIME
 import math
 
 from graphicEngine import shapes
@@ -276,11 +276,10 @@ class Star(SphericalBody):
             self.lifetime = 0
             self.stage = 6
             self.model_path.setTexture(SphericalBody.star_stage6_tex, 1)
-            #timer_destruction= taskMgr.doMethodLater(1, self._consumeSolarSystem, 'consumeSolarSystem')
+            timer_destruction= taskMgr.doMethodLater(1, self._consumeSolarSystem, 'consumeSolarSystem')
             '''calls the escape solar system routine from the AI class'''
             from gameEngine.gameEngine import ai
-            if(self.player == ai):
-                task = taskMgr.doMethodLater(5, ai.escapeStar, 'AIescapeStar', extraArgs =[self], appendTask=True)
+            task = taskMgr.doMethodLater(AI_ESCAPE_WAIT_TIME, ai.escapeStar, 'AIescapeStar', extraArgs =[self], appendTask=True)
             return task.done
         return task.again
     
@@ -502,10 +501,6 @@ class Planet(SphericalBody):
         and notifies the corresponding objects based on the state of the planet
         @param player, the player who has selected
         '''
-#        print "prev_planet:" + str(self.prev_planet)
-#        print "next_planet:" + str(self.next_planet)
-#        print self.player
-        
         player.selected_star = None
 
         if(self.player == player):

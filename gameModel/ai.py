@@ -3,7 +3,7 @@ Created on March 25, 2012
 
 @author: Bazibaz
 '''
-from constants import MINERAL_STARTING_AMOUNT, GRAVITY_ENGINE_STARTING_AMOUNT, AI_MINERAL_STARTING_AMOUNT, AI_GRAVITY_ENGINE_STARTING_AMOUNT, \
+from constants import MIN_DISTANCE_BETWEEN_PLANETS, \
                     FORGE_BUILD_TIME, NEXUS_BUILD_TIME, EXTRACTOR_BUILD_TIME, PHYLON_BUILD_TIME, GENERATOR_CORE_BUILD_TIME, \
                     SWARM_BUILD_TIME, SWARM_MINERAL_COST, GLOBE_BUILD_TIME, GLOBE_MINERAL_COST, ANALYZER_BUILD_TIME, ANALYZER_MINERAL_COST, \
                     HORDE_BUILD_TIME, HORDE_MINERAL_COST, SPHERE_BUILD_TIME, SPHERE_MINERAL_COST, \
@@ -33,21 +33,20 @@ class AI(object):
         self.units = []
         self.assault_party = []
         self.defense_party = []
-        self.minerals = AI_MINERAL_STARTING_AMOUNT
-        self.ge_amount = AI_GRAVITY_ENGINE_STARTING_AMOUNT
         self.all_stars = all_stars
     
     ''' Escape Solar System Routine '''
     def escapeStar(self, star, task):
-        no_more_units = True
         for planet in star.planets():
-            #if(planet.getNumberOfUnitsOfPlayer(self)==0):
-            #    no_more_units = False
-            for unit in planet.unitsOfPlayer(self):
-                unit.moveUnitNext()
+            if(planet.next_planet==None):
                 '''TODO : choose randomly another star and travel in deep space if next planet is None'''
-        #if(no_more_units == True):
-        #    return task.done
+                return task.done
+            elif(planet.orbital_radius < 15*MIN_DISTANCE_BETWEEN_PLANETS):
+                for unit in planet.next_planet.unitsOfPlayer(self):
+                    unit.moveUnitNext()
+                for unit in planet.unitsOfPlayer(self):
+                        unit.moveUnitNext()
+            break
         return task.again
                 
     
@@ -65,7 +64,7 @@ class AI(object):
     
     def _activatePlanetsLoop(self, orbit, star, task):
         if(self._allPlanetsActivated(star) == True):
-            self.activateRandomStar(self.all_stars)
+            self.activateRandomStar()
         else:
             self._activatePlanet(star.getPlanetAt(orbit))   
             orbit = orbit + 1
@@ -177,7 +176,7 @@ class AI(object):
             task_unit_timer =  taskMgr.doMethodLater(SWARM_BUILD_TIME, self._constructSwarm, 'AIbuildSwarm', extraArgs =[planet], appendTask=True) 
         
         planet.task_unit_timers.append(task_unit_timer)
-        if(units_in_construction >= AI_MAX_NUMBER_OF_UNITS-1):
+        if(units_in_construction >= AI_MAX_NUMBER_OF_UNITS/2):
             if(task==None):return
             else:return task.done
         else:
@@ -199,7 +198,7 @@ class AI(object):
             task_unit_timer =  taskMgr.doMethodLater(MATHEMATICA_BUILD_TIME, self._constructMathematica, 'AIbuildMathematica', extraArgs =[planet], appendTask=True)  
         
         planet.task_unit_timers.append(task_unit_timer)
-        if(units_in_construction >= AI_MAX_NUMBER_OF_UNITS-2):
+        if(units_in_construction >= AI_MAX_NUMBER_OF_UNITS/AI_MAX_NUMBER_OF_UNITS):
             if(task==None):return
             else:return task.done
         else:

@@ -77,7 +77,7 @@ class Unit(object):
     def move(self, target_planet):
         '''
         Moves the unit from host_planet to target_planet
-        If the target planet is in another solar system make the go into deep spave travel untill it
+        If the target planet is in another solar system make the go into deep space travel until it
         reaches it's destination
         ''' 
         if(target_planet.parent_star==self.host_planet.parent_star):
