@@ -65,6 +65,14 @@ class Unit(object):
     def startOrbit(self):
         self.orbit_period = self.point_path.hprInterval(10, Vec3(-360, 0, 0))
         self.orbit_period.loop()
+    
+    def moveUnitPrev(self):
+        if self.host_planet.prev_planet != None:
+            self.move(self.host_planet.prev_planet)
+
+    def moveUnitNext(self):
+        if self.host_planet.next_planet != None:
+            self.move(self.host_planet.next_planet)
       
     def move(self, target_planet):
         '''
@@ -108,7 +116,6 @@ class Unit(object):
             
     def attack(self, target_unit):
         '''Deals damage to an opposing unit.'''
-        #TODO: Does this make sense, what if there is an interruption or a movement by the player
         while(target_unit.energy>=0):
             target_unit.energy =- self.damage
             

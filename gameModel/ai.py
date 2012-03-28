@@ -22,7 +22,7 @@ class AI(object):
     Artificial opponent class
     '''
 
-    def __init__(self, name):
+    def __init__(self, name, all_stars):
         '''
         Constructor
         '''
@@ -35,10 +35,25 @@ class AI(object):
         self.defense_party = []
         self.minerals = AI_MINERAL_STARTING_AMOUNT
         self.ge_amount = AI_GRAVITY_ENGINE_STARTING_AMOUNT
-        self.all_stars = []
-        
-    def activateRandomStar(self, all_stars):
         self.all_stars = all_stars
+    
+    ''' Escape Solar System Routine '''
+    def escapeStar(self, star, task):
+        no_more_units = True
+        for planet in star.planets():
+            #if(planet.getNumberOfUnitsOfPlayer(self)==0):
+            #    no_more_units = False
+            for unit in planet.unitsOfPlayer(self):
+                unit.moveUnitNext()
+                '''TODO : choose randomly another star and travel in deep space if next planet is None'''
+        #if(no_more_units == True):
+        #    return task.done
+        return task.again
+                
+    
+    
+    ''' Construction Routine '''    
+    def activateRandomStar(self):
         if(self._allStarsActivated(self.all_stars) == False):    
             while(True):
                 star = self.all_stars[random.randrange(0, NUMBER_OF_STARS, 1)]
@@ -82,7 +97,7 @@ class AI(object):
             
             '''TODO : construct defensive structures '''
             
-            if(planet.getNumberOfUnits(self) < AI_MAX_NUMBER_OF_UNITS):
+            if(planet.getNumberOfUnitsOfPlayer(self) < AI_MAX_NUMBER_OF_UNITS):
                 unit_type = random.randrange(0, 100, 1)
                 if(0 <= unit_type and unit_type < 60):
                     ''' 60% chance of constructing units of tier I '''

@@ -131,24 +131,8 @@ def _singlePlayer():
     player = Player("player")
     mouse_events.setPlayer(player)
     mouse_events.setCamera(_game_camera)
-    ai = AI("Alien")
+    ai = AI("Alien", all_stars)
     _runAI()
-    
-def moveUnitsPrev():
-    global player
-    planet = player.selected_planet
-    if planet != None and planet.next_planet != None:
-        for unit in planet.units():
-            unit.move(planet.next_planet)
-            break
-
-def moveUnitsNext():
-    global player
-    planet = player.selected_planet
-    if planet != None and planet.prev_planet != None:
-        for unit in planet.units():
-            unit.move(planet.prev_planet)
-            break
        
 def _isSeparated(neighbors, test_position, mindist):
     '''
@@ -173,8 +157,7 @@ def _runAI():
     
 def _initiateAI(task):
     global all_stars, ai, ai_task 
-    ai.activateRandomStar(all_stars)
+    ai.activateRandomStar()
     ai_task = None
     return task.done
-    
     

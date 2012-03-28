@@ -272,12 +272,15 @@ class Star(SphericalBody):
         elif(self.lifetime <= LIFETIME - 2*LIFETIME/3 and self.stage == 4):
             self.stage = 5
             self.model_path.setTexture(self.flare_ts, SphericalBody.star_stage5_tex)
-            ''' TODO: notify AI to moves its units '''
-        elif(self.lifetime <= 0):
+        elif(self.lifetime <= 0 and self.stage == 5):
             self.lifetime = 0
             self.stage = 6
             self.model_path.setTexture(SphericalBody.star_stage6_tex, 1)
-            timer_destruction= taskMgr.doMethodLater(1, self._consumeSolarSystem, 'consumeSolarSystem')
+            #timer_destruction= taskMgr.doMethodLater(1, self._consumeSolarSystem, 'consumeSolarSystem')
+            '''calls the escape solar system routine from the AI class'''
+            from gameEngine.gameEngine import ai
+            if(self.player == ai):
+                task = taskMgr.doMethodLater(5, ai.escapeStar, 'AIescapeStar', extraArgs =[self], appendTask=True)
             return task.done
         return task.again
     
@@ -656,13 +659,22 @@ class Planet(SphericalBody):
         for unit in self._orbiting_units:
             yield unit
             
+    def unitsOfPlayer(self, player):
+        '''
+        Generator that iterates over the hosted units belonging to the player.
+        @param player, the owner of the units 
+        '''
+        for unit in self._orbiting_units:
+            if(unit.player == player):
+                yield unit
+            
     def getNumberOfUnits(self):
         '''
         Returns the number of hosted units from the planet
         '''
         return len(self._orbiting_units)
     
-    def getNumberOfUnits(self, player):
+    def getNumberOfUnitsOfPlayer(self, player):
         '''
         Returns the number of hosted units from the planet that belongs to the player
         @param player, the owner of the units
