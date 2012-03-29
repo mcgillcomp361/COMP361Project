@@ -32,17 +32,17 @@ PLANET_SPIN_VELOCITY = 5
 DEEP_SPACE_DISTANCE = UNIVERSE_SCALE*MAX_NUMBER_OF_PLANETS/50
 
 ''' Resources '''
-MINERAL_STARTING_AMOUNT = 1000
-GRAVITY_ENGINE_STARTING_AMOUNT = 3
+MINERAL_STARTING_AMOUNT = 0
+GRAVITY_ENGINE_STARTING_AMOUNT = 1
 
 ''' AI '''
-AI_INITIATION_TIME = 10
-AI_ACTIVATE_PLANET_WAIT_TIME = 90
-AI_ACCELERATION_TIME = 8
-AI_START_CONSTRUCTION_WAIT_TIME = 10
+AI_INITIATION_TIME = 9
+AI_ACTIVATE_PLANET_WAIT_TIME = 60
+AI_ACCELERATION_TIME = 5
+AI_START_CONSTRUCTION_WAIT_TIME = 6
 AI_UNIT_CONSTRUCTION_WAIT_TIME = 3
 AI_MAX_NUMBER_OF_UNITS = 3 #per planet
-AI_ESCAPE_WAIT_TIME = 3
+AI_ESCAPE_WAIT_TIME = 2
 
 ''' Structures '''
 STRUCTURE_TYPE = ["Forge","Nexus","Extractor","Phylon","GeneratorCore","PlanetaryDefenseI",
@@ -101,13 +101,13 @@ HORDE_MAX_ENERGY = 250
 HORDE_DAMAGE = 8
 HORDE_VELOCITY = 1
 HORDE_BUILD_TIME = 30
-HORDE_MINERAL_COST = 120
+HORDE_MINERAL_COST = 150
 HIVE_DESCRIPTION = "Evolved from the Horde, this unit compromises of millions of combat bio-drones  equipped with para-dimensional sight, dark energy engines, excavation tech and deadly harvesting tools. The hive is much stronger and larger than the horde but relatively slower"
 HIVE_MAX_ENERGY = 500
 HIVE_DAMAGE = 12
 HIVE_VELOCITY = 1
 HIVE_BUILD_TIME = 60
-HIVE_MINERAL_COST = 230
+HIVE_MINERAL_COST = 250
 GLOBE_DESCRIPTION = "This basic synthetic machine built from the remains of the ancient technology is used as a major combat unit. It is much more effective than the swarm but it costs more minerals to be built"
 GLOBE_MAX_ENERGY = 160
 GLOBE_DAMAGE = 6
@@ -119,13 +119,13 @@ SPHERE_MAX_ENERGY = 270
 SPHERE_DAMAGE = 8
 SPHERE_VELOCITY = 1
 SPHERE_BUILD_TIME = 45
-SPHERE_MINERAL_COST = 150
+SPHERE_MINERAL_COST = 250
 PLANETARIUM_DESCRIPTION = "A massive synthetic machine based on the Sphere design with devastating power which can also repair any units close by. Although, it requires more minerals to be built and is much slower"
 PLANETARIUM_MAX_ENERGY = 600
 PLANETARIUM_DAMAGE = 13
 PLANETARIUM_VELOCITY = 1
 PLANETARIUM_BUILD_TIME = 70
-PLANETARIUM_MINERAL_COST = 300
+PLANETARIUM_MINERAL_COST = 500
 ANALYZER_DESCRIPTION = "A living supercomputer made out of thousands of artificial brains is used to monitor every activity in a galaxy. Very weak and has no combat capabilities but it can detect cloaked units"
 ANALYZER_MAX_ENERGY = 130
 ANALYZER_DAMAGE = 0
@@ -143,7 +143,7 @@ BLACK_HOLE_GENERATOR_MAX_ENERGY = 400
 BLACK_HOLE_GENERATOR_DAMAGE = 0
 BLACK_HOLE_GENERATOR_VELOCITY = 1
 BLACK_HOLE_GENERATOR_BUILD_TIME = 90
-BLACK_HOLE_GENERATOR_MINERAL_COST = 350
+BLACK_HOLE_GENERATOR_MINERAL_COST = 1000
 
 ''' Abilities '''
 

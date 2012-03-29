@@ -129,6 +129,7 @@ def _singlePlayer():
     '''
     global player, mouse_events, ai, all_stars, _game_camera
     player = Player("player")
+    task_track_minerals = taskMgr.doMethodLater(1, player.trackMinerals, 'trackPlayerMinerals')
     mouse_events.setPlayer(player)
     mouse_events.setCamera(_game_camera)
     ai = AI("Alien", all_stars)

@@ -8,7 +8,8 @@ from constants import MINERAL_STARTING_AMOUNT, GRAVITY_ENGINE_STARTING_AMOUNT, \
                     SWARM_BUILD_TIME, SWARM_MINERAL_COST, GLOBE_BUILD_TIME, GLOBE_MINERAL_COST, ANALYZER_BUILD_TIME, ANALYZER_MINERAL_COST, \
                     HORDE_BUILD_TIME, HORDE_MINERAL_COST, SPHERE_BUILD_TIME, SPHERE_MINERAL_COST, \
                     HIVE_BUILD_TIME, HIVE_MINERAL_COST, PLANETARIUM_BUILD_TIME, PLANETARIUM_MINERAL_COST, MATHEMATICA_BUILD_TIME, MATHEMATICA_MINERAL_COST, \
-                    BLACK_HOLE_GENERATOR_BUILD_TIME, BLACK_HOLE_GENERATOR_MINERAL_COST
+                    BLACK_HOLE_GENERATOR_BUILD_TIME, BLACK_HOLE_GENERATOR_MINERAL_COST, \
+                    GENERATOR_CORE_RESOURCE_GENERATION_RATE, PHYLON_RESOURCE_GENERATION_RATE, EXTRACTOR_RESOURCE_GENERATION_RATE
 from structures import *
 from units import *
 
@@ -196,4 +197,17 @@ class Player(object):
             self.units.append(blackHoleGenerator)
             planet.task_unit_timer = None
             return task.done
-    
+        
+    def trackMinerals(self, task):
+        for structure in self.structures:
+            if(type(structure) == Extractor):
+                self.minerals = self.minerals + EXTRACTOR_RESOURCE_GENERATION_RATE
+            elif(type(structure) == Phylon):
+                self.minerals = self.minerals + PHYLON_RESOURCE_GENERATION_RATE
+            elif(type(structure) == GeneratorCore):
+                self.minerals = self.minerals + GENERATOR_CORE_RESOURCE_GENERATION_RATE
+            from gameEngine.gameEngine import updateGUI
+            updateGUI.refreshResources()
+            updateGUI.value = self.minerals
+            updateGUI.printResources()
+        return task.again
