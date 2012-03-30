@@ -68,8 +68,7 @@ class Unit(object):
                 self._attack(unit)
         if(self.host_planet.player != self.player):
             for structure in self.host_planet.structures():
-                if(structure != None):
-                    self._attack(structure)
+                self._attack(structure)
         return task.again
         
     def select(self, player):
@@ -99,6 +98,7 @@ class Unit(object):
         If the target planet is in another solar system make the go into deep space travel until it
         reaches it's destination
         ''' 
+        '''TODO: Speed coefficient based on unit type '''
 #       relativePos = target_planet.point_path.getPos(self.point_path)
         relativePos = self.point_path.getPos(target_planet.point_path)
         self.host_planet.removeOrbitingUnit(self)

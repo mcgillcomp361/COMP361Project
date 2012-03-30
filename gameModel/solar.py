@@ -601,6 +601,19 @@ class Planet(SphericalBody):
         self.position = self.point_path.getPos()
         return task.cont
     
+    def collapseOrbit(self, task):
+        pass
+#        self.orbital_radius = self.orbital_radius - 0.01
+#        self.point_path.setPos(self.orbital_radius * math.cos(self.orbital_angle),
+#                               self.orbital_radius * math.sin(self.orbital_angle), 0)
+#        self.position = self.point_path.getPos()
+#        self.orbital_velocity = self.orbital_velocity + 0.0001
+#        if self.orbital_radius < 0:
+#            return task.done
+#        else:
+#            return task.cont
+        
+    
     def drawLines(self): 
         # put some lighting on the line
         # for some reason the ambient and directional light in the environment drain out
