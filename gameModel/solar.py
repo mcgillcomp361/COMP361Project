@@ -523,7 +523,25 @@ class Planet(SphericalBody):
             self.activateHighlight(False)
         
         player.selected_planet = self
-            
+        
+    def selectRight(self, player):
+        '''
+        This method observes the events on the planet and calls the related methods
+        and notifies the corresponding objects based on the state of the planet
+        @param player, the player who has selected with right mouse click
+        '''
+        if(player.selected_unit != None):
+            '''movement is inside the solar system'''
+            if(player.selected_unit.host_planet.parent_star == self.parent_star):
+                if(player.selected_unit.host_planet == self.prev_planet):
+                    player.selected_unit.moveUnitNext()
+                if(player.selected_unit.host_planet == self.next_planet):
+                    player.selected_unit.moveUnitPrev()      
+            else:
+                '''movement is between solar systems in deep space mode'''
+                if(self.next_planet == None and player.selected_unit.host_planet.next_planet == None):
+                    player.selected_unit.moveDeepSpace(self)
+       
     def activatePlanet(self, player):
         '''
         Activates a constructed dead planet object, starting the orbital movement with the assigned value while

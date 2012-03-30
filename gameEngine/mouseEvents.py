@@ -37,7 +37,8 @@ class MouseEvents(DirectObject.DirectObject):
         self.pickerNode.addSolid(self.pickerRay)
         self.myTraverser.addCollider(self.pickerNP, self.myHandler)
         ''' the player has to double click a star or planet in order to activate them '''
-        self.accept("mouse1", self.handleMouseClick)
+        self.accept("mouse1", self.handleLeftMouseClick)
+        self.accept("mouse3", self.handleRightMouseClick)
         
     
     def setPlayer(self, player):
@@ -58,7 +59,7 @@ class MouseEvents(DirectObject.DirectObject):
     def moveCameraRight(self):
         self.camera.camera_direction = "moveRight"   
     
-    def handleMouseClick(self):
+    def handleLeftMouseClick(self):
         if base.mouseWatcherNode.hasMouse():
             #get the mouse position
             mpos = base.mouseWatcherNode.getMouse()
@@ -73,15 +74,39 @@ class MouseEvents(DirectObject.DirectObject):
                 self.myHandler.sortEntries()
                 pickedObj = self.myHandler.getEntry(0).getIntoNodePath()
                 if pickedObj.hasTag('star'):
-                    self.selected(pickedObj, 'star', 'pyStar')
+                    self.selected(pickedObj, 'star', 'pyStar', 'leftClick')
                 elif pickedObj.hasTag('planet'):
-                    self.selected(pickedObj, 'planet', 'pyPlanet')
+                    self.selected(pickedObj, 'planet', 'pyPlanet', 'leftClick')
                 elif pickedObj.hasTag('unit'):
-                    self.selected(pickedObj, 'unit', 'pyUnit')
+                    self.selected(pickedObj, 'unit', 'pyUnit', 'leftClick')
                     
-    def selected(self, pickedObj, tag, python_tag):
+    def handleRightMouseClick(self):
+        if base.mouseWatcherNode.hasMouse():
+            #get the mouse position
+            mpos = base.mouseWatcherNode.getMouse()
+            # This makes the ray's origin the camera and makes the ray point 
+            # to the screen coordinates of the mouse.
+            self.pickerRay.setFromLens(base.camNode, mpos.getX(), mpos.getY())
+            
+            self.myTraverser.traverse(render)
+            # Assume for simplicity's sake that myHandler is a CollisionHandlerQueue.
+            if self.myHandler.getNumEntries() > 0:
+                # This is so we get the closest object.
+                self.myHandler.sortEntries()
+                pickedObj = self.myHandler.getEntry(0).getIntoNodePath()
+                #if pickedObj.hasTag('star'):
+                #    self.selected(pickedObj, 'star', 'pyStar')
+                if pickedObj.hasTag('planet'):
+                    self.selected(pickedObj, 'planet', 'pyPlanet', 'rightClick')
+                #elif pickedObj.hasTag('unit'):
+                #    self.selected(pickedObj, 'unit', 'pyUnit')
+                    
+    def selected(self, pickedObj, tag, python_tag, click):
 #        print 'Player has selected '+ tag + ' ' + pickedObj.getTag(tag)
         model_path = pickedObj.getParent()
         #model_path.notify("starSelected")
         model = model_path.getPythonTag(python_tag)
-        model.select(self.player)
+        if(click == 'rightClick'):
+            model.selectRight(self.player)
+        if(click == 'leftClick'):
+            model.select(self.player)

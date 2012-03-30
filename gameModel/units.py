@@ -36,6 +36,9 @@ class Unit(object):
         self.host_planet.addOrbitingUnit(self)
         self._unit_abilities = unit_abilities
         self.__initSceneGraph()
+        
+        self.task_observe_enemy = taskMgr.doMethodLater(1, self._observeEnemy, 'observeEnemy')
+         
     
     def __initSceneGraph(self):        
         self.point_path = self.host_planet.point_path.attachNewNode("unit_center_node")
@@ -59,20 +62,32 @@ class Unit(object):
         self.quad_path.setTransparency(TransparencyAttrib.MAlpha)
         self.quad_path.setBillboardPointEye()
     
+    def _observeEnemy(self, task):
+        for unit in self.host_planet.units():
+            if(unit.player != self.player):
+                self._attack(unit)
+        if(self.host_planet.player != self.player):
+            for structure in self.host_planet.structures():
+                self._attack(structure)
+        return task.again
+        
     def select(self, player):
-        pass
+        if(self.player == player):
+            player.selected_unit = self
+        ''' TODO: show the statics of the unit in the characteristic panel on the GUI '''
     
     def startOrbit(self):
         self.orbit_period = self.point_path.hprInterval(10, Vec3(-360, 0, 0))
         self.orbit_period.loop()
     
     def moveUnitPrev(self):
-        if self.host_planet.prev_planet != None:
-            self.move(self.host_planet.prev_planet)
+        self.move(self.host_planet.prev_planet)
 
     def moveUnitNext(self):
-        if self.host_planet.next_planet != None:
-            self.move(self.host_planet.next_planet)
+        self.move(self.host_planet.next_planet)
+        
+    def moveDeepSpace(self, planet):
+        self.move(planet)
       
     def move(self, target_planet):
         '''
@@ -114,10 +129,11 @@ class Unit(object):
         self.point_path.reparentTo(target_planet.point_path)
         self.point_path.setPos(relativePos)
             
-    def attack(self, target_unit):
-        '''Deals damage to an opposing unit.'''
-        while(target_unit.energy>=0):
-            target_unit.energy =- self.damage
+    def _attack(self, target):
+        '''Deals damage to an opposing unit or structure only if the unit is capable of attacking'''
+        ''' TODO: check if unit is attackable '''
+        if(target.energy>=0 and self.damage != 0):
+            target.energy =- self.damage
             
     
     def useAbility(self, ability):

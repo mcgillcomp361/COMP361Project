@@ -134,6 +134,7 @@ def _singlePlayer():
     mouse_events.setCamera(_game_camera)
     ai = AI("Alien", all_stars)
     _runAI()
+    task_track_units_and_structures = taskMgr.doMethodLater(1, _trackUnitsAndStructures, 'trackUnitsAndStructures')
        
 def _isSeparated(neighbors, test_position, mindist):
     '''
@@ -150,7 +151,7 @@ def _isSeparated(neighbors, test_position, mindist):
     return True
 
 '''
-This is the AI section which the game engine manages
+The AI section which the game engine manages
 '''
 def _runAI():
     global ai_task
@@ -161,4 +162,37 @@ def _initiateAI(task):
     ai.activateRandomStar()
     ai_task = None
     return task.done
-    
+
+'''
+The Auto management of observing and removing units and structures from the game world
+'''
+def _trackUnitsAndStructures(task):
+    global ai, player
+    '''TODO : use yield iteration for units and structures in ai and player classes '''
+    if(ai != None):
+        for unit in ai.units:
+            if(unit.energy <= 0):
+                unit.host_planet.removeOrbitingUnit(unit)
+                unit = None
+                ''' TODO : remove the unit properly '''
+                ''' TODO: remove unit model and its abilities if any'''
+        for structure in ai.structures:
+            if(structure.energy <= 0):
+                structure.host_planet.removeSurfaceStructure(structure)
+                structure = None
+                ''' TODO : remove the structure properly '''
+                ''' TODO: remove structure texture'''
+    for unit in player.units:
+            if(unit.energy <= 0):
+                unit.host_planet.removeOrbitingUnit(unit)
+                unit = None
+                ''' TODO : remove the unit properly '''
+                ''' TODO: remove unit model and its abilities if any'''
+    for structure in player.structures:
+        if(structure.energy <= 0):
+            structure.host_planet.removeSurfaceStructure(structure)
+            structure = None
+            ''' TODO : remove the structure properly '''
+            ''' TODO: remove structure texture'''
+    return task.again
+                   
