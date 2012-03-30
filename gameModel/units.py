@@ -64,11 +64,12 @@ class Unit(object):
     
     def _observeEnemy(self, task):
         for unit in self.host_planet.units():
-            if(unit.player != self.player):
+            if(unit.player != self.player and unit.deep_space != False and self.deep_space != False):
                 self._attack(unit)
         if(self.host_planet.player != self.player):
             for structure in self.host_planet.structures():
-                self._attack(structure)
+                if(structure != None):
+                    self._attack(structure)
         return task.again
         
     def select(self, player):
@@ -88,6 +89,9 @@ class Unit(object):
         
     def moveDeepSpace(self, planet):
         self.move(planet)
+        self.deep_space = True
+        '''TODO : fix this method, deep space should be set to False when the unit arrives at destination'''
+        print 'deep space'
       
     def move(self, target_planet):
         '''
@@ -95,31 +99,30 @@ class Unit(object):
         If the target planet is in another solar system make the go into deep space travel until it
         reaches it's destination
         ''' 
-        if(target_planet.parent_star==self.host_planet.parent_star):
-#            relativePos = target_planet.point_path.getPos(self.point_path)
-            relativePos = self.point_path.getPos(target_planet.point_path)
-            self.host_planet.removeOrbitingUnit(self)
-            self.host_planet = target_planet
-            target_planet.addOrbitingUnit(self)
-            self.point_path.reparentTo(target_planet.point_path)
-            self.point_path.setPos(relativePos)
-            myseq = Sequence(
-                LerpPosInterval(self.point_path,
-                    3.0,
-                    Point3(0,0,0),
-#                    startPos=None,
-#                    other=self.host_planet.parent_star.point_path,
-                    blendType='easeInOut',
-                    bakeInStart=0
-                )
-#                Func(self._changeHostPlanet, target_planet)
+#       relativePos = target_planet.point_path.getPos(self.point_path)
+        relativePos = self.point_path.getPos(target_planet.point_path)
+        self.host_planet.removeOrbitingUnit(self)
+        self.host_planet = target_planet
+        target_planet.addOrbitingUnit(self)
+        self.point_path.reparentTo(target_planet.point_path)
+        self.point_path.setPos(relativePos)
+        myseq = Sequence(
+            LerpPosInterval(self.point_path,
+                3.0,
+                Point3(0,0,0),
+#               startPos=None,
+#                   other=self.host_planet.parent_star.point_path,
+                blendType='easeInOut',
+                bakeInStart=0
             )
-            myseq.start()
-        else:
-            self.deep_space = True
+#               Func(self._changeHostPlanet, target_planet)
+         )
+        myseq.start()
+        #else:
+         #   self.deep_space = True
             #TODO : The unit will NOT be select-able for the duration of travel
             #TODO : keep track when the unit reaches the target planet then change the host
-            self.host_planet = target_planet
+          #  self.host_planet = target_planet
     
     def _changeHostPlanet(self, target_planet):
         relativePos = target_planet.point_path.getPos(self.point_path)
@@ -132,7 +135,7 @@ class Unit(object):
     def _attack(self, target):
         '''Deals damage to an opposing unit or structure only if the unit is capable of attacking'''
         ''' TODO: check if unit is attackable '''
-        if(target.energy>=0 and self.damage != 0):
+        if(target.energy>0 and self.damage != 0 and target != None):
             target.energy =- self.damage
             
     

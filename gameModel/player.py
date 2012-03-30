@@ -3,7 +3,7 @@ Created on Jan 2, 2012
 
 @author: Bazibaz
 '''
-from constants import MINERAL_STARTING_AMOUNT, GRAVITY_ENGINE_STARTING_AMOUNT, \
+from constants import MINERAL_STARTING_AMOUNT, GRAVITY_ENGINE_STARTING_AMOUNT, MAX_NUMBER_OF_STRUCTURE, \
                     FORGE_BUILD_TIME, NEXUS_BUILD_TIME, EXTRACTOR_BUILD_TIME, PHYLON_BUILD_TIME, GENERATOR_CORE_BUILD_TIME, \
                     SWARM_BUILD_TIME, SWARM_MINERAL_COST, GLOBE_BUILD_TIME, GLOBE_MINERAL_COST, ANALYZER_BUILD_TIME, ANALYZER_MINERAL_COST, \
                     HORDE_BUILD_TIME, HORDE_MINERAL_COST, SPHERE_BUILD_TIME, SPHERE_MINERAL_COST, \
@@ -25,8 +25,8 @@ class Player(object):
         self.name = name
         self.selected_planet = None
         self.selected_star = None
-        self.selecteUnit = None
-        self.selectedUnits = []
+        self.selected_unit = None
+        self.selected_units = []
         self.planets = []
         self.structures = []
         self.units = []
@@ -43,14 +43,14 @@ class Player(object):
         '''
         if(self.selected_planet != None and self.selected_planet.activated == True and \
            self.selected_planet.player == self and self.selected_planet.task_structure_timer == None and \
-           self.selected_planet.hasStructure(structure) == False):
+           self.selected_planet.hasStructure(structure) == False and self.selected_planet.getNumberOfStructures()<MAX_NUMBER_OF_STRUCTURE):
             if(structure == "forge"):
-                self.selected_planet.task_structure_timer = taskMgr.doMethodLater(1, self._constructForge, 'buildForge', extraArgs =[self.selected_planet], appendTask=True)
+                self.selected_planet.task_structure_timer = taskMgr.doMethodLater(FORGE_BUILD_TIME, self._constructForge, 'buildForge', extraArgs =[self.selected_planet], appendTask=True)
             elif(structure == "nexus"):
                 self.selected_planet.task_structure_timer = taskMgr.doMethodLater(NEXUS_BUILD_TIME, self._constructNexus, 'buildNexus', extraArgs =[self.selected_planet], appendTask=True)
-            elif(structure == "extractor" and self.selected_planet.hasStructure("phylon") == False and self.selected_planet.hasStructure("generatorCore") == False):
+            elif(structure == "extractor"):
                 self.selected_planet.task_structure_timer = taskMgr.doMethodLater(EXTRACTOR_BUILD_TIME, self._constructExtractor, 'buildExtractor', extraArgs =[self.selected_planet], appendTask=True)
-            elif(structure == "phylon" and self.selected_planet.hasStructure("generatorCore") == False):
+            elif(structure == "phylon"):
                 self.selected_planet.task_structure_timer = taskMgr.doMethodLater(PHYLON_BUILD_TIME, self._constructPhylon, 'buildPhylon', extraArgs =[self.selected_planet], appendTask=True)
             elif(structure == "generatorCore"):
                 self.selected_planet.task_structure_timer = taskMgr.doMethodLater(GENERATOR_CORE_BUILD_TIME, self._constructGeneratorCore, 'buildGeneratorCore', extraArgs =[self.selected_planet], appendTask=True)
@@ -129,7 +129,7 @@ class Player(object):
                 self.minerals = self.minerals - BLACK_HOLE_GENERATOR_MINERAL_COST
 #               taskMgr.add(host_planet.drawConnections, 'DrawConnections')
                 self.selected_planet.task_unit_timer = taskMgr.doMethodLater(1, self._constructBlackHoleGenerator, 'buildBlackHoleGenerator', extraArgs =[self.selected_planet], appendTask=True)
-            
+            '''TODO: add gravity engine here '''
             from gameEngine.gameEngine import updateGUI
             updateGUI.refreshResources()
             updateGUI.value = self.minerals
@@ -197,6 +197,8 @@ class Player(object):
             self.units.append(blackHoleGenerator)
             planet.task_unit_timer = None
             return task.done
+        
+    '''TODO: add gravity engine constructor here '''
         
     def trackMinerals(self, task):
         for structure in self.structures:

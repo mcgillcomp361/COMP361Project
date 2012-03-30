@@ -81,18 +81,18 @@ class AI(object):
         if(planet.player == self and planet.parent_star.lifetime > 0):
             if(planet.hasStructure("forge")==False):
                 self._constructForge(planet)
-                planet.task_structure_timers.remove(task)
 
-            structureType = random.randrange(1, 5, 1)
-            if(structureType == 1 and planet.hasStructure("nexus")==False):
-                task_structure_timer = taskMgr.doMethodLater(NEXUS_BUILD_TIME, self._constructNexus, 'AIbuildNexus', extraArgs =[planet], appendTask=True)
-            elif(structureType == 2 and planet.hasStructure("extractor")==False and planet.hasStructure("phylon")==False and planet.hasStructure("generatorCore")==False):
+            structureType = random.randrange(1, 4, 1)
+            if(structureType == 1 and planet.hasStructure("extractor")==False and planet.hasStructure("phylon")==False and planet.hasStructure("generatorCore")==False):
                 task_structure_timer = taskMgr.doMethodLater(EXTRACTOR_BUILD_TIME, self._constructExtractor, 'AIbuildExtractor', extraArgs =[planet], appendTask=True)
-            elif(structureType == 3 and planet.hasStructure("phylon")==False and planet.hasStructure("generatorCore")==False):
+            elif(structureType == 2 and planet.hasStructure("phylon")==False and planet.hasStructure("generatorCore")==False):
                 task_structure_timer = taskMgr.doMethodLater(PHYLON_BUILD_TIME, self._constructPhylon, 'AIbuildPhylon', extraArgs =[planet], appendTask=True)
-            elif(structureType == 4 and planet.hasStructure("generatorCore")==False):
+            elif(structureType == 3 and planet.hasStructure("generatorCore")==False):
                 task_structure_timer = taskMgr.doMethodLater(GENERATOR_CORE_BUILD_TIME, self._constructGeneratorCore, 'AIbuildGeneratorCore', extraArgs =[planet], appendTask=True)
             planet.task_structure_timers.append(task_structure_timer)
+            
+            if(planet.hasStructure("nexus")==False):
+               self._constructNexus(planet) 
             
             '''TODO : construct defensive structures '''
             
@@ -114,11 +114,9 @@ class AI(object):
         forge = Forge(planet)
         self.structures.append(forge)
         
-    def _constructNexus(self, planet, task):
+    def _constructNexus(self, planet):
         nexus = Nexus(planet)
         self.structures.append(nexus)
-        planet.task_structure_timers.remove(task)
-        return task.done
         
     def _constructExtractor(self, planet, task):
         extractor = Extractor(planet)
