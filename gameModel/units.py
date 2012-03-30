@@ -88,9 +88,8 @@ class Unit(object):
         
     def moveDeepSpace(self, planet):
         self.move(planet)
-        self.deep_space = True
+        #self.deep_space = True
         '''TODO : fix this method, deep space should be set to False when the unit arrives at destination'''
-        print 'deep space'
       
     def move(self, target_planet):
         '''

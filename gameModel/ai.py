@@ -40,6 +40,10 @@ class AI(object):
         for planet in star.planets():
             if(planet.next_planet==None):
                 '''TODO : choose randomly another star and travel in deep space if next planet is None'''
+                for unit in planet.unitsOfPlayer(self):
+                    star = random.randrange(0, len(self.all_stars))
+                    if(star.lifetime <= 0):
+                        unit.moveDeepSpace(star.getPlanetAt(MAX_NUMBER_OF_PLANETS))
                 return task.done
             elif(planet.orbital_radius < 15*MIN_DISTANCE_BETWEEN_PLANETS):
                 for unit in planet.next_planet.unitsOfPlayer(self):
@@ -71,11 +75,12 @@ class AI(object):
             task = taskMgr.doMethodLater(AI_ACTIVATE_PLANET_WAIT_TIME - AI_ACCELERATION_TIME*orbit, self._activatePlanetsLoop, 'AIactivatePlanet', extraArgs =[orbit, star], appendTask=True)
         
     def _activatePlanet(self, planet):
-        if(planet.activated == False and planet != None):
-            planet.activatePlanet(self)
-            if(planet.player == self):#for extra check
-                task_structure_timer = taskMgr.doMethodLater(AI_START_CONSTRUCTION_WAIT_TIME, self._startConstruction, 'AIbuildForge', extraArgs =[planet], appendTask=True)
-                planet.task_structure_timers.append(task_structure_timer)
+        if(planet != None):
+            if(planet.activated == False):
+                planet.activatePlanet(self)
+                if(planet.player == self):#for extra check
+                    task_structure_timer = taskMgr.doMethodLater(AI_START_CONSTRUCTION_WAIT_TIME, self._startConstruction, 'AIbuildForge', extraArgs =[planet], appendTask=True)
+                    planet.task_structure_timers.append(task_structure_timer)
 
     def _startConstruction(self, planet, task):
         if(planet.player == self and planet.parent_star.lifetime > 0):
