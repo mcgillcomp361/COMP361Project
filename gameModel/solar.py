@@ -276,38 +276,32 @@ class Star(SphericalBody):
             self.lifetime = 0
             self.stage = 6
             self.model_path.setTexture(SphericalBody.star_stage6_tex, 1)
-            timer_destruction= taskMgr.doMethodLater(1, self._consumeSolarSystem, 'consumeSolarSystem')
+            self._consumeSolarSystem()
+#            timer_destruction= taskMgr.doMethodLater(1, self._consumeSolarSystem, 'consumeSolarSystem')
             '''calls the escape solar system routine from the AI class'''
             from gameEngine.gameEngine import ai
             task = taskMgr.doMethodLater(AI_ESCAPE_WAIT_TIME, ai.escapeStar, 'AIescapeStar', extraArgs =[self], appendTask=True)
             return task.done
         return task.again
     
-    def _consumeSolarSystem(self, task):
+    def _consumeSolarSystem(self):#, task):
+        
         for planet in self.planets():
-            ''' TODO: move it smoothly '''
-            ''' TODO: make the unactivated planets move '''
-            planet.orbital_radius = planet.orbital_radius - 1
-            planet.max_orbital_velocity = planet.max_orbital_velocity + 0.0002
-            planet.orbital_velocity = planet.orbital_velocity + 0.0002
-            #taskMgr.add(planet.accelerateOrbit, 'accelerateOrbit', taskChain = 'orbitChain')
-            if(planet.orbital_radius <= 0):
-                self._consumePlanet(planet)
-                if(planet.next_planet == None):
-                    planet = None
-                    return task.done
-                planet = None
-        return task.again
-    
-    def _consumePlanet(self, planet):
-        ''' TODO : remove planet properly, destroy orbiting unit and surface structures'''
-        self.removePlanet(planet)
-        planet.orbital_radius = 0
-        planet.max_orbital_velocity = 0
-        planet.orbital_velocity = 0
-        ''' TODO : delete planet model '''
-        planet._consumeUnits()
-        planet._consumeStructures()
+            planet.startCollapse()
+#            ''' TODO: move it smoothly '''
+#            ''' TODO: make the unactivated planets move '''
+#            planet.orbital_radius = planet.orbital_radius - 1
+#            planet.max_orbital_velocity = planet.max_orbital_velocity + 0.0002
+#            planet.orbital_velocity = planet.orbital_velocity + 0.0002
+#            #taskMgr.add(planet.accelerateOrbit, 'accelerateOrbit', taskChain = 'orbitChain')
+#            if(planet.orbital_radius <= 0):
+#                self._consumePlanet(planet)
+#                if(planet.next_planet == None):
+#                    planet = None
+#                    return task.done
+#                planet = None
+#        return task.again
+
         
     def updateTimer(self):
         self.notify("updateTime")
@@ -579,6 +573,25 @@ class Planet(SphericalBody):
     def startSpin(self):
         self.day_period = self.model_path.hprInterval(PLANET_SPIN_VELOCITY, Vec3(360, 0, 0))
         self.day_period.loop()
+    
+    def startCollapse(self):
+        taskMgr.remove('stepOrbit')
+        taskMgr.setupTaskChain('collapseChain')
+        taskMgr.add(self._collapseOrbit, 'collapseOrbit', taskChain='collapseChain')
+#        taskMgr.add(self._consume, 'consume', taskChain='collapseChain')
+        self.orbitTask = None
+    
+    def _consume(self, task):
+        ''' TODO : remove planet properly, destroy orbiting unit and surface structures'''
+        self.parent_star.removePlanet(self)
+        self.point_path.removeNode()
+#        self.orbital_radius = 0
+#        self.max_orbital_velocity = 0
+#        self.orbital_velocity = 0
+        ''' TODO : delete planet model '''
+        self._consumeUnits()
+        self._consumeStructures()
+        return task.done
         
     def accelerateOrbit(self, task):
         
@@ -595,23 +608,31 @@ class Planet(SphericalBody):
     
     def stepOrbit(self, task):
         self.orbital_angle = self.orbital_angle + self.orbital_velocity
-        self.orbital_angle = math.fmod(self.orbital_angle, 2.0*math.pi);
+        self.orbital_angle = math.fmod(self.orbital_angle, 2.0*math.pi)
         self.point_path.setPos(self.orbital_radius * math.cos(self.orbital_angle),
                                self.orbital_radius * math.sin(self.orbital_angle), 0)
         self.position = self.point_path.getPos()
         return task.cont
     
-    def collapseOrbit(self, task):
-        pass
-#        self.orbital_radius = self.orbital_radius - 0.01
-#        self.point_path.setPos(self.orbital_radius * math.cos(self.orbital_angle),
-#                               self.orbital_radius * math.sin(self.orbital_angle), 0)
-#        self.position = self.point_path.getPos()
-#        self.orbital_velocity = self.orbital_velocity + 0.0001
-#        if self.orbital_radius < 0:
-#            return task.done
-#        else:
-#            return task.cont
+    def _collapseOrbit(self, task):
+        self.orbital_radius = self.orbital_radius - 0.03
+        self.orbital_angle = self.orbital_angle + self.orbital_velocity
+        self.orbital_angle = math.fmod(self.orbital_angle, 2.0*math.pi)
+        self.point_path.setPos(self.orbital_radius * math.cos(self.orbital_angle),
+                               self.orbital_radius * math.sin(self.orbital_angle), 0)
+        self.position = self.point_path.getPos()
+#        if self.orbital_velocity < 0.01:
+        if self.orbital_radius != 0:
+            self.orbital_velocity = self.orbital_velocity + 0.01/(self.orbital_radius**2)
+        try:
+            self.orbit_path.setScale(self.orbital_radius)
+        except AttributeError:
+            pass # no orbit on this planet (has not been activated)
+        
+        if self.orbital_radius < 0:
+            return task.done
+        else:
+            return task.cont
         
     
     def drawLines(self): 
