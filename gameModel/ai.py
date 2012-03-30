@@ -38,6 +38,7 @@ class AI(object):
     ''' Escape Solar System Routine '''
     def escapeStar(self, star, task):
         for planet in star.planets():
+            print planet.orbital_radius
             if(planet.next_planet==None):
                 '''TODO : choose randomly another star and travel in deep space if next planet is None'''
                 for unit in planet.unitsOfPlayer(self):
@@ -49,7 +50,7 @@ class AI(object):
                 for unit in planet.next_planet.unitsOfPlayer(self):
                     unit.moveUnitNext()
                 for unit in planet.unitsOfPlayer(self):
-                        unit.moveUnitNext()
+                    unit.moveUnitNext()
             break
         return task.again
                 

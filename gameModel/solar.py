@@ -288,20 +288,6 @@ class Star(SphericalBody):
         
         for planet in self.planets():
             planet.startCollapse()
-#            ''' TODO: move it smoothly '''
-#            ''' TODO: make the unactivated planets move '''
-#            planet.orbital_radius = planet.orbital_radius - 1
-#            planet.max_orbital_velocity = planet.max_orbital_velocity + 0.0002
-#            planet.orbital_velocity = planet.orbital_velocity + 0.0002
-#            #taskMgr.add(planet.accelerateOrbit, 'accelerateOrbit', taskChain = 'orbitChain')
-#            if(planet.orbital_radius <= 0):
-#                self._consumePlanet(planet)
-#                if(planet.next_planet == None):
-#                    planet = None
-#                    return task.done
-#                planet = None
-#        return task.again
-
         
     def updateTimer(self):
         self.notify("updateTime")
@@ -589,6 +575,9 @@ class Planet(SphericalBody):
 #        self.max_orbital_velocity = 0
 #        self.orbital_velocity = 0
         ''' TODO : delete planet model '''
+        #if(planet.orbital_radius <= 0):
+        #    if(planet.next_planet == None):
+        #        planet = None
         self._consumeUnits()
         self._consumeStructures()
         return task.done
