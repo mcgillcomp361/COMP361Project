@@ -34,6 +34,10 @@ class guiUpdate():
             from gameEngine.gameEngine import player
             self.value = player.ge_amount
             self.printGE()
+        if (event == "updateUnits"):
+            self.refreshUnits
+        if (event == "updateConstructions"):
+            self.updateConstructions
             
     def start(self):
         self.printTime()
@@ -57,3 +61,9 @@ class guiUpdate():
         
     def printGE(self):
         self.geAmount = OnscreenText(text=str(self.value), pos=(0.4, -0.75), scale=0.05, fg=(1, 1, 1, 1))
+        
+    def refreshUnits(self):
+        pass
+    
+    def updateConstructions(self):
+        pass

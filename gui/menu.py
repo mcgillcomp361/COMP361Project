@@ -8,6 +8,8 @@ from gui.gamePanel import GamePanel
 
 class Menu(): 
     def __init__(self): 
+        
+        self.mainFrame = DirectFrame(pos=(0,0,0))
         self.b=OnscreenImage(parent=render2d, image="./models/gui/mainMenu.png") 
         self.screenImages=loader.loadModel('./models/gui/singleplayer.egg')
         b1 = DirectButton(geom=(self.screenImages.find('**/singleplayer'), 
@@ -50,13 +52,11 @@ class Menu():
                      relief=2, command = sys.exit)
         b5.setScale(0.6,1,0.16) 
             
-        self.mainFrame = DirectFrame(pos=(0,0,0))
         b1.reparentTo(self.mainFrame)
         b2.reparentTo(self.mainFrame)
         b3.reparentTo(self.mainFrame)
         b4.reparentTo(self.mainFrame)
-        b5.reparentTo(self.mainFrame)
-       
+        b5.reparentTo(self.mainFrame)   
        
     def startGame(self):
         print 'starting game'
@@ -70,8 +70,7 @@ class Menu():
 
         b1 = DirectButton(text = ("Single Player", "click!", "start_roll", "disabled"), frameColor=(1, 1, 1, 0), text_fg=(1, 1, 1, 1),
                      text_scale=0.1, text_align = TextNode.ALeft, pos=(0.3, 0, 0.4),
-                     relief=2, command = self.startGame)
-            
+                     relief=2, command = self.startGame)    
         b2 = DirectButton(text = ("Multiplayer", "click!", "start_roll", "disabled"), frameColor=(1, 1, 1, 0), text_fg=(1, 1, 1, 1),
                       text_scale=0.1,  text_align = TextNode.ALeft,pos=(1, 0, 0.15),
                       relief=2, command = self.startGame)
