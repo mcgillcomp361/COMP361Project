@@ -321,15 +321,29 @@ class Star(SphericalBody):
         for planet in self._planets:
             yield planet
     
+    def getPlanetAt(self, orbit):
+        '''
+        Returns the planet at the desired orbit
+        @param orbit is an integer
+        '''
+        return self._planets[orbit]
+        
     def getNextDeadPlanet(self):
         '''
-        returns next unactivated planet
+        returns next un-activated planet
         '''
         for planet in self._planets:
             if not planet.activated:
                 return planet
         return None
     
+    def getlastPlanet(self):
+        '''
+        returns the last planet in the solar system
+        '''
+        if(self.getNumberOfPlanets()!=0):
+            return self._planets[-1]
+        
     def getOrbit(self, planet):
         return self._planets.index(planet)
         

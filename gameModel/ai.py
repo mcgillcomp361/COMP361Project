@@ -39,20 +39,23 @@ class AI(object):
     def escapeStar(self, star, task):
         for planet in star.planets():
             if(planet.next_planet==None):
-                '''TODO : choose randomly another star and travel in deep space if next planet is None'''
-                for unit in planet.unitsOfPlayer(self):
-                    star = random.randrange(0, len(self.all_stars))
-                    if(star.lifetime <= 0):
-                        unit.moveDeepSpace(star.getPlanetAt(MAX_NUMBER_OF_PLANETS))
+                self._escape(planet)
                 return task.done
-            elif(planet.orbital_radius < 15*MIN_DISTANCE_BETWEEN_PLANETS):
-                '''FIXME: These two lines which I commented need to be removed I think'''
-#                for unit in planet.next_planet.unitsOfPlayer(self):
-#                    unit.moveUnitNext()
+            elif(planet.orbital_radius < 48*MIN_DISTANCE_BETWEEN_PLANETS):
                 for unit in planet.unitsOfPlayer(self):
                     unit.moveUnitNext()
             break
         return task.again
+    
+    def _escape(self, planet):
+        if(planet == None or planet.getNumberOfUnitsOfPlayer(self)==0):
+            return
+        else:
+            for unit in planet.unitsOfPlayer(self):
+                target_star = self.all_stars[random.randrange(0, len(self.all_stars))]
+                if(target_star.stage != 6):
+                    unit.moveDeepSpace(target_star.getlastPlanet())
+            self._escape(planet)
     
     ''' Construction Routine '''    
     def activateRandomStar(self):
