@@ -45,44 +45,20 @@ class Player(object):
            self.selected_planet.player == self and self.selected_planet.task_structure_timer == None and \
            self.selected_planet.hasStructure(structure) == False and self.selected_planet.getNumberOfStructures()<MAX_NUMBER_OF_STRUCTURE):
             if(structure == "forge"):
-                self.selected_planet.task_structure_timer = taskMgr.doMethodLater(FORGE_BUILD_TIME, self._constructForge, 'buildForge', extraArgs =[self.selected_planet], appendTask=True)
+                self.selected_planet.task_structure_timer = taskMgr.doMethodLater(FORGE_BUILD_TIME, self._delayedConstructStructure, 'buildForge', extraArgs =[Forge, self.selected_planet], appendTask=True)
             elif(structure == "nexus"):
-                self.selected_planet.task_structure_timer = taskMgr.doMethodLater(NEXUS_BUILD_TIME, self._constructNexus, 'buildNexus', extraArgs =[self.selected_planet], appendTask=True)
+                self.selected_planet.task_structure_timer = taskMgr.doMethodLater(NEXUS_BUILD_TIME, self._delayedConstructStructure, 'buildNexus', extraArgs =[Nexus, self.selected_planet], appendTask=True)
             elif(structure == "extractor"):
-                self.selected_planet.task_structure_timer = taskMgr.doMethodLater(EXTRACTOR_BUILD_TIME, self._constructExtractor, 'buildExtractor', extraArgs =[self.selected_planet], appendTask=True)
+                self.selected_planet.task_structure_timer = taskMgr.doMethodLater(EXTRACTOR_BUILD_TIME, self._delayedConstructStructure, 'buildExtractor', extraArgs =[Extractor, self.selected_planet], appendTask=True)
             elif(structure == "phylon"):
-                self.selected_planet.task_structure_timer = taskMgr.doMethodLater(PHYLON_BUILD_TIME, self._constructPhylon, 'buildPhylon', extraArgs =[self.selected_planet], appendTask=True)
+                self.selected_planet.task_structure_timer = taskMgr.doMethodLater(PHYLON_BUILD_TIME, self._delayedConstructStructure, 'buildPhylon', extraArgs =[Phylon, self.selected_planet], appendTask=True)
             elif(structure == "generatorCore"):
-                self.selected_planet.task_structure_timer = taskMgr.doMethodLater(GENERATOR_CORE_BUILD_TIME, self._constructGeneratorCore, 'buildGeneratorCore', extraArgs =[self.selected_planet], appendTask=True)
+                self.selected_planet.task_structure_timer = taskMgr.doMethodLater(GENERATOR_CORE_BUILD_TIME, self._delayedConstructStructure, 'buildGeneratorCore', extraArgs =[GeneratorCore, self.selected_planet], appendTask=True)
 
-    def _constructForge(self, planet, task):
-            forge = Forge(planet)
-            self.structures.append(forge)
-            planet.task_structure_timer = None
-            return task.done
-
-    def _constructNexus(self, planet, task):
-            nexus = Nexus(planet)
-            self.structures.append(nexus)
-            planet.task_structure_timer = None
-            return task.done
-    
-    def _constructExtractor(self, planet, task):
-            extractor = Extractor(planet)
-            self.structures.append(extractor)
-            planet.task_structure_timer = None
-            return task.done
-    
-    def _constructPhylon(self, planet, task):
-            phylon = Phylon(planet)
-            self.structures.append(phylon)
-            planet.task_structure_timer = None
-            return task.done
-    
-    def _constructGeneratorCore(self, planet, task):
-            generatorCore = GeneratorCore(planet)
-            self.structures.append(generatorCore)
-            planet.task_structure_timer = None
+    def _delayedConstructStructure(self, Structure, host_planet, task):
+            structure = Structure(host_planet)
+            self.structures.append(structure)
+            host_planet.task_structure_timer = None
             return task.done
 
     def addUnit(self, unit):
@@ -96,105 +72,49 @@ class Player(object):
             if(unit == "swarm" and self.minerals > SWARM_MINERAL_COST):
                 self.minerals = self.minerals - SWARM_MINERAL_COST
 #               taskMgr.add(host_planet.drawConnections, 'DrawConnections')
-                self.selected_planet.task_unit_timer = taskMgr.doMethodLater(1, self._constructSwarm, 'buildSwarm', extraArgs =[self.selected_planet], appendTask=True)         
+                self.selected_planet.task_unit_timer = taskMgr.doMethodLater(1, self._delayedConstructUnit, 'buildSwarm', extraArgs =[Swarm, self.selected_planet], appendTask=True)         
             elif(unit == "horde" and self.minerals > HORDE_MINERAL_COST):
                 self.minerals = self.minerals - HORDE_MINERAL_COST
 #               taskMgr.add(host_planet.drawConnections, 'DrawConnections')
-                self.selected_planet.task_unit_timer = taskMgr.doMethodLater(1, self._constructHorde, 'buildHorde', extraArgs =[self.selected_planet], appendTask=True)
+                self.selected_planet.task_unit_timer = taskMgr.doMethodLater(1, self._delayedConstructUnit, 'buildHorde', extraArgs =[Horde, self.selected_planet], appendTask=True)
             elif(unit == "hive" and self.minerals > HIVE_MINERAL_COST):
                 self.minerals = self.minerals - HIVE_MINERAL_COST
 #               taskMgr.add(host_planet.drawConnections, 'DrawConnections')
-                self.selected_planet.task_unit_timer = taskMgr.doMethodLater(1, self._constructHive, 'buildHive', extraArgs =[self.selected_planet], appendTask=True)
+                self.selected_planet.task_unit_timer = taskMgr.doMethodLater(1, self._delayedConstructUnit, 'buildHive', extraArgs =[Hive, self.selected_planet], appendTask=True)
             elif(unit == "globe" and self.minerals > GLOBE_MINERAL_COST):
                 self.minerals = self.minerals - GLOBE_MINERAL_COST
 #               taskMgr.add(host_planet.drawConnections, 'DrawConnections')
-                self.selected_planet.task_unit_timer = taskMgr.doMethodLater(1, self._constructGlobe, 'buildGlobe', extraArgs =[self.selected_planet], appendTask=True)
+                self.selected_planet.task_unit_timer = taskMgr.doMethodLater(1, self._delayedConstructUnit, 'buildGlobe', extraArgs =[Globe, self.selected_planet], appendTask=True)
             elif(unit == "sphere" and self.minerals > SPHERE_MINERAL_COST):
                 self.minerals = self.minerals - SPHERE_MINERAL_COST
 #               taskMgr.add(host_planet.drawConnections, 'DrawConnections')
-                self.selected_planet.task_unit_timer = taskMgr.doMethodLater(1, self._constructSphere, 'buildSphere', extraArgs =[self.selected_planet], appendTask=True)
+                self.selected_planet.task_unit_timer = taskMgr.doMethodLater(1, self._delayedConstructUnit, 'buildSphere', extraArgs =[Sphere, self.selected_planet], appendTask=True)
             elif(unit == "planetarium" and self.minerals > PLANETARIUM_MINERAL_COST):
                 self.minerals = self.minerals - PLANETARIUM_MINERAL_COST
 #               taskMgr.add(host_planet.drawConnections, 'DrawConnections')
-                self.selected_planet.task_unit_timer = taskMgr.doMethodLater(1, self._constructPlanetarium, 'buildPlanetarium', extraArgs =[self.selected_planet], appendTask=True)
+                self.selected_planet.task_unit_timer = taskMgr.doMethodLater(1, self._delayedConstructUnit, 'buildPlanetarium', extraArgs =[Planetarium, self.selected_planet], appendTask=True)
             elif(unit == "analyzer" and self.minerals > ANALYZER_MINERAL_COST):
                 self.minerals = self.minerals - ANALYZER_MINERAL_COST
 #               taskMgr.add(host_planet.drawConnections, 'DrawConnections')
-                self.selected_planet.task_unit_timer = taskMgr.doMethodLater(1, self._constructAnalyzer, 'buildAnalyzer', extraArgs =[self.selected_planet], appendTask=True)
+                self.selected_planet.task_unit_timer = taskMgr.doMethodLater(1, self._delayedConstructUnit, 'buildAnalyzer', extraArgs =[Analyzer, self.selected_planet], appendTask=True)
             elif(unit == "mathematica" and self.minerals > MATHEMATICA_MINERAL_COST):
                 self.minerals = self.minerals - MATHEMATICA_MINERAL_COST
 #               taskMgr.add(host_planet.drawConnections, 'DrawConnections')
-                self.selected_planet.task_unit_timer = taskMgr.doMethodLater(1, self._constructMathematica, 'buildMathematica', extraArgs =[self.selected_planet], appendTask=True)
+                self.selected_planet.task_unit_timer = taskMgr.doMethodLater(1, self._delayedConstructUnit, 'buildMathematica', extraArgs =[Mathematica, self.selected_planet], appendTask=True)
             elif(unit == "blackHoleGenerator" and self.minerals > BLACK_HOLE_GENERATOR_MINERAL_COST):
                 self.minerals = self.minerals - BLACK_HOLE_GENERATOR_MINERAL_COST
 #               taskMgr.add(host_planet.drawConnections, 'DrawConnections')
-                self.selected_planet.task_unit_timer = taskMgr.doMethodLater(1, self._constructBlackHoleGenerator, 'buildBlackHoleGenerator', extraArgs =[self.selected_planet], appendTask=True)
+                self.selected_planet.task_unit_timer = taskMgr.doMethodLater(1, self._delayedConstructUnit, 'buildBlackHoleGenerator', extraArgs =[BlackHoleGenerator, self.selected_planet], appendTask=True)
             '''TODO: add gravity engine here '''
             from gameEngine.gameEngine import updateGUI
             updateGUI.refreshResources()
             updateGUI.value = self.minerals
             updateGUI.printResources()
 
-    def _constructSwarm(self, planet, task):
-            swarm = Swarm(planet, self)
-            swarm.startOrbit()
-            self.units.append(swarm)
-            planet.task_unit_timer = None
-            return task.done
-        
-    def _constructHorde(self, planet, task):
-            horde = Horde(planet, self)
-            horde.startOrbit()
-            self.units.append(horde)
-            planet.task_unit_timer = None
-            return task.done
-        
-    def _constructHive(self, planet, task):
-            hive = Hive(planet, self)
-            hive.startOrbit()
-            self.units.append(hive)
-            planet.task_unit_timer = None
-            return task.done
-        
-    def _constructGlobe(self, planet, task):
-            globe = Globe(planet, self)
-            globe.startOrbit()
-            self.units.append(globe)
-            planet.task_unit_timer = None
-            return task.done
-        
-    def _constructSphere(self, planet, task):
-            sphere = Sphere(planet, self)
-            sphere.startOrbit()
-            self.units.append(sphere)
-            planet.task_unit_timer = None
-            return task.done
-        
-    def _constructPlanetarium(self, planet, task):
-            planetarium = Planetarium(planet, self)
-            planetarium.startOrbit()
-            self.units.append(planetarium)
-            planet.task_unit_timer = None
-            return task.done
-        
-    def _constructAnalyzer(self, planet, task):
-            analyzer = Analyzer(planet, self)
-            analyzer.startOrbit()
-            self.units.append(analyzer)
-            planet.task_unit_timer = None
-            return task.done
-        
-    def _constructMathematica(self, planet, task):
-            mathematica = Mathematica(planet, self)
-            mathematica.startOrbit()
-            self.units.append(mathematica)
-            planet.task_unit_timer = None
-            return task.done
-        
-    def _constructBlackHoleGenerator(self, planet, task):
-            blackHoleGenerator = BlackHoleGenerator(planet, self)
-            blackHoleGenerator.startOrbit()
-            self.units.append(blackHoleGenerator)
+    def _delayedConstructUnit(self, Unit, planet, task):
+            unit = Unit(planet, self)
+            unit.startOrbit()
+            self.units.append(unit)
             planet.task_unit_timer = None
             return task.done
         
