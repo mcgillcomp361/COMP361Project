@@ -26,3 +26,4 @@ class Ability(object):
         '''
         if(self.used == False):
             self.position = unit_position
+            self.used = True

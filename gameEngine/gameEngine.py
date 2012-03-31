@@ -201,4 +201,3 @@ def _trackUnitsAndStructures(task):
             ''' TODO : remove the structure properly '''
             ''' TODO: remove structure texture'''
     return task.again
-                   
