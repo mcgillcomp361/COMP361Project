@@ -53,9 +53,6 @@ class AI(object):
                     unit.moveUnitNext()
             break
         return task.again
-                
-    #AI_ACCELERATION_TIME  =0
-    #AI_ACTIVATE_PLANET_WAIT_TIME = smaller
     
     ''' Construction Routine '''    
     def activateRandomStar(self):
