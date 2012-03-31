@@ -321,17 +321,17 @@ class Star(SphericalBody):
         for planet in self._planets:
             yield planet
     
-    def getPlanetAt(self, orbit):
+    def getNextDeadPlanet(self):
         '''
-        returns the planet object at the specified orbit number
-        @param orbit, Integer : the orbit of the planet
+        returns next unactivated planet
         '''
-        tmp = 0
-        for planet in self.planets():
-            if(orbit == tmp):
+        for planet in self._planets:
+            if not planet.activated:
                 return planet
-            else:
-                tmp = tmp + 1
+        return None
+    
+    def getOrbit(self, planet):
+        return self._planets.index(planet)
         
     def getPlanet(self, planet):
         '''
@@ -546,11 +546,11 @@ class Planet(SphericalBody):
         
         #rand = random.randrange(1,8,1)
         self.model_path.setTexture(SphericalBody.planet_activated_tex, 1)
-        
         self.startSpin()
-        taskMgr.setupTaskChain('orbitChain')
-        taskMgr.add(self.accelerateOrbit, 'accelerateOrbit', taskChain = 'orbitChain')
-        self.orbitTask = taskMgr.add(self.stepOrbit, 'stepOrbit', taskChain = 'orbitChain')
+        
+        # We want to avoid adding this task when the 'collapseOrbit' is already running
+        if self.parent_star.lifetime != 0:
+            taskMgr.add(self._accelerateOrbit, 'accelerateOrbit')
         
         self.orbit_path = shapes.makeArc(360, int(self.orbital_radius))
         self.orbit_path.reparentTo(self.parent_star.point_path)
@@ -561,15 +561,20 @@ class Planet(SphericalBody):
         self.day_period.loop()
     
     def startCollapse(self):
-        taskMgr.remove('stepOrbit')
-        taskMgr.setupTaskChain('collapseChain')
-        taskMgr.add(self._collapseOrbit, 'collapseOrbit', taskChain='collapseChain')
-#        taskMgr.add(self._consume, 'consume', taskChain='collapseChain')
-        self.orbitTask = None
+        try:
+            if self.orbit_task:
+                taskMgr.remove(self.orbit_task)
+        except AttributeError:
+            pass # no orbit on this planet (has not been activated)
+        
+        taskMgr.add(self._collapseOrbit, 'collapseOrbit')
+#        taskMgr.setupTaskChain('collapseChain')
+#        taskMgr.add(self._collapseOrbit, 'collapseOrbit')#, taskChain='collapseChain')
+#        taskMgr.add(self._consume, 'consumePlanet', taskChain='collapseChain')
+#        self.orbitTask = None
     
-    def _consume(self, task):
+    def _consume(self):
         ''' TODO : remove planet properly, destroy orbiting unit and surface structures'''
-        self.parent_star.removePlanet(self)
         self.point_path.removeNode()
 #        self.orbital_radius = 0
 #        self.max_orbital_velocity = 0
@@ -580,10 +585,9 @@ class Planet(SphericalBody):
         #        planet = None
         self._consumeUnits()
         self._consumeStructures()
-        return task.done
+        self.parent_star.removePlanet(self)
         
-    def accelerateOrbit(self, task):
-        
+    def _accelerateOrbit(self, task):
         self.orbital_angle = self.orbital_angle + self.orbital_velocity
         self.orbital_angle = math.fmod(self.orbital_angle, 2.0*math.pi);
         self.point_path.setPos(self.orbital_radius * math.cos(self.orbital_angle),
@@ -591,11 +595,12 @@ class Planet(SphericalBody):
         self.position = self.point_path.getPos()
         self.orbital_velocity = self.orbital_velocity + 0.0001
         if self.orbital_velocity > self.max_orbital_velocity:
+            self.orbit_task = taskMgr.add(self._stepOrbit, 'stepOrbit')
             return task.done
         else:
             return task.cont
     
-    def stepOrbit(self, task):
+    def _stepOrbit(self, task):
         self.orbital_angle = self.orbital_angle + self.orbital_velocity
         self.orbital_angle = math.fmod(self.orbital_angle, 2.0*math.pi)
         self.point_path.setPos(self.orbital_radius * math.cos(self.orbital_angle),
@@ -618,7 +623,8 @@ class Planet(SphericalBody):
         except AttributeError:
             pass # no orbit on this planet (has not been activated)
         
-        if self.orbital_radius < 0:
+        if self.orbital_radius <= 0:
+            self._consume()
             return task.done
         else:
             return task.cont

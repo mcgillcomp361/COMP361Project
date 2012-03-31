@@ -38,7 +38,6 @@ class AI(object):
     ''' Escape Solar System Routine '''
     def escapeStar(self, star, task):
         for planet in star.planets():
-            print planet.orbital_radius
             if(planet.next_planet==None):
                 '''TODO : choose randomly another star and travel in deep space if next planet is None'''
                 for unit in planet.unitsOfPlayer(self):
@@ -47,41 +46,39 @@ class AI(object):
                         unit.moveDeepSpace(star.getPlanetAt(MAX_NUMBER_OF_PLANETS))
                 return task.done
             elif(planet.orbital_radius < 15*MIN_DISTANCE_BETWEEN_PLANETS):
-                for unit in planet.next_planet.unitsOfPlayer(self):
-                    unit.moveUnitNext()
+                '''FIXME: These two lines which I commented need to be removed I think'''
+#                for unit in planet.next_planet.unitsOfPlayer(self):
+#                    unit.moveUnitNext()
                 for unit in planet.unitsOfPlayer(self):
                     unit.moveUnitNext()
             break
         return task.again
                 
-    
+    #AI_ACCELERATION_TIME  =0
+    #AI_ACTIVATE_PLANET_WAIT_TIME = smaller
     
     ''' Construction Routine '''    
     def activateRandomStar(self):
-        if(self._allStarsActivated(self.all_stars) == False):    
-            while(True):
-                star = self.all_stars[random.randrange(0, NUMBER_OF_STARS, 1)]
-                if not star.activated:
-                    star.activateStar(self)
-                    orbit = 0
-                    task = taskMgr.doMethodLater(AI_ACTIVATE_PLANET_WAIT_TIME - AI_ACCELERATION_TIME*MAX_NUMBER_OF_PLANETS, self._activatePlanetsLoop, 'AIactivatePlanet', extraArgs =[orbit, star], appendTask=True)
-                    break
+        if not self._allStarsActivated(self.all_stars):
+            star = self.all_stars[random.randrange(0, NUMBER_OF_STARS, 1)]
+            if not star.activated:
+                star.activateStar(self)
+                taskMgr.doMethodLater(AI_ACTIVATE_PLANET_WAIT_TIME - AI_ACCELERATION_TIME*MAX_NUMBER_OF_PLANETS, self._activatePlanetsLoop, 'AIactivatePlanet', extraArgs =[star], appendTask=True)
     
-    def _activatePlanetsLoop(self, orbit, star, task):
-        if(self._allPlanetsActivated(star) == True):
+    def _activatePlanetsLoop(self, star, task):
+        if self._allPlanetsActivated(star):
             self.activateRandomStar()
         else:
-            self._activatePlanet(star.getPlanetAt(orbit))   
-            orbit = orbit + 1
-            task = taskMgr.doMethodLater(AI_ACTIVATE_PLANET_WAIT_TIME - AI_ACCELERATION_TIME*orbit, self._activatePlanetsLoop, 'AIactivatePlanet', extraArgs =[orbit, star], appendTask=True)
-        
-    def _activatePlanet(self, planet):
-        if(planet != None):
-            if(planet.activated == False):
+            planet = star.getNextDeadPlanet()
+            if planet:
                 planet.activatePlanet(self)
-                if(planet.player == self):#for extra check
+                if planet.player == self:#for extra check
                     task_structure_timer = taskMgr.doMethodLater(AI_START_CONSTRUCTION_WAIT_TIME, self._startConstruction, 'AIbuildForge', extraArgs =[planet], appendTask=True)
                     planet.task_structure_timers.append(task_structure_timer)
+                orbit = star.getOrbit(planet)
+                taskMgr.doMethodLater(AI_ACTIVATE_PLANET_WAIT_TIME - AI_ACCELERATION_TIME*orbit, self._activatePlanetsLoop, 'AIactivatePlanet', extraArgs =[star], appendTask=True)
+        return task.done
+                
 
     def _startConstruction(self, planet, task):
         if(planet.player == self and planet.parent_star.lifetime > 0):
@@ -98,7 +95,7 @@ class AI(object):
             planet.task_structure_timers.append(task_structure_timer)
             
             if(planet.hasStructure("nexus")==False):
-               self._constructNexus(planet) 
+                self._constructNexus(planet) 
             
             '''TODO : construct defensive structures '''
             
@@ -274,13 +271,13 @@ class AI(object):
    
     def _allStarsActivated(self, all_star):
         for star in all_star:
-            if(star.activated == False):
+            if not star.activated:
                 return False
         return True
     
     def _allPlanetsActivated(self, star):
         for planet in star.planets():
-            if(planet.activated == False):
+            if not planet.activated:
                 return False
         return True
     
