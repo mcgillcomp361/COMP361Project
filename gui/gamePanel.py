@@ -6,6 +6,7 @@ Created on Feb 21, 2012
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from researchTree import ResearchTree
+from minimap import Minimap
 
 class GamePanel(): 
     def __init__(self, player): 
@@ -129,6 +130,10 @@ class GamePanel():
         b5.stateNodePath[2].setScale(15, 1, 5)
         b5.stateNodePath[2].setPos(10, 0, 3)
         
+        bGravity = DirectButton(image = ("./models/gui/units/gravityEngine.png"),
+                          frameColor=(0, 0,0, 0), image_scale = (0.65, 1, 0.65), pos=(-18,0, -0.75), relief=2, command=self.selectGravityEngine)
+        bGravity.setTransparency(1)
+        
         b6 = DirectButton(image = ("./models/gui/units/hive.png", "./models/gui/units/hive.png","./models/gui/units/hive_hover.png"),
                           frameColor=(0, 0,0, 0), image_scale = (0.65, 1, 0.65), pos=(-21,0, -2.3),command=self.selectHive)
         b6.stateNodePath[2].setTransparency(1)
@@ -162,6 +167,7 @@ class GamePanel():
         b7.reparentTo(self.mainFrame)
         b6.reparentTo(self.mainFrame)
         b9.reparentTo(self.mainFrame)
+        bGravity.reparentTo(self.mainFrame)
       
     def loadResearchTree(self):
         b1 = DirectButton(text = ("Research Tree", "click!", "roll"), pos = (0, 0, -2.4),
@@ -170,9 +176,11 @@ class GamePanel():
         b1.reparentTo(self.mainFrame)
             
     def loadMiniMap(self):
-        #TODO: JULIE
+        #TODO: Finish Minimap
+      #  img = OnscreenImage(image="./models/gui/.png", scale = (1, 1, 0.3), pos = (0,0,-0.7))
+ #       m = Minimap()
         pass
-        
+       
     ## CONSTRUCTION SELECTION
     def selectForge(self):
         self.player.addStructure("forge")
@@ -228,3 +236,6 @@ class GamePanel():
 
     def selectBHG(self):
         self.player.addUnit("blackHoleGenerator")
+    
+    def selectGravityEngine(self):
+        pass
