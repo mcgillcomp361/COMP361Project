@@ -9,7 +9,9 @@ from gameModel.solar import SphericalBody
 from gameModel.solar import Star
 from gameModel.solar import Planet
 from gameModel.constants import *
+from direct.showbase import DirectObject
 
+window = DirectObject() 
 
 class Test(unittest.TestCase):
 
@@ -25,6 +27,7 @@ class Test(unittest.TestCase):
         
     def test_addPlnt(self):
         self.star.addPlanet(self.planet1)
+        self.assertEqual(self.star._planets[0], self.planet1)
 
 
 if __name__ == "__main__":
