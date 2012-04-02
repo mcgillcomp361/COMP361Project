@@ -6,7 +6,7 @@ Created on Feb 21, 2012
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from researchTree import ResearchTree
-from minimap import Minimap
+#from minimap import Minimap
 
 class GamePanel(): 
     def __init__(self, player): 
