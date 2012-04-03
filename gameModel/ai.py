@@ -64,6 +64,8 @@ class AI(object):
             if not star.activated:
                 star.activateStar(self)
                 taskMgr.doMethodLater(AI_ACTIVATE_PLANET_WAIT_TIME - AI_ACCELERATION_TIME*MAX_NUMBER_OF_PLANETS, self._activatePlanetsLoop, 'AIactivatePlanet', extraArgs =[star], appendTask=True)
+            else:
+                self.activateRandomStar()
     
     def _activatePlanetsLoop(self, star, task):
         if self._allPlanetsActivated(star):
@@ -149,7 +151,7 @@ class AI(object):
         if(unit_type == 0):
             task_unit_timer =  taskMgr.doMethodLater(SWARM_BUILD_TIME, self._constructSwarm, 'AIbuildSwarm', extraArgs =[planet], appendTask=True)
         elif(unit_type == 1 and planet.task_unit_timer == None):
-            task_unit_timer =  taskMgr.doMethodLater(GLOBE_BUILD_TIME, self._constructSphere, 'AIbuildGlobe', extraArgs =[planet], appendTask=True)
+            task_unit_timer =  taskMgr.doMethodLater(GLOBE_BUILD_TIME, self._constructGlobe, 'AIbuildGlobe', extraArgs =[planet], appendTask=True)
         elif(unit_type == 2 and planet.task_unit_timer == None):
             task_unit_timer =  taskMgr.doMethodLater(ANALYZER_BUILD_TIME, self._constructAnalyzer, 'AIbuildGlobe', extraArgs =[planet], appendTask=True)  
         

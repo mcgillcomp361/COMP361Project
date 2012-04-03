@@ -37,7 +37,7 @@ class Unit(object):
         self._unit_abilities = unit_abilities
         self.__initSceneGraph()
         ''' TODO : finish the fight algorithm '''
-        self.task_observe_enemy = taskMgr.doMethodLater(5, self._observeEnemy, 'observeEnemy')
+        self.task_observe_enemy = taskMgr.doMethodLater(1, self._observeEnemy, 'observeEnemy')
          
     
     def __initSceneGraph(self):        
@@ -64,7 +64,9 @@ class Unit(object):
     
     def _observeEnemy(self, task):
         for unit in self.host_planet.units():
-            if(unit.player != self.player and unit.deep_space != True and self.deep_space != True):
+            if(unit != self and unit.player != self.player and \
+               unit.deep_space != True and self.deep_space != True):
+                #print str(self) + " attacks " + str(unit)
                 self._attack(unit)
         #if(self.host_planet.player != self.player and self.host_planet.getNumberOfStructures()!=0):
             #for structure in self.host_planet.structures():
@@ -133,8 +135,10 @@ class Unit(object):
     def _attack(self, target):
         '''Deals damage to an opposing unit or structure only if the unit is capable of attacking'''
         ''' TODO: check if unit is attackable '''
-        if(target.energy>=0 and self.damage != 0 and target != None):
-            target.energy =- self.damage
+        if(target.energy>0 and target != None):
+            tmp =  target.energy - self.damage
+            if(tmp <= 0): target.energy = 0
+            else: target.energy = tmp  
             
     
     def useAbility(self, ability):
