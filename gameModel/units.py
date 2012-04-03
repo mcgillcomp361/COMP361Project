@@ -36,8 +36,8 @@ class Unit(object):
         self.host_planet.addOrbitingUnit(self)
         self._unit_abilities = unit_abilities
         self.__initSceneGraph()
-        
-        self.task_observe_enemy = taskMgr.doMethodLater(1, self._observeEnemy, 'observeEnemy')
+        ''' TODO : finish the fight algorithm '''
+        self.task_observe_enemy = taskMgr.doMethodLater(5, self._observeEnemy, 'observeEnemy')
          
     
     def __initSceneGraph(self):        
@@ -64,16 +64,15 @@ class Unit(object):
     
     def _observeEnemy(self, task):
         for unit in self.host_planet.units():
-            if(unit.player != self.player and unit.deep_space != False and self.deep_space != False):
+            if(unit.player != self.player and unit.deep_space != True and self.deep_space != True):
                 self._attack(unit)
-        if(self.host_planet.player != self.player):
-            for structure in self.host_planet.structures():
-                self._attack(structure)
+        #if(self.host_planet.player != self.player and self.host_planet.getNumberOfStructures()!=0):
+            #for structure in self.host_planet.structures():
+                #self._attack(structure)
         return task.again
         
     def select(self, player):
-        if(self.player == player):
-            player.selected_unit = self
+        player.selected_unit = self
         ''' TODO: show the statics of the unit in the characteristic panel on the GUI '''
     
     def startOrbit(self):
@@ -134,7 +133,7 @@ class Unit(object):
     def _attack(self, target):
         '''Deals damage to an opposing unit or structure only if the unit is capable of attacking'''
         ''' TODO: check if unit is attackable '''
-        if(target.energy>0 and self.damage != 0 and target != None):
+        if(target.energy>=0 and self.damage != 0 and target != None):
             target.energy =- self.damage
             
     

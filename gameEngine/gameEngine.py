@@ -189,6 +189,8 @@ def _trackUnitsAndStructures(task):
         print unit.energy
         if(unit.energy <= 0):
             unit.host_planet.removeOrbitingUnit(unit)
+            if(unit == player.selected_unit):
+                player.selected_unit = None
             player.units.remove(unit)
             unit = None
             ''' TODO : remove the unit properly '''

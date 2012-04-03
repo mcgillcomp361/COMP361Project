@@ -524,7 +524,7 @@ class Planet(SphericalBody):
         and notifies the corresponding objects based on the state of the planet
         @param player, the player who has selected with right mouse click
         '''
-        if(player.selected_unit != None):
+        if(player.selected_unit != None and player.selected_unit.player == player):
             '''movement is inside the solar system'''
             if(player.selected_unit.host_planet.parent_star == self.parent_star):
                 if(player.selected_unit.host_planet == self.prev_planet):
@@ -532,7 +532,7 @@ class Planet(SphericalBody):
                 if(player.selected_unit.host_planet == self.next_planet):
                     player.selected_unit.moveUnitPrev()      
             else:
-                '''movement is between solar systems in deep space mode'''
+                '''movement is between solar systems in deep space'''
                 if(self.next_planet == None and player.selected_unit.host_planet.next_planet == None):
                     player.selected_unit.moveDeepSpace(self)
        
@@ -599,6 +599,9 @@ class Planet(SphericalBody):
         #        planet = None
         self._consumeUnits()
         self._consumeStructures()
+        ''' TODO : should we set selected_planet in player class to None here '''
+        #if(self.player.selected_planet == self):
+        #    self.player.selected_planet == None
         self.parent_star.removePlanet(self)
         
     def _accelerateOrbit(self, task):
