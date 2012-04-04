@@ -574,6 +574,10 @@ class Planet(SphericalBody):
         self.day_period = self.model_path.hprInterval(PLANET_SPIN_VELOCITY, Vec3(360, 0, 0))
         self.day_period.loop()
     
+    def drawProgressBar(self, time):
+        #TODO: scale interval a line to show progress
+        pass
+    
     def startCollapse(self):
         try:
             if self.orbit_task:
@@ -589,19 +593,12 @@ class Planet(SphericalBody):
     
     def _consume(self):
         ''' TODO : remove planet properly, destroy orbiting unit and surface structures'''
-        self.point_path.removeNode()
-#        self.orbital_radius = 0
-#        self.max_orbital_velocity = 0
-#        self.orbital_velocity = 0
-        ''' TODO : delete planet model '''
-        #if(planet.orbital_radius <= 0):
-        #    if(planet.next_planet == None):
-        #        planet = None
+        self.removeFromGame()
         self._consumeUnits()
         self._consumeStructures()
         ''' TODO : should we set selected_planet in player class to None here '''
-        #if(self.player.selected_planet == self):
-        #    self.player.selected_planet == None
+        if self.player.selected_planet == self:
+            self.player.selected_planet = None
         self.parent_star.removePlanet(self)
         
     def _accelerateOrbit(self, task):
@@ -724,9 +721,29 @@ class Planet(SphericalBody):
         @param player, the owner of the units 
         '''
         for unit in self._orbiting_units:
-            if(unit.player == player):
+            if unit.player == player:
                 yield unit
-            
+    
+    def unitsOfEnemy(self, player):
+        '''
+        Generator that iterates over the hosted units not belonging to the player.
+        @param player, the owner of the units 
+        '''
+        for unit in self._orbiting_units:
+            if unit.player != player:
+                yield unit
+    
+    def unitsOfEnemyLowestEnergy(self, player):
+        '''
+        Generator that iterates over the hosted units not belonging to the player
+        sorted by lowest energy.
+        @param player, the owner of the units 
+        '''
+        energyList = sorted(self._orbiting_units, key=lambda unit: unit.energy)
+        for unit in energyList:
+            if unit.player != player:
+                yield unit
+                
     def getNumberOfUnits(self):
         '''
         Returns the number of hosted units from the planet
@@ -770,6 +787,7 @@ class Planet(SphericalBody):
         for unit in self.units():
             unit.player.units.remove(unit)
             self.removeOrbitingUnit(unit)
+            unit.removeFromGame()
             ''' TODO: remove unit model and its abilities if any'''
             unit = None
         
@@ -849,3 +867,8 @@ class Planet(SphericalBody):
             elif(structure == "generatorCore" and type(surface_structure) == GeneratorCore):
                 return True
         return False
+    
+    def removeFromGame(self):
+        self.point_path.removeNode()
+    
+    

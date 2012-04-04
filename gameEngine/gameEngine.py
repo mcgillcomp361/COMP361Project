@@ -174,6 +174,7 @@ def _trackUnitsAndStructures(task):
             if(unit.energy <= 0):
                 unit.host_planet.removeOrbitingUnit(unit)
                 ai.units.remove(unit)
+                unit.removeFromGame()
                 unit = None
                 ''' TODO : remove the unit properly '''
                 ''' TODO: remove unit model and its abilities if any'''
@@ -186,12 +187,13 @@ def _trackUnitsAndStructures(task):
                 ''' TODO: remove structure texture'''
 
     for unit in player.units:
-        print unit.energy
+#        print unit.energy
         if(unit.energy <= 0):
             unit.host_planet.removeOrbitingUnit(unit)
             if(unit == player.selected_unit):
                 player.selected_unit = None
             player.units.remove(unit)
+            unit.removeFromGame()
             unit = None
             ''' TODO : remove the unit properly '''
             ''' TODO: remove unit model and its abilities if any'''

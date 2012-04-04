@@ -32,6 +32,7 @@ class Unit(object):
         self.max_velocity = max_velocity
         self.energy = energy
         self.damage = damage
+        self.target = None
         self.deep_space = False
         self.host_planet.addOrbitingUnit(self)
         self._unit_abilities = unit_abilities
@@ -63,14 +64,20 @@ class Unit(object):
         self.quad_path.setBillboardPointEye()
     
     def _observeEnemy(self, task):
-        for unit in self.host_planet.units():
-            if(unit != self and unit.player != self.player and \
-               unit.deep_space != True and self.deep_space != True):
-                #print str(self) + " attacks " + str(unit)
-                self._attack(unit)
-        #if(self.host_planet.player != self.player and self.host_planet.getNumberOfStructures()!=0):
-            #for structure in self.host_planet.structures():
-                #self._attack(structure)
+        if not self.deep_space:
+            if self.target != None and self.target.energy >= 0 and \
+                self.host_planet == self.target.host_planet and \
+                not self.target.deep_space:
+                self._attack(self.target)
+                
+            else:
+                for unit in self.host_planet.unitsOfEnemyLowestEnergy(self.player):
+                    print str(self) + " attacks " + str(unit)
+                    self.target = unit
+                    break
+#        if(self.host_planet.player != self.player and self.host_planet.getNumberOfStructures()!=0):
+#            for structure in self.host_planet.structures():
+#                self._attack(structure)
         return task.again
         
     def select(self, player):
@@ -101,6 +108,7 @@ class Unit(object):
         '''TODO: Speed coefficient based on unit type '''
 #       relativePos = target_planet.point_path.getPos(self.point_path)
         relativePos = self.point_path.getPos(target_planet.point_path)
+        length = relativePos.length()
         self.host_planet.removeOrbitingUnit(self)
         self.host_planet = target_planet
         target_planet.addOrbitingUnit(self)
@@ -108,7 +116,7 @@ class Unit(object):
         self.point_path.setPos(relativePos)
         myseq = Sequence(
             LerpPosInterval(self.point_path,
-                3.0,
+                self.max_velocity*length/10.0,
                 Point3(0,0,0),
 #               startPos=None,
 #                   other=self.host_planet.parent_star.point_path,
@@ -119,10 +127,9 @@ class Unit(object):
          )
         myseq.start()
         #else:
-         #   self.deep_space = True
+        #   self.deep_space = True
             #TODO : The unit will NOT be select-able for the duration of travel
-            #TODO : keep track when the unit reaches the target planet then change the host
-          #  self.host_planet = target_planet
+
     
     def _changeHostPlanet(self, target_planet):
         relativePos = target_planet.point_path.getPos(self.point_path)
@@ -134,11 +141,8 @@ class Unit(object):
             
     def _attack(self, target):
         '''Deals damage to an opposing unit or structure only if the unit is capable of attacking'''
-        ''' TODO: check if unit is attackable '''
         if(target.energy>0 and target != None):
-            tmp =  target.energy - self.damage
-            if(tmp <= 0): target.energy = 0
-            else: target.energy = tmp  
+            target.energy = max(0, target.energy-self.damage) 
             
     
     def useAbility(self, ability):
@@ -155,6 +159,9 @@ class Unit(object):
         '''
         for ability in self._unit_abilities:
             yield ability
+    
+    def removeFromGame(self):
+        self.point_path.removeNode()
  
 #TODO: create abilities for each unit when they are constructed 
 class Swarm(Unit):
