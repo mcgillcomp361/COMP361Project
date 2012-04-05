@@ -574,10 +574,6 @@ class Planet(SphericalBody):
         self.day_period = self.model_path.hprInterval(PLANET_SPIN_VELOCITY, Vec3(360, 0, 0))
         self.day_period.loop()
     
-    def drawProgressBar(self, time):
-        #TODO: scale interval a line to show progress
-        pass
-    
     def startCollapse(self):
         try:
             if self.orbit_task:

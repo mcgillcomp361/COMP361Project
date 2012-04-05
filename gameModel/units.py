@@ -9,6 +9,7 @@ from pandac.PandaModules import CollisionNode, CollisionBox, CollisionSphere, Tr
 from direct.showbase import DirectObject
 from direct.interval.IntervalGlobal import *
 from panda3d.core import Vec3, Vec4, Point3, BitMask32, CardMaker
+import math
 
 class Unit(object):
     __metaclass__ = ABCMeta
@@ -33,6 +34,7 @@ class Unit(object):
         self.energy = energy
         self.damage = damage
         self.target = None
+        self.between_orbits = False
         self.deep_space = False
         self.host_planet.addOrbitingUnit(self)
         self._unit_abilities = unit_abilities
@@ -106,30 +108,36 @@ class Unit(object):
         reaches it's destination
         ''' 
         '''TODO: Speed coefficient based on unit type '''
-#       relativePos = target_planet.point_path.getPos(self.point_path)
-        relativePos = self.point_path.getPos(target_planet.point_path)
-        length = relativePos.length()
-        self.host_planet.removeOrbitingUnit(self)
-        self.host_planet = target_planet
-        target_planet.addOrbitingUnit(self)
-        self.point_path.reparentTo(target_planet.point_path)
-        self.point_path.setPos(relativePos)
-        myseq = Sequence(
-            LerpPosInterval(self.point_path,
-                self.max_velocity*length/10.0,
-                Point3(0,0,0),
-#               startPos=None,
-#                   other=self.host_planet.parent_star.point_path,
-                blendType='easeInOut',
-                bakeInStart=0
-            )
-#               Func(self._changeHostPlanet, target_planet)
-         )
-        myseq.start()
-        #else:
-        #   self.deep_space = True
-            #TODO : The unit will NOT be select-able for the duration of travel
-
+        if self.between_orbits:
+            pass
+        else:
+            self.between_orbits = True
+    #       relativePos = target_planet.point_path.getPos(self.point_path)
+            relativePos = self.point_path.getPos(target_planet.point_path)
+            length = math.sqrt(relativePos.length())
+            self.host_planet.removeOrbitingUnit(self)
+            self.host_planet = target_planet
+            target_planet.addOrbitingUnit(self)
+            self.point_path.reparentTo(target_planet.point_path)
+            self.point_path.setPos(relativePos)
+            myseq = Sequence(
+                LerpPosInterval(self.point_path,
+                    self.max_velocity*length/6.0,
+                    Point3(0,0,0),
+    #               startPos=None,
+    #                   other=self.host_planet.parent_star.point_path,
+                    blendType='easeInOut',
+                    bakeInStart=0
+                ),
+                Func(self._onPlanet)
+             )
+            myseq.start()
+            #else:
+            #   self.deep_space = True
+                #TODO : The unit will NOT be select-able for the duration of travel
+                
+    def _onPlanet(self):
+        self.between_orbits = False
     
     def _changeHostPlanet(self, target_planet):
         relativePos = target_planet.point_path.getPos(self.point_path)

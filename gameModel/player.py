@@ -13,6 +13,8 @@ from constants import MINERAL_STARTING_AMOUNT, GRAVITY_ENGINE_STARTING_AMOUNT, M
 from structures import *
 from units import *
 
+from graphicEngine import indicators
+
 class Player(object):
     '''
     Player class
@@ -41,20 +43,28 @@ class Player(object):
         '''
         Building a structure on the player's planet
         '''
-        if(self.selected_planet != None and self.selected_planet.activated == True and \
+        if self.selected_planet and self.selected_planet.activated and \
            self.selected_planet.player == self and self.selected_planet.task_structure_timer == None and \
-           self.selected_planet.hasStructure(structure) == False and self.selected_planet.getNumberOfStructures()<MAX_NUMBER_OF_STRUCTURE):
+           not self.selected_planet.hasStructure(structure) and self.selected_planet.getNumberOfStructures()<MAX_NUMBER_OF_STRUCTURE:
             if(structure == "forge"):
                 self.selected_planet.task_structure_timer = taskMgr.doMethodLater(FORGE_BUILD_TIME, self._delayedConstructStructure, 'buildForge', extraArgs =[Forge, self.selected_planet], appendTask=True)
+                self._showStructureProgress(FORGE_BUILD_TIME)
             elif(structure == "nexus"):
                 self.selected_planet.task_structure_timer = taskMgr.doMethodLater(NEXUS_BUILD_TIME, self._delayedConstructStructure, 'buildNexus', extraArgs =[Nexus, self.selected_planet], appendTask=True)
+                self._showStructureProgress(NEXUS_BUILD_TIME)
             elif(structure == "extractor"):
                 self.selected_planet.task_structure_timer = taskMgr.doMethodLater(EXTRACTOR_BUILD_TIME, self._delayedConstructStructure, 'buildExtractor', extraArgs =[Extractor, self.selected_planet], appendTask=True)
+                self._showStructureProgress(EXTRACTOR_BUILD_TIME)
             elif(structure == "phylon"):
                 self.selected_planet.task_structure_timer = taskMgr.doMethodLater(PHYLON_BUILD_TIME, self._delayedConstructStructure, 'buildPhylon', extraArgs =[Phylon, self.selected_planet], appendTask=True)
+                self._showStructureProgress(PHYLON_BUILD_TIME)
             elif(structure == "generatorCore"):
                 self.selected_planet.task_structure_timer = taskMgr.doMethodLater(GENERATOR_CORE_BUILD_TIME, self._delayedConstructStructure, 'buildGeneratorCore', extraArgs =[GeneratorCore, self.selected_planet], appendTask=True)
-
+                self._showStructureProgress(GENERATOR_CORE_BUILD_TIME)
+    
+    def _showStructureProgress(self, time):
+        taskMgr.add(indicators.drawProgressBar, 'structureProgressBar', extraArgs =[self.selected_planet, time, False, (1.0,0,0,0.5), (0,1.0,0,0.5)], appendTask=True)
+    
     def _delayedConstructStructure(self, Structure, host_planet, task):
             structure = Structure(host_planet)
             self.structures.append(structure)
@@ -69,6 +79,7 @@ class Player(object):
         if(self.selected_planet != None and self.selected_planet.activated == True and \
            self.selected_planet.player == self and self.selected_planet.task_unit_timer == None and \
            self.selected_planet.hasStructure("forge")):
+            self._showUnitProgress(1)
             if(unit == "swarm" and self.minerals > SWARM_MINERAL_COST):
                 self.minerals = self.minerals - SWARM_MINERAL_COST
 #               taskMgr.add(host_planet.drawConnections, 'DrawConnections')
@@ -110,7 +121,10 @@ class Player(object):
             updateGUI.refreshResources()
             updateGUI.value = self.minerals
             updateGUI.printResources()
-
+    
+    def _showUnitProgress(self, time):
+        taskMgr.add(indicators.drawProgressBar, 'unitProgressBar', extraArgs =[self.selected_planet, time, True, (0.5,0,1.0,0.5), (1.0,1.0,0,0.5)], appendTask=True)
+    
     def _delayedConstructUnit(self, Unit, planet, task):
             unit = Unit(planet, self)
             unit.startOrbit()
