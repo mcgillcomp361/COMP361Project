@@ -27,7 +27,6 @@ class Unit(object):
         @unit abilities : the abilities the unit has either unlocked or locked
         '''
         self.host_planet = host_planet
-        #TODO : calculate starting position base on host_planet
         self.position = None
         self.player = player
         self.max_velocity = max_velocity
@@ -39,7 +38,6 @@ class Unit(object):
         self.host_planet.addOrbitingUnit(self)
         self._unit_abilities = unit_abilities
         self.__initSceneGraph()
-        ''' TODO : finish the fight algorithm '''
         self.task_observe_enemy = taskMgr.doMethodLater(1, self._observeEnemy, 'observeEnemy')
          
     
@@ -67,14 +65,16 @@ class Unit(object):
     
     def _observeEnemy(self, task):
         if not self.deep_space:
-            if self.target != None and self.target.energy >= 0 and \
+            if self.target != None and self.target.energy > 0 and \
                 self.host_planet == self.target.host_planet and \
                 not self.target.deep_space:
                 self._attack(self.target)
                 
             else:
+                if(self.damage == 0):
+                    return task.done
+                self.target = None
                 for unit in self.host_planet.unitsOfEnemyLowestEnergy(self.player):
-                    print str(self) + " attacks " + str(unit)
                     self.target = unit
                     break
 #        if(self.host_planet.player != self.player and self.host_planet.getNumberOfStructures()!=0):
@@ -122,7 +122,7 @@ class Unit(object):
             self.point_path.setPos(relativePos)
             myseq = Sequence(
                 LerpPosInterval(self.point_path,
-                    self.max_velocity*length/6.0,
+                    self.max_velocity*length/11.0,
                     Point3(0,0,0),
     #               startPos=None,
     #                   other=self.host_planet.parent_star.point_path,
@@ -150,7 +150,7 @@ class Unit(object):
     def _attack(self, target):
         '''Deals damage to an opposing unit or structure only if the unit is capable of attacking'''
         if(target.energy>0 and target != None):
-            target.energy = max(0, target.energy-self.damage) 
+            target.energy = max(0, target.energy-self.damage)
             
     
     def useAbility(self, ability):
@@ -169,7 +169,13 @@ class Unit(object):
             yield ability
     
     def removeFromGame(self):
+        self.damage = 0
+        self.task_observe_enemy = None
+        self.target = None
         self.point_path.removeNode()
+        
+        '''TODO: remove the unit abilities '''
+        #self._unit_abilities = unit_abilities
  
 #TODO: create abilities for each unit when they are constructed 
 class Swarm(Unit):
