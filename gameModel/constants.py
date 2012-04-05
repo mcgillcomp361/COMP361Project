@@ -15,7 +15,7 @@ MAX_STAR_RADIUS = 8
 MAX_SOLAR_SYSTEM_RADIUS = 100 #could be variable instead
 #make sure the number is satisfactory for UNIVERSE_SCALE
 NUMBER_OF_STARS = 10
-LIFETIME = 1800.0 
+LIFETIME = 180.0 
 ''' should be divisible by 6 '''
 
 ''' Planets '''
@@ -93,13 +93,13 @@ MAX_UNIT_VELOCITY = 2
 SWARM_DESCRIPTION = "The basic combat unit which compromises of hundreds of combat bio-drones equipped with para-dimensional sight and dark energy engines. The swarm is fast but very weak"
 SWARM_MAX_ENERGY = 100
 SWARM_DAMAGE = 4
-SWARM_VELOCITY = 1
+SWARM_VELOCITY = 9
 SWARM_BUILD_TIME = 15
 SWARM_MINERAL_COST = 50
 HORDE_DESCRIPTION = "Evolved from the swarm, this unit compromises of thousands of combat bio-drones  equipped with para-dimensional sight, dark energy engines and excavation tech. The horde is much stronger and larger than the swarm but relatively slower"
 HORDE_MAX_ENERGY = 250
 HORDE_DAMAGE = 8
-HORDE_VELOCITY = 1
+HORDE_VELOCITY = 40
 HORDE_BUILD_TIME = 30
 HORDE_MINERAL_COST = 150
 HIVE_DESCRIPTION = "Evolved from the Horde, this unit compromises of millions of combat bio-drones  equipped with para-dimensional sight, dark energy engines, excavation tech and deadly harvesting tools. The hive is much stronger and larger than the horde but relatively slower"

@@ -592,14 +592,9 @@ class Planet(SphericalBody):
 #        self.orbitTask = None
     
     def _consume(self):
-        ''' TODO : remove planet properly, destroy orbiting unit and surface structures'''
         self.removeFromGame()
         self._consumeUnits()
         self._consumeStructures()
-        ''' TODO : should we set selected_planet in player class to None here '''
-        if self.player.selected_planet == self:
-            self.player.selected_planet = None
-        self.parent_star.removePlanet(self)
         
     def _accelerateOrbit(self, task):
         self.orbital_angle = self.orbital_angle + self.orbital_velocity
@@ -869,6 +864,11 @@ class Planet(SphericalBody):
         return False
     
     def removeFromGame(self):
+        self.next_planet.prev_planet = None
         self.point_path.removeNode()
+        from player import Player
+        if type(self.player) == Player and self.player.selected_planet == self:
+            self.player.selected_planet = None
+        self.parent_star.removePlanet(self)
     
     
