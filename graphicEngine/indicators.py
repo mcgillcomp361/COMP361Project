@@ -8,7 +8,15 @@ from panda3d.core import Vec4
 
 
 def drawProgressBar(self, time, above, red, green, task):
-    #TODO: scale interval a line to show progress
+    '''
+    Draw a progress bar above or below an object (planet).
+    @param self: instance of the object associated with the progress bar 
+    @param time: total duration
+    @param above: True if the progress bar is displayed above
+    @param red: Vec4 representing the first color
+    @param green: Vec4 representing the second color
+    @param task: Panda3d's task
+    '''
     try:
         if self.green_progress_path:
                 self.green_progress_path.setScale(task.time/float(time)*2.0)
@@ -31,8 +39,6 @@ def drawProgressBar(self, time, above, red, green, task):
     if task.time > time:
         self.green_progress_path.removeNode()
         self.red_progress_path.removeNode()
-#        delattr(self,'green_progress_path')
-#        delattr(self,'red_progress_path')
         del self.green_progress_path 
         del self.red_progress_path       
         return task.done
