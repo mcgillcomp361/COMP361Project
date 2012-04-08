@@ -12,7 +12,7 @@ from constants import MINERAL_STARTING_AMOUNT, GRAVITY_ENGINE_STARTING_AMOUNT, M
                     GENERATOR_CORE_RESOURCE_GENERATION_RATE, PHYLON_RESOURCE_GENERATION_RATE, EXTRACTOR_RESOURCE_GENERATION_RATE
 from structures import *
 from units import *
-
+from direct.showbase import DirectObject
 from graphicEngine import indicators
 
 class Player(object):
@@ -51,15 +51,20 @@ class Player(object):
             elif(structure == "nexus"):
                 self.selected_planet.task_structure_timer = taskMgr.doMethodLater(NEXUS_BUILD_TIME, self._delayedConstructStructure, 'buildNexus', extraArgs =[Nexus, self.selected_planet], appendTask=True)
                 self._showStructureProgress(NEXUS_BUILD_TIME)
-            elif(structure == "extractor"):
+            elif(structure == "extractor" and self.selected_planet.hasStructure("phylon")==False  and self.selected_planet.hasStructure("generatorCore")==False):
                 self.selected_planet.task_structure_timer = taskMgr.doMethodLater(EXTRACTOR_BUILD_TIME, self._delayedConstructStructure, 'buildExtractor', extraArgs =[Extractor, self.selected_planet], appendTask=True)
                 self._showStructureProgress(EXTRACTOR_BUILD_TIME)
-            elif(structure == "phylon"):
+            elif(structure == "phylon" and self.selected_planet.hasStructure("extractor")==False  and self.selected_planet.hasStructure("generatorCore")==False):
                 self.selected_planet.task_structure_timer = taskMgr.doMethodLater(PHYLON_BUILD_TIME, self._delayedConstructStructure, 'buildPhylon', extraArgs =[Phylon, self.selected_planet], appendTask=True)
                 self._showStructureProgress(PHYLON_BUILD_TIME)
-            elif(structure == "generatorCore"):
+            elif(structure == "generatorCore" and self.selected_planet.hasStructure("extractor")==False  and self.selected_planet.hasStructure("phylon")==False):
                 self.selected_planet.task_structure_timer = taskMgr.doMethodLater(GENERATOR_CORE_BUILD_TIME, self._delayedConstructStructure, 'buildGeneratorCore', extraArgs =[GeneratorCore, self.selected_planet], appendTask=True)
                 self._showStructureProgress(GENERATOR_CORE_BUILD_TIME)
+            else:
+                base.loader.loadSfx("sound/effects/structures/cannot_build.wav").play()
+        else:
+            base.loader.loadSfx("sound/effects/structures/cannot_build.wav").play()
+
     
     def _showStructureProgress(self, time):
         taskMgr.add(indicators.drawProgressBar, 'structureProgressBar', extraArgs =[self.selected_planet, time, False, (1.0,0,0,0.5), (0,1.0,0,0.5)], appendTask=True)
@@ -68,6 +73,7 @@ class Player(object):
         structure = Structure(host_planet)
         self.structures.append(structure)
         host_planet.task_structure_timer = None
+        base.loader.loadSfx("sound/effects/structures/building_complete.wav").play()
         return task.done
 
     def addUnit(self, unit):
@@ -118,10 +124,14 @@ class Player(object):
                 self.minerals = self.minerals - GRAVITY_ENGINE_MINERAL_COST
                 self.selected_planet.task_unit_timer = taskMgr.doMethodLater(GRAVITY_ENGINE_BUILD_TIME, self._delayedConstructGravityEngine, 'buildGravityEngine', extraArgs =[self.selected_planet], appendTask=True)
                 self._showUnitProgress(GRAVITY_ENGINE_BUILD_TIME)
+            else:
+                base.loader.loadSfx("sound/effects/structures/cannot_build.wav").play()
             from gameEngine.gameEngine import updateGUI
             updateGUI.refreshResources()
             updateGUI.value = self.minerals
             updateGUI.printResources()
+        else:
+            base.loader.loadSfx("sound/effects/structures/cannot_build.wav").play()
     
     def _showUnitProgress(self, time):
         taskMgr.add(indicators.drawProgressBar, 'unitProgressBar', extraArgs =[self.selected_planet, time, True, (0.5,0,1.0,0.5), (1.0,1.0,0,0.5)], appendTask=True)

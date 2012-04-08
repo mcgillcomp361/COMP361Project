@@ -45,24 +45,31 @@ class Unit(object):
         '''
         Method to load sounds.
         '''
-        location = "sound/effects/units/" + unit_name + "/attack.wav"
-        self.attack_unit = base.loader.loadSfx(location)
-        self.attack_unit.setVolume(0.35)
         
-        location = "sound/effects/units/" + unit_name + "/birth.wav"
-        base.loader.loadSfx(location).play()
+        self.move_unit = None
+        self.select_unit = None
+        
+        from gameModel.player import Player
+        if(type(self.player)==Player):
+            
+            location = "sound/effects/units/" + unit_name + "/birth.wav"
+            base.loader.loadSfx(location).play()
+        
+            location = "sound/effects/units/" + unit_name + "/move.wav"
+            self.move_unit = base.loader.loadSfx(location)
+            self.move_unit.setVolume(0.5)
+        
+            location = "sound/effects/units/" + unit_name + "/select.wav"
+            self.select_unit = base.loader.loadSfx(location)
+            self.select_unit.setVolume(0.5)
         
         location = "sound/effects/units/" + unit_name + "/death.wav"
         self.death_unit = base.loader.loadSfx(location)
         self.death_unit.setVolume(0.5)
         
-        location = "sound/effects/units/" + unit_name + "/move.wav"
-        self.move_unit = base.loader.loadSfx(location)
-        self.move_unit.setVolume(0.5)
-        
-        location = "sound/effects/units/" + unit_name + "/select.wav"
-        self.select_unit = base.loader.loadSfx(location)
-        self.select_unit.setVolume(0.5)
+        location = "sound/effects/units/" + unit_name + "/attack.wav"
+        self.attack_unit = base.loader.loadSfx(location)
+        self.attack_unit.setVolume(0.35)
         
     
     def __initSceneGraph(self):        
@@ -216,10 +223,10 @@ class Swarm(Unit):
         Constructor
         @param host_planet : The planet where the unit is constructed
         '''
-        self._loadSounds("swarm")
         super(Swarm, self).__init__(host_planet, player, SWARM_VELOCITY, SWARM_MAX_ENERGY, SWARM_DAMAGE, [])
         self.quad_path.setColor(Vec4(0.6, 0.1, 0.1, 1))
         self.quad_path.setScale(2)
+        self._loadSounds("swarm")
                    
 class Horde(Unit):
     '''
@@ -230,10 +237,10 @@ class Horde(Unit):
         Constructor
         @param host_planet : The planet where the unit is constructed
         '''
-        self._loadSounds("horde")
         super(Horde, self).__init__(host_planet, player, HORDE_VELOCITY, HORDE_MAX_ENERGY, HORDE_DAMAGE, []) 
         self.quad_path.setColor(Vec4(0.4, 0.2, 0.2, 1))
         self.quad_path.setScale(6)
+        self._loadSounds("horde")
         
 class Hive(Unit):
     '''
@@ -244,10 +251,10 @@ class Hive(Unit):
         Constructor
         @param host_planet : The planet where the unit is constructed
         '''
-        self._loadSounds("hive")
         super(Hive, self).__init__(host_planet, player, HIVE_VELOCITY, HIVE_MAX_ENERGY, HIVE_DAMAGE, [])
         self.quad_path.setColor(Vec4(0.0, 0.2, 0.4, 1))
         self.quad_path.setScale(12)
+        self._loadSounds("hive")
         
 class Globe(Unit):
     '''
@@ -258,10 +265,10 @@ class Globe(Unit):
         Constructor
         @param host_planet : The planet where the unit is constructed
         '''
-        self._loadSounds("globe")
         super(Globe, self).__init__(host_planet, player, GLOBE_VELOCITY, GLOBE_MAX_ENERGY, GLOBE_DAMAGE, [])
         self.quad_path.setColor(Vec4(0.2, 0.6, 0.2, 1))
         self.quad_path.setScale(2)
+        self._loadSounds("globe")
 
 class Sphere(Unit):
     '''
@@ -272,10 +279,10 @@ class Sphere(Unit):
         Constructor
         @param host_planet : The planet where the unit is constructed
         '''
-        self._loadSounds("sphere")
         super(Sphere, self).__init__(host_planet, player, SPHERE_VELOCITY, SPHERE_MAX_ENERGY, SPHERE_DAMAGE, [])
         self.quad_path.setColor(Vec4(0.2, 0.4, 0.2, 1))
         self.quad_path.setScale(6)
+        self._loadSounds("sphere")
 
 class Planetarium(Unit):
     '''
@@ -286,10 +293,10 @@ class Planetarium(Unit):
         Constructor
         @param host_planet : The planet where the unit is constructed
         '''
-        self._loadSounds("planetarium")
         super(Planetarium, self).__init__(host_planet, player, PLANETARIUM_VELOCITY, PLANETARIUM_MAX_ENERGY, PLANETARIUM_DAMAGE, [])
         self.quad_path.setColor(Vec4(0.4, 0.0, 0.2, 1))
         self.quad_path.setScale(12)
+        self._loadSounds("planetarium")        
 
 class Analyzer(Unit):
     '''
@@ -300,10 +307,10 @@ class Analyzer(Unit):
         Constructor
         @param host_planet : The planet where the unit is constructed
         '''
-        self._loadSounds("analyzer")
         super(Analyzer, self).__init__(host_planet, player, ANALYZER_VELOCITY, ANALYZER_MAX_ENERGY, ANALYZER_DAMAGE, [])
         self.quad_path.setColor(Vec4(0.2, 0.2, 0.6, 1))
         self.quad_path.setScale(3)
+        self._loadSounds("analyzer")
 
 class Mathematica(Unit):
     '''
@@ -314,10 +321,10 @@ class Mathematica(Unit):
         Constructor
         @param host_planet : The planet where the unit is constructed
         '''
-        self._loadSounds("mathematica")
         super(Mathematica, self).__init__(host_planet, player, MATHEMATICA_VELOCITY, MATHEMATICA_MAX_ENERGY, MATHEMATICA_DAMAGE, [])
         self.quad_path.setColor(Vec4(0.2, 0.2, 0.3, 1))
         self.quad_path.setScale(6)
+        self._loadSounds("mathematica")
 
 class BlackHoleGenerator(Unit):
     '''
@@ -331,3 +338,4 @@ class BlackHoleGenerator(Unit):
         super(BlackHoleGenerator, self).__init__(host_planet, player, BLACK_HOLE_GENERATOR_VELOCITY, BLACK_HOLE_GENERATOR_MAX_ENERGY, BLACK_HOLE_GENERATOR_DAMAGE, [])
         self.quad_path.setColor(Vec4(0.5, 0.5, 0.7, 1))
         self.quad_path.setScale(4)
+        self._loadSounds("blackholegen")
