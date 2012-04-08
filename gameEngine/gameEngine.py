@@ -109,8 +109,9 @@ def _startGame(players):
     '''
     global _game_camera
     ''' TODO : music should be self.music so it can be changed later on '''
-    music = base.loader.loadSfx("sound/music/music1.mp3")
+    music = base.loader.loadSfx("sound/music/orbitals.mp3")
     music.setLoop(True)
+    music.setVolume(1)
     music.play()
     
     #randomly set the camera on one of the stars for the player
