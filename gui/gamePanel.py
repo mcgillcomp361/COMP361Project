@@ -248,4 +248,4 @@ class GamePanel():
         self.player.addUnit("blackHoleGenerator")
     
     def selectGravityEngine(self):
-        pass
+        self.player.addUnit("gravityEngine")
