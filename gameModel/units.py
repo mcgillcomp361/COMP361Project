@@ -40,6 +40,35 @@ class Unit(object):
         self.__initSceneGraph()
         self.task_observe_enemy = taskMgr.doMethodLater(1, self._observeEnemy, 'observeEnemy')
          
+    def _loadSounds(self, unit_name):
+        '''
+        Method to load sounds.
+        '''
+        location = "sound/effects/units/" + unit_name + "/attack.wav"
+        self.attack_unit = base.loader.loadSfx(location)
+        self.attack_unit.setLoop(False)
+        self.attack_unit.setVolume(0.25)
+        
+        location = "sound/effects/units/" + unit_name + "/birth.wav"
+        self.birth_unit = base.loader.loadSfx(location)
+        self.birth_unit.setLoop(False)
+        self.birth_unit.setVolume(0.25)
+        
+        location = "sound/effects/units/" + unit_name + "/death.wav"
+        self.death_unit = base.loader.loadSfx(location)
+        self.death_unit.setLoop(False)
+        self.death_unit.setVolume(0.25)
+        
+        location = "sound/effects/units/" + unit_name + "/move.wav"
+        self.move_unit = base.loader.loadSfx(location)
+        self.move_unit.setLoop(False)
+        self.move_unit.setVolume(0.25)
+        
+        location = "sound/effects/units/" + unit_name + "/select.wav"
+        self.select_unit = base.loader.loadSfx(location)
+        self.select_unit.setLoop(False)
+        self.select_unit.setVolume(0.25)
+        
     
     def __initSceneGraph(self):        
         self.point_path = self.host_planet.point_path.attachNewNode("unit_center_node")
@@ -83,7 +112,9 @@ class Unit(object):
         return task.again
         
     def select(self, player):
-        player.selected_unit = self
+        if(player == self.player):
+            player.selected_unit = self
+            self.select_unit.play()
         ''' TODO: show the statics of the unit in the characteristic panel on the GUI '''
     
     def startOrbit(self):
@@ -135,6 +166,7 @@ class Unit(object):
             #else:
             #   self.deep_space = True
                 #TODO : The unit will NOT be select-able for the duration of travel
+        self.move_unit.play()
                 
     def _onPlanet(self):
         self.between_orbits = False
@@ -151,6 +183,7 @@ class Unit(object):
         '''Deals damage to an opposing unit or structure only if the unit is capable of attacking'''
         if(target.energy>0 and target != None):
             target.energy = max(0, target.energy-self.damage)
+            self.attack_unit.play()
             
     
     def useAbility(self, ability):
@@ -187,6 +220,7 @@ class Swarm(Unit):
         Constructor
         @param host_planet : The planet where the unit is constructed
         '''
+        self._loadSounds("swarm")
         super(Swarm, self).__init__(host_planet, player, SWARM_VELOCITY, SWARM_MAX_ENERGY, SWARM_DAMAGE, [])
         self.quad_path.setColor(Vec4(0.6, 0.1, 0.1, 1))
         self.quad_path.setScale(2)
