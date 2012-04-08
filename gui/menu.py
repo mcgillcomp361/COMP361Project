@@ -77,11 +77,11 @@ class Menu():
     
     def startGame(self):
         print 'starting game'
+        self.menu_music.stop()
         self.mainFrame.destroy()
         self.b.destroy()
         gameEngine.initialize()
         self.gamePanel = GamePanel(gameEngine.player)
-        self.menu_music.stop()
 
     def mainMenu(self):
         self.mainFrame.destroy()
