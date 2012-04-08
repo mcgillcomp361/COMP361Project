@@ -15,7 +15,7 @@ MAX_STAR_RADIUS = 8
 MAX_SOLAR_SYSTEM_RADIUS = 100 #could be variable instead
 #make sure the number is satisfactory for UNIVERSE_SCALE
 NUMBER_OF_STARS = 10
-LIFETIME = 180.0 
+LIFETIME = 1800.0 
 ''' should be divisible by 6 '''
 
 ''' Planets '''
@@ -36,12 +36,12 @@ MINERAL_STARTING_AMOUNT = 0
 GRAVITY_ENGINE_STARTING_AMOUNT = 1
 
 ''' AI '''
-AI_INITIATION_TIME = 9
+AI_INITIATION_TIME = 20
 AI_ACTIVATE_PLANET_WAIT_TIME = 60
 AI_ACCELERATION_TIME = 3
 AI_START_CONSTRUCTION_WAIT_TIME = 2
 AI_UNIT_CONSTRUCTION_WAIT_TIME = 1
-AI_MAX_NUMBER_OF_UNITS = 3 #per planet
+AI_MAX_NUMBER_OF_UNITS = 3 #per planet(should not be less than 3)
 AI_ESCAPE_WAIT_TIME = 1
 
 ''' Structures '''
@@ -50,18 +50,18 @@ STRUCTURE_TYPE = ["Forge","Nexus","Extractor","Phylon","GeneratorCore","Planetar
 MAX_NUMBER_OF_STRUCTURE = 4
 FORGE_DESCRIPTION = "These are complex production facilities that cover entire continents. It allows construction of all the unlocked units on that specific planet"
 FORGE_MAX_ENERGY = 1200
-FORGE_BUILD_TIME = 1
+FORGE_BUILD_TIME = 30
 NEXUS_DESCRIPTION = "This massive complex is used to research the ancient technology and speed up evolution"
 NEXUS_MAX_ENERGY = 1000
 NEXUS_BUILD_TIME = 50
 NEXUS_RESEARCH_INCREASE_RATE = 1.1
 EXTRACTOR_DESCRIPTION = "The basic mineral gathering complex"
 EXTRACTOR_MAX_ENERGY = 200
-EXTRACTOR_BUILD_TIME = 1
-EXTRACTOR_RESOURCE_GENERATION_RATE = 10
+EXTRACTOR_BUILD_TIME = 20
+EXTRACTOR_RESOURCE_GENERATION_RATE = 10#for now
 PHYLON_DESCRIPTION = "A fast mineral gathering complex equipped with advanced excavating machines"
 PHYLON_MAX_ENERGY = 400
-PHYLON_BUILD_TIME = 30
+PHYLON_BUILD_TIME = 40
 PHYLON_RESOURCE_GENERATION_RATE = 2
 GENERATOR_CORE_DESCRIPTION = "Massive mineral gathering complex equipped with ancient technology of cracking planet's cores"
 GENERATOR_CORE_MAX_ENERGY = 600
@@ -144,6 +144,8 @@ BLACK_HOLE_GENERATOR_DAMAGE = 0
 BLACK_HOLE_GENERATOR_VELOCITY = 1
 BLACK_HOLE_GENERATOR_BUILD_TIME = 90
 BLACK_HOLE_GENERATOR_MINERAL_COST = 1000
+GRAVITY_ENGINE_BUILD_TIME = 60
+GRAVITY_ENGINE_MINERAL_COST = 400
 
 ''' Abilities '''
 
