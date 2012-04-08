@@ -230,6 +230,7 @@ class Horde(Unit):
         Constructor
         @param host_planet : The planet where the unit is constructed
         '''
+        self._loadSounds("horde")
         super(Horde, self).__init__(host_planet, player, HORDE_VELOCITY, HORDE_MAX_ENERGY, HORDE_DAMAGE, []) 
         self.quad_path.setColor(Vec4(0.4, 0.2, 0.2, 1))
         self.quad_path.setScale(6)
@@ -243,6 +244,7 @@ class Hive(Unit):
         Constructor
         @param host_planet : The planet where the unit is constructed
         '''
+        self._loadSounds("hive")
         super(Hive, self).__init__(host_planet, player, HIVE_VELOCITY, HIVE_MAX_ENERGY, HIVE_DAMAGE, [])
         self.quad_path.setColor(Vec4(0.0, 0.2, 0.4, 1))
         self.quad_path.setScale(12)
@@ -256,6 +258,7 @@ class Globe(Unit):
         Constructor
         @param host_planet : The planet where the unit is constructed
         '''
+        self._loadSounds("globe")
         super(Globe, self).__init__(host_planet, player, GLOBE_VELOCITY, GLOBE_MAX_ENERGY, GLOBE_DAMAGE, [])
         self.quad_path.setColor(Vec4(0.2, 0.6, 0.2, 1))
         self.quad_path.setScale(2)
@@ -269,6 +272,7 @@ class Sphere(Unit):
         Constructor
         @param host_planet : The planet where the unit is constructed
         '''
+        self._loadSounds("sphere")
         super(Sphere, self).__init__(host_planet, player, SPHERE_VELOCITY, SPHERE_MAX_ENERGY, SPHERE_DAMAGE, [])
         self.quad_path.setColor(Vec4(0.2, 0.4, 0.2, 1))
         self.quad_path.setScale(6)
@@ -282,6 +286,7 @@ class Planetarium(Unit):
         Constructor
         @param host_planet : The planet where the unit is constructed
         '''
+        self._loadSounds("planetarium")
         super(Planetarium, self).__init__(host_planet, player, PLANETARIUM_VELOCITY, PLANETARIUM_MAX_ENERGY, PLANETARIUM_DAMAGE, [])
         self.quad_path.setColor(Vec4(0.4, 0.0, 0.2, 1))
         self.quad_path.setScale(12)
@@ -295,6 +300,7 @@ class Analyzer(Unit):
         Constructor
         @param host_planet : The planet where the unit is constructed
         '''
+        self._loadSounds("analyzer")
         super(Analyzer, self).__init__(host_planet, player, ANALYZER_VELOCITY, ANALYZER_MAX_ENERGY, ANALYZER_DAMAGE, [])
         self.quad_path.setColor(Vec4(0.2, 0.2, 0.6, 1))
         self.quad_path.setScale(3)
@@ -308,6 +314,7 @@ class Mathematica(Unit):
         Constructor
         @param host_planet : The planet where the unit is constructed
         '''
+        self._loadSounds("mathematica")
         super(Mathematica, self).__init__(host_planet, player, MATHEMATICA_VELOCITY, MATHEMATICA_MAX_ENERGY, MATHEMATICA_DAMAGE, [])
         self.quad_path.setColor(Vec4(0.2, 0.2, 0.3, 1))
         self.quad_path.setScale(6)
