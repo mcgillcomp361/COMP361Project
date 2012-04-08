@@ -32,7 +32,7 @@ class GamePanel():
         '''
         self.mouse_hover = base.loader.loadSfx("sound/effects/mouse_hover/unit_building_hover.wav")
         self.mouse_hover.setLoop(False)
-        self.mouse_hover.setVolume(0.25)
+        self.mouse_hover.setVolume(0.2)
     
     def loadResources(self):
         

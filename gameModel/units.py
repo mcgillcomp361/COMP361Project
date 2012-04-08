@@ -38,6 +38,7 @@ class Unit(object):
         self.host_planet.addOrbitingUnit(self)
         self._unit_abilities = unit_abilities
         self.__initSceneGraph()
+        ''' TODO: add the cool down attack effect '''
         self.task_observe_enemy = taskMgr.doMethodLater(1, self._observeEnemy, 'observeEnemy')
          
     def _loadSounds(self, unit_name):
@@ -46,28 +47,22 @@ class Unit(object):
         '''
         location = "sound/effects/units/" + unit_name + "/attack.wav"
         self.attack_unit = base.loader.loadSfx(location)
-        self.attack_unit.setLoop(False)
-        self.attack_unit.setVolume(0.25)
+        self.attack_unit.setVolume(0.35)
         
         location = "sound/effects/units/" + unit_name + "/birth.wav"
-        self.birth_unit = base.loader.loadSfx(location)
-        self.birth_unit.setLoop(False)
-        self.birth_unit.setVolume(0.25)
+        base.loader.loadSfx(location).play()
         
         location = "sound/effects/units/" + unit_name + "/death.wav"
         self.death_unit = base.loader.loadSfx(location)
-        self.death_unit.setLoop(False)
-        self.death_unit.setVolume(0.25)
+        self.death_unit.setVolume(0.5)
         
         location = "sound/effects/units/" + unit_name + "/move.wav"
         self.move_unit = base.loader.loadSfx(location)
-        self.move_unit.setLoop(False)
-        self.move_unit.setVolume(0.25)
+        self.move_unit.setVolume(0.5)
         
         location = "sound/effects/units/" + unit_name + "/select.wav"
         self.select_unit = base.loader.loadSfx(location)
-        self.select_unit.setLoop(False)
-        self.select_unit.setVolume(0.25)
+        self.select_unit.setVolume(0.5)
         
     
     def __initSceneGraph(self):        
@@ -202,6 +197,7 @@ class Unit(object):
             yield ability
     
     def removeFromGame(self):
+        self.death_unit.play()
         self.damage = 0
         self.task_observe_enemy = None
         self.target = None
