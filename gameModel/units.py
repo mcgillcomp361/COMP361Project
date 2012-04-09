@@ -84,7 +84,7 @@ class Unit(object):
         #audio3d.setListenerVelocityAuto()
         #audio3d.attachSoundToObject(self.death_unit, self)
         
-        if unit_name is not "analyzer":
+        if unit_name is not "analyzer" or not "mathematica" or not "blackholegen":
             location = "sound/effects/units/" + unit_name + "/attack.wav"
             self.attack_unit = base.loader.loadSfx(location)
             #self.attack_unit = audio3d.loadSfx(location)
