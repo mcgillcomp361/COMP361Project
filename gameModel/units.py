@@ -190,7 +190,8 @@ class Unit(object):
             #else:
             #   self.deep_space = True
                 #TODO : The unit will NOT be select-able for the duration of travel
-        self.move_unit.play()
+        if(self.move_unit != None):
+            self.move_unit.play()
                 
     def _onPlanet(self):
         self.between_orbits = False
@@ -207,7 +208,8 @@ class Unit(object):
         '''Deals damage to an opposing unit or structure only if the unit is capable of attacking'''
         if(target.energy>0 and target != None):
             target.energy = max(0, target.energy-self.damage)
-            self.attack_unit.play()
+            if(self.attack_unit != None):
+                self.attack_unit.play()
             
     
     def useAbility(self, ability):
