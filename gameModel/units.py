@@ -5,11 +5,13 @@ Created on Dec 29, 2011
 '''
 from abc import ABCMeta, abstractmethod
 from constants import *
-from pandac.PandaModules import CollisionNode, CollisionBox, CollisionSphere, TransparencyAttrib
+from pandac.PandaModules import CollisionNode, CollisionBox, CollisionSphere, CollisionTraverser, TransparencyAttrib
 from direct.showbase import DirectObject
+from direct.showbase import Audio3DManager
 from direct.interval.IntervalGlobal import *
 from panda3d.core import Vec3, Vec4, Point3, BitMask32, CardMaker
 import math
+import gameEngine
 
 class Unit(object):
     __metaclass__ = ABCMeta
@@ -45,6 +47,8 @@ class Unit(object):
         '''
         Method to load sounds.
         '''
+        #base.cTrav = CollisionTraverser()
+        #audio3d = Audio3DManager.Audio3DManager(base.sfxManagerList[0], gameEngine.gameEngine._game_camera)
         
         self.move_unit = None
         self.select_unit = None
@@ -54,22 +58,40 @@ class Unit(object):
             
             location = "sound/effects/units/" + unit_name + "/birth.wav"
             base.loader.loadSfx(location).play()
+            #audio3d.loadSfx(location).play()
         
             location = "sound/effects/units/" + unit_name + "/move.wav"
             self.move_unit = base.loader.loadSfx(location)
+            #self.move_unit = audio3d.loadSfx(location)
             self.move_unit.setVolume(0.5)
+            #audio3d.setSoundVelocityAuto(self.move_unit)
+            #audio3d.setListenerVelocityAuto()
+            #audio3d.attachSoundToObject(self.move_unit, self)
         
             location = "sound/effects/units/" + unit_name + "/select.wav"
             self.select_unit = base.loader.loadSfx(location)
+            #self.select_unit = audio3d.loadSfx(location)
             self.select_unit.setVolume(0.5)
+            #audio3d.setSoundVelocityAuto(self.select_unit)
+            #audio3d.setListenerVelocityAuto()
+            #audio3d.attachSoundToObject(self.select_unit, self)
         
         location = "sound/effects/units/" + unit_name + "/death.wav"
         self.death_unit = base.loader.loadSfx(location)
+        #self.death_unit = audio3d.loadSfx(location)
         self.death_unit.setVolume(0.5)
+        #audio3d.setSoundVelocityAuto(self.death_unit)
+        #audio3d.setListenerVelocityAuto()
+        #audio3d.attachSoundToObject(self.death_unit, self)
         
-        location = "sound/effects/units/" + unit_name + "/attack.wav"
-        self.attack_unit = base.loader.loadSfx(location)
-        self.attack_unit.setVolume(0.35)
+        if unit_name is not "analyzer":
+            location = "sound/effects/units/" + unit_name + "/attack.wav"
+            self.attack_unit = base.loader.loadSfx(location)
+            #self.attack_unit = audio3d.loadSfx(location)
+            self.attack_unit.setVolume(0.35)
+            #audio3d.setSoundVelocityAuto(self.attack_unit)
+            #audio3d.setListenerVelocityAuto()
+            #audio3d.attachSoundToObject(self.attack_unit, self)
         
     
     def __initSceneGraph(self):        
