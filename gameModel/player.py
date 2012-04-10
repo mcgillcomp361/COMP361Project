@@ -12,6 +12,7 @@ from constants import MINERAL_STARTING_AMOUNT, GRAVITY_ENGINE_STARTING_AMOUNT, M
                     GENERATOR_CORE_RESOURCE_GENERATION_RATE, PHYLON_RESOURCE_GENERATION_RATE, EXTRACTOR_RESOURCE_GENERATION_RATE
 from structures import *
 from units import *
+from research import *
 from direct.showbase import DirectObject
 from graphicEngine import indicators
 
@@ -35,6 +36,7 @@ class Player(object):
         self.planets = []
         self.structures = []
         self.units = []
+        self.research = ResearchTree()
         self.color = Vec4(0, 0, 1, 1)
         self.minerals = MINERAL_STARTING_AMOUNT
         self.ge_amount = GRAVITY_ENGINE_STARTING_AMOUNT

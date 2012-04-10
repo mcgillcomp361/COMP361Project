@@ -18,7 +18,7 @@ class GamePanel():
         self._loadSounds()
         self.player = player
         self.planet = None
-        self.researchTree = ResearchTree()
+        self.researchTree = ResearchTree(player)
         self.loadUnits()
         self.loadResources()
         self.loadResearchTree()

@@ -149,4 +149,7 @@ GRAVITY_ENGINE_MINERAL_COST = 400
 
 ''' Abilities '''
 
-''' Evolution Tree '''
+''' Research Tree '''
+TIER_II_RESEARCH_TIME = 120
+TIER_III_RESEARCH_TIME = 240
+TIER_IV_RESEARCH_TIME = 480
