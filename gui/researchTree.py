@@ -44,9 +44,17 @@ class ResearchTree():
         myAspect2d = myRender2d.attachNewNode(PGTop('myAspect2d')) 
         myAspect2d.node().setMouseWatcher(mw.node()) 
         
-        self.image = OnscreenImage(parent=myRender2d, image="./models/gui/research_tree.png", scale = (1, 1, 1), pos = (0,0,0))
+        self.image = OnscreenImage(parent=myRender2d, image="./models/gui/researchTree/research_tree.png", scale = (1, 1, 1), pos = (0,0,0))
         
-        
+        tier1 = DirectButton(parent = myAspect2d, image = ("./models/gui/researchTree/tier1.png"), pos = (0, 0, 0.7),
+                          frameColor=(0, 0,0, 0),image_scale = (0.4, 1, 0.05), command = self.selectTier1)
+        tier2 = DirectButton(parent = myAspect2d, image = ("./models/gui/researchTree/tier2.png"), pos = (0, 0, 0.3),
+                          frameColor=(0, 0,0, 0),image_scale = (0.4, 1, 0.05), command = self.selectTier1)
+        tier3 = DirectButton(parent = myAspect2d, image = ("./models/gui/researchTree/tier3.png"), pos = (0, 0, -0.15),
+                          frameColor=(0, 0,0, 0),image_scale = (0.4, 1, 0.05), command = self.selectTier1)
+        tier4 = DirectButton(parent = myAspect2d, image = ("./models/gui/researchTree/tier4.png"), pos = (0, 0, -0.55),
+                          frameColor=(0, 0,0, 0),image_scale = (0.4, 1, 0.05), command = self.selectTier1)        
+
         #Tier 1 abilities
         b1 = DirectButton(parent = myAspect2d, text = ("Capture", "click!", "roll"), pos = (-0.6, 0, 0.4),
                           frameColor=(0,0,0,0),text_fg=(1,1,1,1), text_scale=0.08, relief=2, command=self.selectCapture)   
@@ -74,6 +82,9 @@ class ResearchTree():
         b9 = DirectButton(parent = myAspect2d, text = ("Generate Black Hole", "click!", "roll"), pos = (-0.2, 0, -0.8),
                           frameColor=(0,0,0,0),text_fg=(1,1,1,1), text_scale=0.08, relief=2, command=self.selectGBH)
 
+    def selectTier1(self):
+        pass
+    
     def selectCapture(self): 
         pass
     
