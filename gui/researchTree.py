@@ -45,7 +45,7 @@ class ResearchTree():
         myAspect2d.node().setMouseWatcher(mw.node()) 
         
         self.image = OnscreenImage(parent=myRender2d, image="./models/gui/research_tree.png", scale = (1, 1, 1), pos = (0,0,0))
-   
+        
         
         #Tier 1 abilities
         b1 = DirectButton(parent = myAspect2d, text = ("Capture", "click!", "roll"), pos = (-0.6, 0, 0.4),

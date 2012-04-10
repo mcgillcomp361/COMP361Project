@@ -6,7 +6,8 @@ Created on Feb 21, 2012
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from researchTree import ResearchTree
-#from minimap import Minimap
+from minimap import Minimap
+from gameModel.solar import Planet
 
 class GamePanel(): 
     def __init__(self, player): 
@@ -15,7 +16,7 @@ class GamePanel():
             pos=(0, 0,-0.7),
             sortOrder=2,        
         )   
-        
+        self.planets = []
         self._loadSounds()
         self.player = player
         self.researchTree = ResearchTree()
@@ -23,7 +24,7 @@ class GamePanel():
         self.loadResources()
         self.loadMiniMap()
         self.loadResearchTree()
-        geom=OnscreenImage(parent=render2d, image="./models/gui/guiBarV2.png", scale = (1, 1, 0.3), pos = (0,0,-0.7))
+        geom=OnscreenImage(parent=render2d, image="./models/gui/guiBar.png", scale = (1, 1, 0.3), pos = (0,0,-0.7))
         geom.setTransparency(True)  
         
     def _loadSounds(self):
@@ -183,7 +184,7 @@ class GamePanel():
         bGravity.reparentTo(self.mainFrame)
       
     def loadResearchTree(self):
-        b1 = DirectButton(image = ("./models/gui/ResearchButton.png"), pos = (2.3, 0, -3),
+        b1 = DirectButton(image = ("./models/gui/ResearchButton.png"), pos = (7, 0, -3),
                           frameColor=(0, 0,0, 0),image_scale = (4, 1, 1.5), command = self.researchTree.loadTree)
         b1.stateNodePath[0].setTransparency(1)
         b1.stateNodePath[1].setTransparency(1)
@@ -192,9 +193,10 @@ class GamePanel():
             
     def loadMiniMap(self):
         #TODO: Finish Minimap
-      #  img = OnscreenImage(image="./models/gui/.png", scale = (1, 1, 0.3), pos = (0,0,-0.7))
- #       m = Minimap()
-        pass
+        self.targets = []
+ #       for planets in self.player.planets:
+ #           self.targets.append(self.planets.planet)
+        self.map = Minimap()
        
     ## CONSTRUCTION SELECTION
     def selectForge(self):
