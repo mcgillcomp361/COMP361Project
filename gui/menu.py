@@ -8,8 +8,17 @@ from gui.gamePanel import GamePanel
 from direct.showbase import DirectObject 
 
 class Menu(): 
+    
+    menu_music = None
+    menu_click = None
+    menu_rollover = None
+    
     def __init__(self):
         
+        Menu.menu_music = base.loader.loadSfx("sound/music/music1.mp3")
+        Menu.menu_click = base.loader.loadSfx("sound/effects/menu/menu_click.wav")
+        Menu.menu_rollover = base.loader.loadSfx("sound/effects/menu/menu_rollover.wav")
+    
         self._loadSounds()
         
         self.mainFrame = DirectFrame(pos=(0,0,0))
@@ -66,16 +75,15 @@ class Menu():
         '''
         Method to load sounds.
         '''
-        self.menu_music = base.loader.loadSfx("sound/music/music1.mp3")
-        self.menu_music.setLoop(True)
-        self.menu_music.setVolume(1)
-        self.menu_music.play()
-        
-        self.menu_click = base.loader.loadSfx("sound/effects/menu/menu_click.wav")
-        self.menu_click.setVolume(0.1)
-        
-        self.menu_rollover = base.loader.loadSfx("sound/effects/menu/menu_rollover.wav")
-        self.menu_rollover.setVolume(0.1)
+        Menu.menu_music.setLoop(True)
+        Menu.menu_music.setVolume(1)
+        Menu.menu_music.play()
+
+        Menu.menu_click.setLoop(False)
+        Menu.menu_click.setVolume(0.15)
+
+        Menu.menu_rollover.setLoop(False)
+        Menu.menu_rollover.setVolume(0.15)
     
     def startGame(self):
         print 'starting game'
