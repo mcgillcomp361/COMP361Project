@@ -28,6 +28,7 @@ from direct.task import Task
 from mouseEvents import MouseEvents
 from gui.gamePanel import GamePanel
 from gui.guiUpdate import guiUpdate
+from gui.minimap import Minimap
 
 mouse_events = None
 env_graphics = None
@@ -50,9 +51,10 @@ def initialize():
     global mouse_events, env_graphics, all_players, gamePanel, updateGUI
     mouse_events = MouseEvents()
     env_graphics = Environement()
-    gamePanel = GamePanel(player)
     updateGUI = guiUpdate(0)
     _prepareGame()
+    gamePanel = GamePanel(player)
+    setupMinimap()
     _startGame(all_players)
 
 def _prepareGame():
@@ -165,6 +167,14 @@ def _initiateAI(task):
     ai.activateRandomStar()
     ai_task = None
     return task.done
+
+def setupMinimap():
+    playerTargets = []
+    opponentTargets = []
+    for planet in all_planets:
+        playerTargets.append(planet)
+    map = Minimap()
+  #  map.setTargets(playerTargets)
 
 '''
 The Auto management of observing and removing units and structures from the game world

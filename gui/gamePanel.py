@@ -6,7 +6,6 @@ Created on Feb 21, 2012
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from researchTree import ResearchTree
-from minimap import Minimap
 from gameModel.solar import Planet
 
 class GamePanel(): 
@@ -16,13 +15,12 @@ class GamePanel():
             pos=(0, 0,-0.7),
             sortOrder=2,        
         )   
-        self.planets = []
         self._loadSounds()
         self.player = player
+        self.planet = None
         self.researchTree = ResearchTree()
         self.loadUnits()
         self.loadResources()
-        self.loadMiniMap()
         self.loadResearchTree()
         geom=OnscreenImage(parent=render2d, image="./models/gui/guiBar.png", scale = (1, 1, 0.3), pos = (0,0,-0.7))
         geom.setTransparency(True)  
@@ -190,13 +188,6 @@ class GamePanel():
         b1.stateNodePath[1].setTransparency(1)
         b1.stateNodePath[2].setTransparency(1)
         b1.reparentTo(self.mainFrame)
-            
-    def loadMiniMap(self):
-        #TODO: Finish Minimap
-        self.targets = []
- #       for planets in self.player.planets:
- #           self.targets.append(self.planets.planet)
-        self.map = Minimap()
        
     ## CONSTRUCTION SELECTION
     def selectForge(self):
