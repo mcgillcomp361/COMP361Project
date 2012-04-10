@@ -188,8 +188,6 @@ def _trackUnitsAndStructures(task):
                 ''' TODO: remove structure texture'''
 
     for unit in player.units:
-        print unit.energy
-        print unit.target
         if(unit.energy <= 0):
             unit.host_planet.removeOrbitingUnit(unit)
             if(unit == player.selected_unit):

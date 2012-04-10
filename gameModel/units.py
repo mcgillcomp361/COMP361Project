@@ -52,6 +52,7 @@ class Unit(object):
         
         self.move_unit = None
         self.select_unit = None
+        self.attack_unit = None
         
         from gameModel.player import Player
         if(type(self.player)==Player):
