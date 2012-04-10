@@ -43,9 +43,6 @@ class Player(object):
         
         Player.building_complete_sound = base.loader.loadSfx("sound/effects/structures/building_complete.wav")
         Player.cannot_build_sound = base.loader.loadSfx("sound/effects/structures/cannot_build.wav")
-        
-    ''' TODO: use Multi-Texturing '''
-    ''' TODO: complete all the condition checks(e.g. tech tier, existent structure, ...) '''
     
     def addStructure(self, structure):
         '''
@@ -63,10 +60,10 @@ class Player(object):
             elif(structure == "extractor" and self.selected_planet.hasStructure("phylon")==False  and self.selected_planet.hasStructure("generatorCore")==False):
                 self.selected_planet.task_structure_timer = taskMgr.doMethodLater(EXTRACTOR_BUILD_TIME, self._delayedConstructStructure, 'buildExtractor', extraArgs =[Extractor, self.selected_planet], appendTask=True)
                 self._showStructureProgress(EXTRACTOR_BUILD_TIME)
-            elif(structure == "phylon" and self.selected_planet.hasStructure("extractor")==False  and self.selected_planet.hasStructure("generatorCore")==False):
+            elif(structure == "phylon" and self.research.getLevel() == 2 and self.selected_planet.hasStructure("extractor")==False  and self.selected_planet.hasStructure("generatorCore")==False):
                 self.selected_planet.task_structure_timer = taskMgr.doMethodLater(PHYLON_BUILD_TIME, self._delayedConstructStructure, 'buildPhylon', extraArgs =[Phylon, self.selected_planet], appendTask=True)
                 self._showStructureProgress(PHYLON_BUILD_TIME)
-            elif(structure == "generatorCore" and self.selected_planet.hasStructure("extractor")==False  and self.selected_planet.hasStructure("phylon")==False):
+            elif(structure == "generatorCore" and self.research.getLevel() == 3 and self.selected_planet.hasStructure("extractor")==False  and self.selected_planet.hasStructure("phylon")==False):
                 self.selected_planet.task_structure_timer = taskMgr.doMethodLater(GENERATOR_CORE_BUILD_TIME, self._delayedConstructStructure, 'buildGeneratorCore', extraArgs =[GeneratorCore, self.selected_planet], appendTask=True)
                 self._showStructureProgress(GENERATOR_CORE_BUILD_TIME)
             else:
@@ -97,11 +94,11 @@ class Player(object):
                 self.minerals = self.minerals - SWARM_MINERAL_COST
                 self.selected_planet.task_unit_timer = taskMgr.doMethodLater(SWARM_BUILD_TIME, self._delayedConstructUnit, 'buildSwarm', extraArgs =[Swarm, self.selected_planet], appendTask=True)
                 self._showUnitProgress(SWARM_BUILD_TIME)         
-            elif(unit == "horde" and self.minerals > HORDE_MINERAL_COST):
+            elif(unit == "horde" and self.research.getLevel() == 2 and self.minerals > HORDE_MINERAL_COST):
                 self.minerals = self.minerals - HORDE_MINERAL_COST
                 self.selected_planet.task_unit_timer = taskMgr.doMethodLater(HORDE_BUILD_TIME, self._delayedConstructUnit, 'buildHorde', extraArgs =[Horde, self.selected_planet], appendTask=True)
                 self._showUnitProgress(HORDE_BUILD_TIME)
-            elif(unit == "hive" and self.minerals > HIVE_MINERAL_COST):
+            elif(unit == "hive" and self.research.getLevel() == 3 and self.minerals > HIVE_MINERAL_COST):
                 self.minerals = self.minerals - HIVE_MINERAL_COST
                 self.selected_planet.task_unit_timer = taskMgr.doMethodLater(HIVE_BUILD_TIME, self._delayedConstructUnit, 'buildHive', extraArgs =[Hive, self.selected_planet], appendTask=True)
                 self._showUnitProgress(HIVE_BUILD_TIME)  
@@ -109,11 +106,11 @@ class Player(object):
                 self.minerals = self.minerals - GLOBE_MINERAL_COST
                 self.selected_planet.task_unit_timer = taskMgr.doMethodLater(GLOBE_BUILD_TIME, self._delayedConstructUnit, 'buildGlobe', extraArgs =[Globe, self.selected_planet], appendTask=True)
                 self._showUnitProgress(GLOBE_BUILD_TIME)
-            elif(unit == "sphere" and self.minerals > SPHERE_MINERAL_COST):
+            elif(unit == "sphere" and self.research.getLevel() == 2 and self.minerals > SPHERE_MINERAL_COST):
                 self.minerals = self.minerals - SPHERE_MINERAL_COST
                 self.selected_planet.task_unit_timer = taskMgr.doMethodLater(SPHERE_BUILD_TIME, self._delayedConstructUnit, 'buildSphere', extraArgs =[Sphere, self.selected_planet], appendTask=True)
                 self._showUnitProgress(SPHERE_BUILD_TIME)  
-            elif(unit == "planetarium" and self.minerals > PLANETARIUM_MINERAL_COST):
+            elif(unit == "planetarium" and self.research.getLevel() == 3 and self.minerals > PLANETARIUM_MINERAL_COST):
                 self.minerals = self.minerals - PLANETARIUM_MINERAL_COST
                 self.selected_planet.task_unit_timer = taskMgr.doMethodLater(PLANETARIUM_BUILD_TIME, self._delayedConstructUnit, 'buildPlanetarium', extraArgs =[Planetarium, self.selected_planet], appendTask=True)
                 self._showUnitProgress(PLANETARIUM_BUILD_TIME)
@@ -121,15 +118,15 @@ class Player(object):
                 self.minerals = self.minerals - ANALYZER_MINERAL_COST
                 self.selected_planet.task_unit_timer = taskMgr.doMethodLater(ANALYZER_BUILD_TIME, self._delayedConstructUnit, 'buildAnalyzer', extraArgs =[Analyzer, self.selected_planet], appendTask=True)
                 self._showUnitProgress(ANALYZER_BUILD_TIME)
-            elif(unit == "mathematica" and self.minerals > MATHEMATICA_MINERAL_COST):
+            elif(unit == "mathematica" and self.research.getLevel() == 3 and self.minerals > MATHEMATICA_MINERAL_COST):
                 self.minerals = self.minerals - MATHEMATICA_MINERAL_COST
                 self.selected_planet.task_unit_timer = taskMgr.doMethodLater(MATHEMATICA_BUILD_TIME, self._delayedConstructUnit, 'buildMathematica', extraArgs =[Mathematica, self.selected_planet], appendTask=True)
                 self._showUnitProgress(MATHEMATICA_BUILD_TIME)
-            elif(unit == "blackHoleGenerator" and self.minerals > BLACK_HOLE_GENERATOR_MINERAL_COST):
+            elif(unit == "blackHoleGenerator" and self.research.getLevel() == 4 and self.minerals > BLACK_HOLE_GENERATOR_MINERAL_COST):
                 self.minerals = self.minerals - BLACK_HOLE_GENERATOR_MINERAL_COST
                 self.selected_planet.task_unit_timer = taskMgr.doMethodLater(BLACK_HOLE_GENERATOR_BUILD_TIME, self._delayedConstructUnit, 'buildBlackHoleGenerator', extraArgs =[BlackHoleGenerator, self.selected_planet], appendTask=True)
                 self._showUnitProgress(BLACK_HOLE_GENERATOR_BUILD_TIME)
-            elif(unit == "gravityEngine" and self.minerals > GRAVITY_ENGINE_MINERAL_COST):
+            elif(unit == "gravityEngine" and self.research.getLevel() == 2 and self.minerals > GRAVITY_ENGINE_MINERAL_COST):
                 self.minerals = self.minerals - GRAVITY_ENGINE_MINERAL_COST
                 self.selected_planet.task_unit_timer = taskMgr.doMethodLater(GRAVITY_ENGINE_BUILD_TIME, self._delayedConstructGravityEngine, 'buildGravityEngine', extraArgs =[self.selected_planet], appendTask=True)
                 self._showUnitProgress(GRAVITY_ENGINE_BUILD_TIME)

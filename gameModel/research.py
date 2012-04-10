@@ -29,8 +29,6 @@ class ResearchTree(object):
     '''    
     def incrementLevel(self, task):
         self._level = self._level + 1 if self._level < 4 else self._level
-        #from gameEngine.gameEngine import updateGUI
-        #updateGUI.refreshUnitsAndConstructions(self._level)
         return task.done
     
     '''

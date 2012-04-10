@@ -506,7 +506,8 @@ class Planet(SphericalBody):
         player.selected_star = None
 
         if(self.player == player):
-            '''TODO : notify the GUI Panel about the constructions available on this planet '''
+            from gameEngine.gameEngine import updateGUI
+            updateGUI.refreshUnitsAndConstructions(self)
         
         if(not self.activated and player.selected_planet == self):
             if((self.prev_planet == None or self.prev_planet.activated) and \
