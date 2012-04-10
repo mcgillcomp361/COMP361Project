@@ -57,13 +57,15 @@ class Unit(object):
         if(type(self.player)==Player):
             
             location = "sound/effects/units/" + unit_name + "/birth.wav"
+            #base.loader.loadSfx(location).setLoop(False)
             base.loader.loadSfx(location).play()
             #audio3d.loadSfx(location).play()
         
             location = "sound/effects/units/" + unit_name + "/move.wav"
             self.move_unit = base.loader.loadSfx(location)
             #self.move_unit = audio3d.loadSfx(location)
-            self.move_unit.setVolume(0.5)
+            #self.move_unit.setLoop(False)
+            self.move_unit.setVolume(0.7)
             #audio3d.setSoundVelocityAuto(self.move_unit)
             #audio3d.setListenerVelocityAuto()
             #audio3d.attachSoundToObject(self.move_unit, self)
@@ -71,7 +73,8 @@ class Unit(object):
             location = "sound/effects/units/" + unit_name + "/select.wav"
             self.select_unit = base.loader.loadSfx(location)
             #self.select_unit = audio3d.loadSfx(location)
-            self.select_unit.setVolume(0.5)
+            #self.select_unit.setLoop(False)
+            self.select_unit.setVolume(0.7)
             #audio3d.setSoundVelocityAuto(self.select_unit)
             #audio3d.setListenerVelocityAuto()
             #audio3d.attachSoundToObject(self.select_unit, self)
@@ -79,7 +82,7 @@ class Unit(object):
         location = "sound/effects/units/" + unit_name + "/death.wav"
         self.death_unit = base.loader.loadSfx(location)
         #self.death_unit = audio3d.loadSfx(location)
-        self.death_unit.setVolume(0.5)
+        self.death_unit.setVolume(0.6)
         #audio3d.setSoundVelocityAuto(self.death_unit)
         #audio3d.setListenerVelocityAuto()
         #audio3d.attachSoundToObject(self.death_unit, self)
@@ -88,7 +91,8 @@ class Unit(object):
             location = "sound/effects/units/" + unit_name + "/attack.wav"
             self.attack_unit = base.loader.loadSfx(location)
             #self.attack_unit = audio3d.loadSfx(location)
-            self.attack_unit.setVolume(0.35)
+            #self.attack_unit.setLoop(False)
+            self.attack_unit.setVolume(0.5)
             #audio3d.setSoundVelocityAuto(self.attack_unit)
             #audio3d.setListenerVelocityAuto()
             #audio3d.attachSoundToObject(self.attack_unit, self)

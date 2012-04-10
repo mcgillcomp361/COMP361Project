@@ -19,7 +19,10 @@ class Player(object):
     '''
     Player class
     '''
-
+    
+    building_complete_sound = None
+    cannot_build_sound = None
+    
     def __init__(self, name):
         '''
         Constructor
@@ -34,6 +37,9 @@ class Player(object):
         self.units = []
         self.minerals = MINERAL_STARTING_AMOUNT
         self.ge_amount = GRAVITY_ENGINE_STARTING_AMOUNT
+        
+        Player.building_complete_sound = base.loader.loadSfx("sound/effects/structures/building_complete.wav")
+        Player.cannot_build_sound = base.loader.loadSfx("sound/effects/structures/cannot_build.wav")
         
     ''' TODO: use Multi-Texturing '''
     ''' TODO: complete all the condition checks(e.g. tech tier, existent structure, ...) '''
@@ -61,9 +67,9 @@ class Player(object):
                 self.selected_planet.task_structure_timer = taskMgr.doMethodLater(GENERATOR_CORE_BUILD_TIME, self._delayedConstructStructure, 'buildGeneratorCore', extraArgs =[GeneratorCore, self.selected_planet], appendTask=True)
                 self._showStructureProgress(GENERATOR_CORE_BUILD_TIME)
             else:
-                base.loader.loadSfx("sound/effects/structures/cannot_build.wav").play()
+                Player.cannot_build_sound.play()
         else:
-            base.loader.loadSfx("sound/effects/structures/cannot_build.wav").play()
+            Player.cannot_build_sound.play()
 
     
     def _showStructureProgress(self, time):
@@ -73,7 +79,7 @@ class Player(object):
         structure = Structure(host_planet)
         self.structures.append(structure)
         host_planet.task_structure_timer = None
-        base.loader.loadSfx("sound/effects/structures/building_complete.wav").play()
+        Player.building_complete_sound.play()
         return task.done
 
     def addUnit(self, unit):
@@ -125,13 +131,13 @@ class Player(object):
                 self.selected_planet.task_unit_timer = taskMgr.doMethodLater(GRAVITY_ENGINE_BUILD_TIME, self._delayedConstructGravityEngine, 'buildGravityEngine', extraArgs =[self.selected_planet], appendTask=True)
                 self._showUnitProgress(GRAVITY_ENGINE_BUILD_TIME)
             else:
-                base.loader.loadSfx("sound/effects/structures/cannot_build.wav").play()
+                Player.cannot_build_sound.play()
             from gameEngine.gameEngine import updateGUI
             updateGUI.refreshResources()
             updateGUI.value = self.minerals
             updateGUI.printResources()
         else:
-            base.loader.loadSfx("sound/effects/structures/cannot_build.wav").play()
+            Player.cannot_build_sound.play()
     
     def _showUnitProgress(self, time):
         taskMgr.add(indicators.drawProgressBar, 'unitProgressBar', extraArgs =[self.selected_planet, time, True, (0.5,0,1.0,0.5), (1.0,1.0,0,0.5)], appendTask=True)
