@@ -11,7 +11,7 @@ from panda3d.core import Vec4
 
 def makeArc(color, angle_degrees = 360, numsteps = 16, horizon_plane = 0,): 
     ls = LineSegs() 
-    ls.setColor(Vec4(0, 0, 0.3, 1.0))
+    ls.setColor(color)
     angleRadians = deg2Rad(angle_degrees) 
 
     for i in xrange(numsteps + 1): 
