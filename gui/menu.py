@@ -18,59 +18,49 @@ class Menu():
         Menu.menu_music = base.loader.loadSfx("sound/music/music1.mp3")
         Menu.menu_click = base.loader.loadSfx("sound/effects/menu/menu_click.wav")
         Menu.menu_rollover = base.loader.loadSfx("sound/effects/menu/menu_rollover.wav")
-    
+
         self._loadSounds()
         
-        self.mainFrame = DirectFrame(pos=(0,0,0))
-        self.b=OnscreenImage(parent=render2d, image="./models/gui/mainMenu.png") 
+        self.mainFrame = DirectFrame(pos=(0,0,0), parent=aspect2d)
+        self.b=OnscreenImage(parent=render2d, image="./models/gui/mainMenu.png", scale = (1, 1,1), pos = (0,0,0))
+        self.b.setTransparency(True)  
+        
         self.screenImages=loader.loadModel('./models/gui/singleplayer.egg')
         b1 = DirectButton(geom=(self.screenImages.find('**/singleplayer'), 
                         self.screenImages.find('**/singleplayer_over'), 
                         self.screenImages.find('**/singleplayer_over'), 
-                        self.screenImages.find('**/singleplayer')), frameColor=(1, 1, 1, 0), text_fg=(1, 1, 1, 1),
-                      pos=(0.6, 0, 0.4),
-                     relief=2, command = self.startGame, clickSound=self.menu_click,rolloverSound=self.menu_rollover)
-        b1.setScale(0.6,1,0.16)
+                        self.screenImages.find('**/singleplayer')), frameColor=(1, 1, 1, 0), pos=(0.6, 0, 0.4), 
+                        parent=self.mainFrame, command = self.startGame, clickSound=self.menu_click,rolloverSound=self.menu_rollover)
+        b1.setScale(0.6,1,0.16) 
         self.screenImages=loader.loadModel('./models/gui/multiplayer.egg')
         b2 = DirectButton(geom=(self.screenImages.find('**/multiplayer'), 
                         self.screenImages.find('**/multiplayer_over'), 
                         self.screenImages.find('**/multiplayer_over'), 
                         self.screenImages.find('**/multiplayer')), frameColor=(1, 1, 1, 0), text_fg=(1, 1, 1, 1),
-                      pos=(1.3, 0, 0.15),
-                     relief=2, command = self.startGame, clickSound=self.menu_click,rolloverSound=self.menu_rollover)
+                      pos=(1.3, 0, 0.15),parent=self.mainFrame, command = self.startGame, clickSound=self.menu_click,rolloverSound=self.menu_rollover)
         b2.setScale(0.6,1,0.16)
         self.screenImages=loader.loadModel('./models/gui/tutorial.egg')
         b3 = DirectButton(geom=(self.screenImages.find('**/tutorial'), 
                         self.screenImages.find('**/tutorial_over'), 
                         self.screenImages.find('**/tutorial_over'), 
                         self.screenImages.find('**/tutorial')), frameColor=(1, 1, 1, 0), text_fg=(1, 1, 1, 1),
-                      pos=(-1.1, 0, 0.1),
-                     relief=2, command = self.tutorial, clickSound=self.menu_click,rolloverSound=self.menu_rollover)
+                      pos=(-1.1, 0, 0.1),parent=self.mainFrame, command = self.tutorial, clickSound=self.menu_click,rolloverSound=self.menu_rollover)
         b3.setScale(0.6,1,0.16)
         self.screenImages=loader.loadModel('./models/gui/settings.egg')
         b4 = DirectButton(geom=(self.screenImages.find('**/settings'), 
                         self.screenImages.find('**/settings_over'), 
                         self.screenImages.find('**/settings_over'), 
                         self.screenImages.find('**/settings')), frameColor=(1, 1, 1, 0), text_fg=(1, 1, 1, 1),
-                     pos=(0.45, 0, -0.1),
-                     relief=2, command = self.settings, clickSound=self.menu_click,rolloverSound=self.menu_rollover)
+                     pos=(0.45, 0, -0.1),parent=self.mainFrame, command = self.settings, clickSound=self.menu_click,rolloverSound=self.menu_rollover)
         b4.setScale(0.6,1,0.16) 
         self.screenImages=loader.loadModel('./models/gui/exit.egg')
         b5 = DirectButton(geom=(self.screenImages.find('**/exit'), 
                         self.screenImages.find('**/exit_over'), 
                         self.screenImages.find('**/exit_over'), 
                         self.screenImages.find('**/exit')), frameColor=(1, 1, 1, 0), text_fg=(1, 1, 1, 1),
-                     pos=(-1.55, 0, -0.35),
-                     relief=2, command = sys.exit,rolloverSound=self.menu_rollover)
+                     pos=(-1.4, 0, -0.35),parent=self.mainFrame, command = sys.exit,rolloverSound=self.menu_rollover)
         b5.setScale(0.6,1,0.16) 
-            
-        b1.reparentTo(self.mainFrame)
-        b2.reparentTo(self.mainFrame)
-        b3.reparentTo(self.mainFrame)
-        b4.reparentTo(self.mainFrame)
-        b5.reparentTo(self.mainFrame)   
-    
-    
+           
     def _loadSounds(self):
         '''
         Method to load sounds.
