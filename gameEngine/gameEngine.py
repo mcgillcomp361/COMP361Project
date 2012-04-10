@@ -38,6 +38,8 @@ all_players = []
 all_stars = []
 all_planets = []
 
+music = None
+
 _game_camera = None
             
     #Keyboard events
@@ -107,7 +109,7 @@ def _startGame(players):
     either the single player mode or the multiplayer mode based on the players choice.
     @param players: the list of the players ready to play
     '''
-    global _game_camera
+    global _game_camera, music
     ''' TODO : music should be self.music so it can be changed later on '''
     music = base.loader.loadSfx("sound/music/orbitals.mp3")
     music.setLoop(True)
@@ -169,7 +171,6 @@ The Auto management of observing and removing units and structures from the game
 '''
 def _trackUnitsAndStructures(task):
     global ai, player
-    '''TODO : use yield iteration for units and structures in ai and player classes '''
     if(ai != None):
         for unit in ai.units:
             if(unit.energy <= 0):
@@ -177,15 +178,11 @@ def _trackUnitsAndStructures(task):
                 ai.units.remove(unit)
                 unit.removeFromGame()
                 unit = None
-                ''' TODO : remove the unit properly '''
-                ''' TODO: remove unit model and its abilities if any'''
         for structure in ai.structures:
             if(structure.energy <= 0):
                 structure.host_planet.removeSurfaceStructure(structure)
                 ai.structures.remove(structure)
                 structure = None
-                ''' TODO : remove the structure properly '''
-                ''' TODO: remove structure texture'''
 
     for unit in player.units:
         if(unit.energy <= 0):
@@ -195,13 +192,9 @@ def _trackUnitsAndStructures(task):
             player.units.remove(unit)
             unit.removeFromGame()
             unit = None
-            ''' TODO : remove the unit properly '''
-            ''' TODO: remove unit model and its abilities if any'''
     for structure in player.structures:
         if(structure.energy <= 0):
             structure.host_planet.removeSurfaceStructure(structure)
             player.structures.remove(structure)
             structure = None
-            ''' TODO : remove the structure properly '''
-            ''' TODO: remove structure texture'''
     return task.again
