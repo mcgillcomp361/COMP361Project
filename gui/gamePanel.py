@@ -183,7 +183,7 @@ class GamePanel():
       
     def loadResearchTree(self):
         b1 = DirectButton(image = ("./models/gui/ResearchButton.png"), pos = (7, 0, -3),
-                          frameColor=(0, 0,0, 0),image_scale = (4, 1, 1.5), command = self.researchTree.loadTree)
+                          frameColor=(0, 0,0, 0),image_scale = (4, 1, 1.5), command = self.researchTree.loadTree, clickSound=self.mouse_click)
         b1.stateNodePath[0].setTransparency(1)
         b1.stateNodePath[1].setTransparency(1)
         b1.stateNodePath[2].setTransparency(1)
