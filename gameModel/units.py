@@ -88,7 +88,7 @@ class Unit(object):
         #audio3d.setListenerVelocityAuto()
         #audio3d.attachSoundToObject(self.death_unit, self)
         
-        if unit_name is not "analyzer" or not "mathematica" or not "blackholegen":
+        if unit_name is not "analyzer" and not "mathematica" and not "blackholegen":
             location = "sound/effects/units/" + unit_name + "/attack.wav"
             self.attack_unit = base.loader.loadSfx(location)
             #self.attack_unit = audio3d.loadSfx(location)
@@ -99,19 +99,22 @@ class Unit(object):
             #audio3d.attachSoundToObject(self.attack_unit, self)
         
     
-    def __initSceneGraph(self):        
+    def __initSceneGraph(self):
+        
         self.point_path = self.host_planet.point_path.attachNewNode("unit_center_node")
         self.model_path = self.point_path.attachNewNode("unit_node")
-        self.model_path.setPythonTag('pyUnit', self);
+        self.model_path.reparentTo(self.point_path)
         self.model_path.setPos(Vec3(0,6,0))
         
+        self.model_path.setPythonTag('pyUnit', self)
+        
         rad = 1
-        self.cnode = CollisionNode("coll_sphere_node")
-        self.cnode.addSolid(CollisionBox(Point3(-rad,-rad,-rad),Point3(rad,rad,rad)))
-        self.cnode.setIntoCollideMask(BitMask32.bit(1))
-        self.cnode.setTag('unit', str(id(self)))
-        self.cnode_path = self.model_path.attachNewNode(self.cnode)
-        self.cnode_path.show()
+        cnode = CollisionNode("coll_sphere_node")
+        cnode.addSolid(CollisionBox(Point3(-rad,-rad,-rad),Point3(rad,rad,rad)))
+        cnode.setIntoCollideMask(BitMask32.bit(1))
+        cnode.setTag('unit', str(id(self)))
+        self.cnode_path = self.model_path.attachNewNode(cnode)
+        #self.cnode_path.show()
         
         tex = loader.loadTexture("models/billboards/flare.png")
         cm = CardMaker('quad')
@@ -120,6 +123,8 @@ class Unit(object):
         self.quad_path.setTexture(tex)
         self.quad_path.setTransparency(TransparencyAttrib.MAlpha)
         self.quad_path.setBillboardPointEye()
+
+        self.quad_path.setColor(self.player.color)
     
     def _observeEnemy(self, task):
         if not self.deep_space:
@@ -257,7 +262,6 @@ class Swarm(Unit):
         @param host_planet : The planet where the unit is constructed
         '''
         super(Swarm, self).__init__(host_planet, player, SWARM_VELOCITY, SWARM_MAX_ENERGY, SWARM_DAMAGE, [])
-        self.quad_path.setColor(Vec4(0.6, 0.1, 0.1, 1))
         self.quad_path.setScale(2)
         self._loadSounds("swarm")
                    
@@ -271,8 +275,7 @@ class Horde(Unit):
         @param host_planet : The planet where the unit is constructed
         '''
         super(Horde, self).__init__(host_planet, player, HORDE_VELOCITY, HORDE_MAX_ENERGY, HORDE_DAMAGE, []) 
-        self.quad_path.setColor(Vec4(0.4, 0.2, 0.2, 1))
-        self.quad_path.setScale(6)
+        self.quad_path.setScale(3)
         self._loadSounds("horde")
         
 class Hive(Unit):
@@ -285,8 +288,7 @@ class Hive(Unit):
         @param host_planet : The planet where the unit is constructed
         '''
         super(Hive, self).__init__(host_planet, player, HIVE_VELOCITY, HIVE_MAX_ENERGY, HIVE_DAMAGE, [])
-        self.quad_path.setColor(Vec4(0.0, 0.2, 0.4, 1))
-        self.quad_path.setScale(12)
+        self.quad_path.setScale(4)
         self._loadSounds("hive")
         
 class Globe(Unit):
@@ -299,7 +301,11 @@ class Globe(Unit):
         @param host_planet : The planet where the unit is constructed
         '''
         super(Globe, self).__init__(host_planet, player, GLOBE_VELOCITY, GLOBE_MAX_ENERGY, GLOBE_DAMAGE, [])
-        self.quad_path.setColor(Vec4(0.2, 0.6, 0.2, 1))
+        unit_model_path = loader.loadModel("models/units/globe/sphere")
+        tex = loader.loadTexture("models/units/globe/globe_tex.jpg")
+        unit_model_path.setTexture(tex)
+        unit_model_path.reparentTo(self.model_path)
+        unit_model_path.setScale(1.1)
         self.quad_path.setScale(2)
         self._loadSounds("globe")
 
@@ -313,8 +319,12 @@ class Sphere(Unit):
         @param host_planet : The planet where the unit is constructed
         '''
         super(Sphere, self).__init__(host_planet, player, SPHERE_VELOCITY, SPHERE_MAX_ENERGY, SPHERE_DAMAGE, [])
-        self.quad_path.setColor(Vec4(0.2, 0.4, 0.2, 1))
-        self.quad_path.setScale(6)
+        unit_model_path = loader.loadModel("models/units/sphere/sphere")
+        tex = loader.loadTexture("models/units/sphere/sphere_tex.jpg")
+        unit_model_path.setTexture(tex)
+        unit_model_path.reparentTo(self.model_path)
+        unit_model_path.setScale(1.7)
+        self.quad_path.setScale(3)
         self._loadSounds("sphere")
 
 class Planetarium(Unit):
@@ -327,8 +337,12 @@ class Planetarium(Unit):
         @param host_planet : The planet where the unit is constructed
         '''
         super(Planetarium, self).__init__(host_planet, player, PLANETARIUM_VELOCITY, PLANETARIUM_MAX_ENERGY, PLANETARIUM_DAMAGE, [])
-        self.quad_path.setColor(Vec4(0.4, 0.0, 0.2, 1))
-        self.quad_path.setScale(12)
+        unit_model_path = loader.loadModel("models/units/planetarium/sphere")
+        tex = loader.loadTexture("models/units/planetarium/planetarium_tex.jpg")
+        unit_model_path.setTexture(tex)
+        unit_model_path.reparentTo(self.model_path)
+        unit_model_path.setScale(2.5)
+        self.quad_path.setScale(4.2)
         self._loadSounds("planetarium")        
 
 class Analyzer(Unit):
@@ -341,8 +355,10 @@ class Analyzer(Unit):
         @param host_planet : The planet where the unit is constructed
         '''
         super(Analyzer, self).__init__(host_planet, player, ANALYZER_VELOCITY, ANALYZER_MAX_ENERGY, ANALYZER_DAMAGE, [])
-        self.quad_path.setColor(Vec4(0.2, 0.2, 0.6, 1))
-        self.quad_path.setScale(3)
+        unit_model_path = loader.loadModel("models/units/analyzer/SpaceDock")
+        unit_model_path.reparentTo(self.model_path)
+        unit_model_path.setScale(0.02)
+        self.quad_path.setScale(1)
         self._loadSounds("analyzer")
 
 class Mathematica(Unit):
@@ -355,8 +371,10 @@ class Mathematica(Unit):
         @param host_planet : The planet where the unit is constructed
         '''
         super(Mathematica, self).__init__(host_planet, player, MATHEMATICA_VELOCITY, MATHEMATICA_MAX_ENERGY, MATHEMATICA_DAMAGE, [])
-        self.quad_path.setColor(Vec4(0.2, 0.2, 0.3, 1))
-        self.quad_path.setScale(6)
+        unit_model_path = loader.loadModel("models/units/mathematica/SpaceDock")
+        unit_model_path.reparentTo(self.model_path)
+        unit_model_path.setScale(0.05)
+        self.quad_path.setScale(2)
         self._loadSounds("mathematica")
 
 class BlackHoleGenerator(Unit):
@@ -369,6 +387,10 @@ class BlackHoleGenerator(Unit):
         @param host_planet : The planet where the unit is constructed
         '''
         super(BlackHoleGenerator, self).__init__(host_planet, player, BLACK_HOLE_GENERATOR_VELOCITY, BLACK_HOLE_GENERATOR_MAX_ENERGY, BLACK_HOLE_GENERATOR_DAMAGE, [])
-        self.quad_path.setColor(Vec4(0.5, 0.5, 0.7, 1))
-        self.quad_path.setScale(4)
+        unit_model_path = loader.loadModel("models/units/blackholegen/Icosahedron")
+        tex = loader.loadTexture("models/units/planetarium/special_tex.jpg")
+        unit_model_path.setTexture(tex)
+        unit_model_path.reparentTo(self.model_path)
+        unit_model_path.setScale(0.3)
+        self.quad_path.setScale(1.5)
         self._loadSounds("blackholegen")

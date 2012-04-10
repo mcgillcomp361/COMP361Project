@@ -35,6 +35,7 @@ class Player(object):
         self.planets = []
         self.structures = []
         self.units = []
+        self.color = Vec4(0, 0, 1, 1)
         self.minerals = MINERAL_STARTING_AMOUNT
         self.ge_amount = GRAVITY_ENGINE_STARTING_AMOUNT
         

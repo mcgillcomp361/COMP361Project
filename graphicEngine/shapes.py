@@ -9,7 +9,7 @@ from pandac.PandaModules import deg2Rad, rad2Deg
 from panda3d.core import Vec4
 
 
-def makeArc(angle_degrees = 360, numsteps = 16, horizon_plane = 0): 
+def makeArc(color, angle_degrees = 360, numsteps = 16, horizon_plane = 0,): 
     ls = LineSegs() 
     ls.setColor(Vec4(0, 0, 0.3, 1.0))
     angleRadians = deg2Rad(angle_degrees) 
@@ -21,6 +21,6 @@ def makeArc(angle_degrees = 360, numsteps = 16, horizon_plane = 0):
 
         ls.drawTo(x, y, horizon_plane)
         ls.setThickness(2.0)
-        ls.setColor(Vec4(0, 0, 0.3, 1.0))
+        ls.setColor(color)
     node = ls.create() 
     return NodePath(node)

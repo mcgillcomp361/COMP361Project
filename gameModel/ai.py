@@ -27,6 +27,7 @@ class AI(object):
         Constructor
         '''
         self.name = name
+        self.color = Vec4(1, 0, 0, 1)
         self.planets = []
         self.orbit = 0
         self.structures = []

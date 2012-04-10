@@ -570,7 +570,7 @@ class Planet(SphericalBody):
         if self.parent_star.lifetime != 0:
             taskMgr.add(self._accelerateOrbit, 'accelerateOrbit')
         
-        self.orbit_path = shapes.makeArc(360, int(self.orbital_radius))
+        self.orbit_path = shapes.makeArc(self.player.color, 360, int(self.orbital_radius))
         self.orbit_path.reparentTo(self.parent_star.point_path)
         self.orbit_path.setScale(self.orbital_radius)
     
@@ -673,6 +673,7 @@ class Planet(SphericalBody):
         @param player: Player, the player who has captured the planet by swarms
         @precondition: the player must have used the capture ability of a swarm unit on the planet
         '''
+        '''TODO: Use makeArc to change the color of the orbit'''
         self.player = player
         
     def addOrbitingUnit(self, unit):
