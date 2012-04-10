@@ -15,8 +15,7 @@ class GamePanel():
             pos=(0, 0,-0.7),
             sortOrder=2,        
         )   
-        geom=OnscreenImage(parent=render2d, image="./models/gui/guiBarV2.png", scale = (1, 1, 0.3), pos = (0,0,-0.7))
-        geom.setTransparency(True)  
+        
         self._loadSounds()
         self.player = player
         self.researchTree = ResearchTree()
@@ -24,7 +23,8 @@ class GamePanel():
         self.loadResources()
         self.loadMiniMap()
         self.loadResearchTree()
-        
+        geom=OnscreenImage(parent=render2d, image="./models/gui/guiBarV2.png", scale = (1, 1, 0.3), pos = (0,0,-0.7))
+        geom.setTransparency(True)  
         
     def _loadSounds(self):
         '''
@@ -183,9 +183,11 @@ class GamePanel():
         bGravity.reparentTo(self.mainFrame)
       
     def loadResearchTree(self):
-        b1 = DirectButton(text = ("Research Tree", "click!", "roll"), pos = (0, 0, -2.4),
-                          frameColor=(0, 0,0, 0.2),text_fg=(0,0,0,1), text_scale=0.8, borderWidth = (0.01, 0.01), 
-                          text_align = TextNode.ALeft, relief=2, command = self.researchTree.loadTree)
+        b1 = DirectButton(image = ("./models/gui/ResearchButton.png"), pos = (2.3, 0, -3),
+                          frameColor=(0, 0,0, 0),image_scale = (4, 1, 1.5), command = self.researchTree.loadTree)
+        b1.stateNodePath[0].setTransparency(1)
+        b1.stateNodePath[1].setTransparency(1)
+        b1.stateNodePath[2].setTransparency(1)
         b1.reparentTo(self.mainFrame)
             
     def loadMiniMap(self):
