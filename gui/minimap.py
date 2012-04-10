@@ -52,13 +52,11 @@ class Minimap():
         
     def setTargets(self, playerTargets=None,index=1):
         index = index-1
-        if playerTargets is None: pass
-        
+        if playerTargets is None: pass   
         for i in range(len(playerTargets)):
-            self.playerTargets[index].append(playerTargets([i]))
+            self.playerTargets[index].append(playerTargets[i])
         for i in range(len(self.playerTargets[index])):
-            self.pivot[index].append(self.map.attachNewNode("Player" + str(index)+ "Pivot" + str(i)))
-            self.dots[index].append(OnscreenImage(image = self.playerImage[index], scale = 1,pos = (0,0,1), parent = self.pivot[index][i]))
+            self.dots[index].append(OnscreenImage(image = "models/gui/minimap/yellowDot.png", scale = 5,pos = (0,0,0), parent = self.pivot[index][i]))
             
     def setPlayerImage(self, index = 1, image = "models/yellowDot.png"): #team must be integer, image must be a path to an image file
         index = index - 1
@@ -99,15 +97,14 @@ class Minimap():
         for team in range(len(self.playerTargets)): #will cycle through each team
             for i in range(len(self.playerTargets[team])): #will cycle through each member of the team
                 target = self.playerTargets[team][i]
-                if target.isEmpty() == False:
+                #if target is not None:
+                #    self.pointer.setZ(target.getZ())
+           #         self.pointer.lookAt(target)
                 
-                    self.pointer.setZ(target.getZ())
-                    self.pointer.lookAt(target)
-                
-                    self.pivot[team][i].setR(-self.pointer.getH())
-                    x = self.pointer.getDistance(target)/self.distanceScale  #this scales the real world distance to the scale of the minimap
-                    if x != 0:
-                        self.pivot[team][i].setScale(x)
-                        self.dots[team][i].setScale((1/x)*4)    #the dots representing targets should be 4x4 pixels. (the 1/x) is a necessary hack, don't worry about it.              
+            #        self.pivot[team][i].setR(-self.pointer.getH())
+             #       x = self.pointer.getDistance(target)/self.distanceScale  #this scales the real world distance to the scale of the minimap
+              #      if x != 0:
+              #          self.pivot[team][i].setScale(x)
+               #         self.dots[team][i].setScale((1/x)*4)    #the dots representing targets should be 4x4 pixels. (the 1/x) is a necessary hack, don't worry about it.              
         return Task.cont
       
