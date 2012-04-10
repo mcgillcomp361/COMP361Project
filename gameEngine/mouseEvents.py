@@ -5,10 +5,11 @@ Created on Jan 15, 2012
 '''
 import sys
 from direct.showbase import DirectObject 
-from pandac.PandaModules import CollisionTraverser, CollisionHandlerQueue, CollisionRay 
-from pandac.PandaModules import CollisionNode
-from panda3d.core import BitMask32
+from pandac.PandaModules import CollisionTraverser, CollisionHandlerQueue, CollisionRay, TransparencyAttrib
+from pandac.PandaModules import CollisionNode, CardMaker
+from panda3d.core import BitMask32, Point2, Vec2, Vec3,Vec4
 
+from direct.directtools.DirectGeometry import LineNodePath
 
 class MouseEvents(DirectObject.DirectObject):
     
@@ -40,7 +41,48 @@ class MouseEvents(DirectObject.DirectObject):
         self.accept("mouse1", self.handleLeftMouseClick)
         self.accept("mouse3", self.handleRightMouseClick)
         
+        self.accept("mouse1-up", self.handleMouseDrag)
+        self.mouseFirstPos = None
+        
+        cm = CardMaker('quad')
+#        cm.setFrameFullscreenQuad()
+        self.drag_rect_path = base.render2d.attachNewNode(cm.generate())
+        self.drag_rect_path.setTransparency(TransparencyAttrib.MAlpha)
+        self.drag_rect_path.setColor(Vec4(1,1,1,0.3))
+        self.drag_rect_path.hide()
+#        self.drag_rect_path = LineNodePath(base.render2d, thickness = 8.0)
+
     
+    def selectionRectangle(self, task):
+        if base.mouseWatcherNode.hasMouse():# and self.mouseFirstPos != None:
+            mpos = base.mouseWatcherNode.getMouse()
+            self.drag_rect_path.show()
+            self.drag_rect_path.setSx(mpos.getX()-self.mouseFirstPos.getX()+0.0001)
+            self.drag_rect_path.setSz(mpos.getY()-self.mouseFirstPos.getY()+0.0001)
+            self.drag_rect_path.setPos(self.mouseFirstPos.getX(), 0, self.mouseFirstPos.getY())
+
+#            self.drag_rect_path.drawLines([((self.mouseFirstPos.getX(),self.mouseFirstPos.getY()),(mpos.getX(), mpos.getY()))])
+#            self.drag_rect_path.create()
+#            base.win.makeDisplayRegion(self.mouseFirstPos.getX(), self.mouseFirstPos.getY(), mpos.getX(), mpos.getY())
+        return task.cont
+        
+    def handleMouseDrag(self):
+        if self.mouseFirstPos != None:
+            mpos = base.mouseWatcherNode.getMouse()
+            lvec = Vec2(self.mouseFirstPos) - Vec2(mpos)
+            if lvec.length() > 0.01:
+                scaled_pos = Point2(self.mouseFirstPos)
+                scaled_pos.setX(scaled_pos.getX()*base.getAspectRatio())
+                scaled_mpos = Point2(mpos)
+                scaled_mpos.setX(scaled_mpos.getX()*base.getAspectRatio())
+                for unit in self.player.units:
+                    if unit.is3dpointIn2dRegion(scaled_pos, scaled_mpos):
+#                        unit.select(self.player)
+                        unit.highlight()
+            self.mouseFirstPos = None
+            self.drag_rect_path.hide()
+            taskMgr.remove(self.rect_task)
+        
     def setPlayer(self, player):
         self.player = player
     
@@ -63,10 +105,10 @@ class MouseEvents(DirectObject.DirectObject):
         if base.mouseWatcherNode.hasMouse():
             #get the mouse position
             mpos = base.mouseWatcherNode.getMouse()
+            self.savemousePos()
             # This makes the ray's origin the camera and makes the ray point 
             # to the screen coordinates of the mouse.
             self.pickerRay.setFromLens(base.camNode, mpos.getX(), mpos.getY())
-            
             self.myTraverser.traverse(render)
             # Assume for simplicity's sake that myHandler is a CollisionHandlerQueue.
             if self.myHandler.getNumEntries() > 0:
@@ -79,7 +121,16 @@ class MouseEvents(DirectObject.DirectObject):
                     self.selected(pickedObj, 'planet', 'pyPlanet', 'leftClick')
                 elif pickedObj.hasTag('unit'):
                     self.selected(pickedObj, 'unit', 'pyUnit', 'leftClick')
-                    
+                elif pickedObj.hasTag('testUnit'):
+                    self.selected(pickedObj, 'testUnit', 'pyTestUnit', 'leftClick')
+            
+            self.rect_task = taskMgr.add(self.selectionRectangle, 'drag')
+
+    def savemousePos(self): 
+        self.mouseFirstPos = Point2(base.mouseWatcherNode.getMouse()) 
+#        self.mouseFirstPos.setX(self.mouseFirstPos.getX()*1.33) 
+
+              
     def handleRightMouseClick(self):
         if base.mouseWatcherNode.hasMouse():
             #get the mouse position

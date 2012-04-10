@@ -22,7 +22,6 @@ class Application(ShowBase):
  #       loadPrcFileData('', 'fullscreen 1')
         loadPrcFileData('', 'win-size 1280 800')
         ShowBase.__init__(self)
-                
         self.menu = Menu()
         ''' ATTENTION: to see all the tasks running uncomment the line below '''
 #        taskMgr.popupControls()

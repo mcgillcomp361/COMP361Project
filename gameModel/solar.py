@@ -4,7 +4,7 @@ Created on 7 janv. 2012
 @author: Bazibaz
 '''
 from observable import Observable
-from pandac.PandaModules import CollisionNode, CollisionBox, CollisionSphere, TransparencyAttrib, TextureStage, Texture
+from pandac.PandaModules import CollisionNode, CollisionBox, CollisionSphere, RenderAttrib, TransparencyAttrib, TextureStage, Texture
 from direct.showbase import DirectObject 
 from panda3d.core import Vec3,Vec4,Point2, Point3, BitMask32
 from direct.directtools.DirectGeometry import LineNodePath
@@ -225,7 +225,7 @@ class Star(SphericalBody):
         point_light = PointLight("starLight")
         point_light.setColor(Vec4(1.0, 1.0, 1.0, 1.0))
         point_light.setPoint(Point3(0, 0, 0))
-        pt_node = render.attachNewNode(point_light)
+        pt_node = self.point_path.attachNewNode(point_light)
 #        pt_node.setHpr(60, 0, 90)
         render.setLight(pt_node)
         
