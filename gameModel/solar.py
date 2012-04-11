@@ -504,11 +504,10 @@ class Planet(SphericalBody):
         @param player, the player who has selected
         '''
         player.selected_star = None
-#
-        ''' TODO : un-comment the following '''
-#        if(self.player == player):
-#            from gameEngine.gameEngine import updateGUI
-#            updateGUI.refreshUnitsAndConstructions(self)
+        
+        if(self.player == player):
+            from gameEngine.gameEngine import updateGUI
+            updateGUI.refreshUnitsAndConstructions(self)
         
         if(not self.activated and player.selected_planet == self):
             if((self.prev_planet == None or self.prev_planet.activated) and \
