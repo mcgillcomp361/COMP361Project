@@ -628,7 +628,7 @@ class Planet(SphericalBody):
         return task.cont
     
     def _collapseOrbit(self, task):
-        self.orbital_radius = self.orbital_radius - 0.03
+        self.orbital_radius = self.orbital_radius - 0.39
         self.orbital_angle = self.orbital_angle + self.orbital_velocity
         self.orbital_angle = math.fmod(self.orbital_angle, 2.0*math.pi)
         self.point_path.setPos(self.orbital_radius * math.cos(self.orbital_angle),
@@ -791,6 +791,9 @@ class Planet(SphericalBody):
                 self.task_unit_timers.remove(task)
                 task = None
         for unit in self.units():
+            for selected_unit in unit.player.selected_units:
+                if(unit == selected_unit):
+                    unit.player.selected_units.remove(unit)
             unit.player.units.remove(unit)
             self.removeOrbitingUnit(unit)
             unit.removeFromGame()
