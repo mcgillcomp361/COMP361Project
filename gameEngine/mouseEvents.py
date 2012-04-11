@@ -75,9 +75,12 @@ class MouseEvents(DirectObject.DirectObject):
                 scaled_pos.setX(scaled_pos.getX()*base.getAspectRatio())
                 scaled_mpos = Point2(mpos)
                 scaled_mpos.setX(scaled_mpos.getX()*base.getAspectRatio())
+                for unit in self.player.selected_units:
+                    unit.deselect()
+                del self.player.selected_units[:]
                 for unit in self.player.units:
                     if unit.is3dpointIn2dRegion(scaled_pos, scaled_mpos):
-#                        unit.select(self.player)
+                        unit.select()
                         unit.highlight()
             self.mouseFirstPos = None
             self.drag_rect_path.hide()
@@ -159,5 +162,10 @@ class MouseEvents(DirectObject.DirectObject):
         model = model_path.getPythonTag(python_tag)
         if(click == 'rightClick'):
             model.selectRight(self.player)
-        if(click == 'leftClick'):
+        elif(click == 'leftClick' and tag == 'unit' and self.player == model.player):
+            for unit in self.player.selected_units:
+                unit.deselect()
+            del self.player.selected_units[:]
+            model.select()
+        else:
             model.select(self.player)
