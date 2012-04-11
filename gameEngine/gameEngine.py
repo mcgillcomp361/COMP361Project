@@ -169,12 +169,14 @@ def _initiateAI(task):
     return task.done
 
 def setupMinimap():
-    playerTargets = []
-  #  opponentTargets = []
+    planetTargets = []
+    starTargets = []
     for planet in all_planets:
-        playerTargets.append(planet)
+        planetTargets.append(planet)
+    for star in starTargets:
+        starTargets.append(star)
     map = Minimap()
-#    map.setTargets(playerTargets)
+    map.setTargets(planetTargets, starTargets)
 
 '''
 The Auto management of observing and removing units and structures from the game world
