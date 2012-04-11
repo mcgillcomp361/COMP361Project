@@ -547,7 +547,7 @@ class Planet(SphericalBody):
                 else:
                     '''movement is between solar systems in deep space'''
                     if(self.next_planet == None and selected_unit.host_planet.next_planet == None):
-                        player.selected_unit.moveDeepSpace(self)
+                        selected_unit.moveDeepSpace(self)
                         move_occured = True
 
         if(len(player.selected_units)!=0 and move_occured):

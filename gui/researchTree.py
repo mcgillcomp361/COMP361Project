@@ -86,18 +86,15 @@ class ResearchTree():
     def selectTier2(self):
         print self.player.research.getLevel()
         if(self.player.research.getLevel() == 1 and self.research_task == None):
-            self.research_task = taskMgr.doMethodLater(TIER_II_RESEARCH_TIME, self.player.research.incrementLevel, 'researchTireII')
-            print 'tier 2'
+            self.research_task = taskMgr.doMethodLater(TIER_II_RESEARCH_TIME, self.player.research.incrementLevel, 'researchTireII', extraArgs=[self.player], appendTask = True)
     
     def selectTier3(self):
         if(self.player.research.getLevel() == 2 and self.research_task == None):
-            self.research_task = taskMgr.doMethodLater(TIER_III_RESEARCH_TIME, self.player.research.incrementLevel, 'researchTireIII')
-            print 'tier 3'
+            self.research_task = taskMgr.doMethodLater(TIER_III_RESEARCH_TIME, self.player.research.incrementLevel, 'researchTireIII', extraArgs=[self.player], appendTask = True)
         
     def selectTier4(self):
         if(self.player.research.getLevel() == 3 and self.research_task == None):
-            self.research_task = taskMgr.doMethodLater(TIER_IV_RESEARCH_TIME, self.player.research.incrementLevel, 'researchTireIV')
-            print 'tier 4'
+            self.research_task = taskMgr.doMethodLater(TIER_IV_RESEARCH_TIME, self.player.research.incrementLevel, 'researchTireIV', extraArgs=[self.player], appendTask = True)
             
     def selectCapture(self): 
         pass

@@ -27,8 +27,11 @@ class ResearchTree(object):
     '''
     Increments the level of the Tier by 1
     '''    
-    def incrementLevel(self, task):
+    def incrementLevel(self, player, task):
         self._level = self._level + 1 if self._level < 4 else self._level
+        if(player.selected_planet != None):
+            from gameEngine.gameEngine import updateGUI
+            updateGUI.refreshUnitsAndConstructions(player.selected_planet)
         return task.done
     
     '''

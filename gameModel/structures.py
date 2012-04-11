@@ -49,19 +49,11 @@ class Forge(Structure):
         Constructor
         '''
         super(Forge, self).__init__(FORGE_MAX_ENERGY, host_planet)
-        self._units_in_construction = [] #Queue for units waiting to be trained.
         self.host_planet.setTexture("forge")
-        
-##        self.model_path.setTextureOff()
-#        self.model_path.setColor(Vec4(0.99, 0.12, 0.10, 0.8))
-#        self.model_path.setTransparency(TransparencyAttrib.MAlpha)
-        
-    '''TODO : manage build time '''
-    def addToConstructionQueue(self, unit): 
-        self._units_in_construction.append(unit)
-        
-    def removeFromConstructionQueue(self):
-        return self._units_in_construction.pop()
+        from gameModel.ai import AI
+        if(type(host_planet.player) != AI):
+            from gameEngine.gameEngine import updateGUI
+            updateGUI.refreshUnitsAndConstructions(host_planet)
 
 
 class Nexus(Structure):

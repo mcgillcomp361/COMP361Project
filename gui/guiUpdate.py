@@ -88,9 +88,9 @@ class guiUpdate():
         g = GamePanel(planet.player)
         if(planet.hasStructure("forge")):
             g.hasForge()
-            if(planet.player.research.getLevel()==2):
+            if(planet.player.research.getLevel()>=2):
                 g.unlockTier2()
-            if(planet.player.research.getLevel()==3):
+            if(planet.player.research.getLevel()>=3):
                 g.unlockTier3()
             if(planet.player.research.getLevel()==4):
                 g.unlockTier4()

@@ -189,6 +189,7 @@ The Auto management of observing and removing units and structures from the game
 '''
 def _trackUnitsAndStructures(task):
     global ai, player
+    print len(player.selected_units)
     if(ai != None):
         for unit in ai.units:
             if(unit.energy <= 0):
@@ -196,23 +197,14 @@ def _trackUnitsAndStructures(task):
                 ai.units.remove(unit)
                 unit.removeFromGame()
                 unit = None
-        for structure in ai.structures:
-            if(structure.energy <= 0):
-                structure.host_planet.removeSurfaceStructure(structure)
-                ai.structures.remove(structure)
-                structure = None
 
     for unit in player.units:
         if(unit.energy <= 0):
             unit.host_planet.removeOrbitingUnit(unit)
-            if(unit == player.selected_unit):
-                player.selected_unit = None
+            for selected_unit in player.selected_units:
+                if(unit == selected_unit):
+                    player.selected_units.remove(unit)
             player.units.remove(unit)
             unit.removeFromGame()
             unit = None
-    for structure in player.structures:
-        if(structure.energy <= 0):
-            structure.host_planet.removeSurfaceStructure(structure)
-            player.structures.remove(structure)
-            structure = None
     return task.again

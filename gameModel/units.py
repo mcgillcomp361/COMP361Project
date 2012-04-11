@@ -221,8 +221,9 @@ class Unit(object):
         if(len(self.player.selected_units) == 1):
             ''' TODO: show the statics of the unit in the characteristic panel on the GUI '''
             self.highlight()
-            if(self.move_unit.status() == self.move_unit.PLAYING):
-                self.move_unit.stop()
+            for unit in self.player.selected_units:
+                if(unit.move_unit != None and unit.move_unit.status() == unit.move_unit.PLAYING):
+                    unit.move_unit.stop()
             self.select_unit.play()
     
     def startOrbit(self):
@@ -274,7 +275,7 @@ class Unit(object):
             #else:
             #   self.deep_space = True
                 #TODO : The unit will NOT be select-able for the duration of travel
-        if(self.select_unit != None):
+        if(self.select_unit != None and self.select_unit.status() == self.select_unit.PLAYING):
             self.select_unit.stop()
                 
     def _onPlanet(self):
