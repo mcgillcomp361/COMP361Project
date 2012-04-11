@@ -45,4 +45,5 @@ class Application(ShowBase):
 app = Application()
 # TODO: maybe we want to manage the game loop ourselves? Using taskMgr.step().
 #       See http://www.panda3d.org/manual/index.php/Main_Loop
+#Best that we don't, it's not easy to manage it ourselves, I tried for the networking.
 app.run()

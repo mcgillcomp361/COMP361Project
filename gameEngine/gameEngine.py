@@ -28,6 +28,7 @@ from direct.task import Task
 from mouseEvents import MouseEvents
 from gui.gamePanel import GamePanel
 from gui.guiUpdate import guiUpdate
+from gui.minimap import Minimap
 
 mouse_events = None
 env_graphics = None
@@ -37,6 +38,8 @@ ai_task = None
 all_players = []
 all_stars = []
 all_planets = []
+
+music = None
 
 _game_camera = None
             
@@ -48,9 +51,10 @@ def initialize():
     global mouse_events, env_graphics, all_players, gamePanel, updateGUI
     mouse_events = MouseEvents()
     env_graphics = Environement()
-    gamePanel = GamePanel(player)
     updateGUI = guiUpdate(0)
     _prepareGame()
+    gamePanel = GamePanel(player)
+    setupMinimap()
     _startGame(all_players)
 
 def _prepareGame():
@@ -107,11 +111,11 @@ def _startGame(players):
     either the single player mode or the multiplayer mode based on the players choice.
     @param players: the list of the players ready to play
     '''
-    global _game_camera
+    global _game_camera, music
     ''' TODO : music should be self.music so it can be changed later on '''
     music = base.loader.loadSfx("sound/music/orbitals.mp3")
     music.setLoop(True)
-    music.setVolume(0.4)
+    music.setVolume(0.15)
     music.play()
     
     #randomly set the camera on one of the stars for the player
@@ -164,12 +168,20 @@ def _initiateAI(task):
     ai_task = None
     return task.done
 
+def setupMinimap():
+    playerTargets = []
+  #  opponentTargets = []
+    for planet in all_planets:
+        playerTargets.append(planet)
+        print planet.position
+    map = Minimap()
+#    map.setTargets(playerTargets)
+
 '''
 The Auto management of observing and removing units and structures from the game world
 '''
 def _trackUnitsAndStructures(task):
     global ai, player
-    '''TODO : use yield iteration for units and structures in ai and player classes '''
     if(ai != None):
         for unit in ai.units:
             if(unit.energy <= 0):
@@ -177,19 +189,13 @@ def _trackUnitsAndStructures(task):
                 ai.units.remove(unit)
                 unit.removeFromGame()
                 unit = None
-                ''' TODO : remove the unit properly '''
-                ''' TODO: remove unit model and its abilities if any'''
         for structure in ai.structures:
             if(structure.energy <= 0):
                 structure.host_planet.removeSurfaceStructure(structure)
                 ai.structures.remove(structure)
                 structure = None
-                ''' TODO : remove the structure properly '''
-                ''' TODO: remove structure texture'''
 
     for unit in player.units:
-        print unit.energy
-        print unit.target
         if(unit.energy <= 0):
             unit.host_planet.removeOrbitingUnit(unit)
             if(unit == player.selected_unit):
@@ -197,13 +203,9 @@ def _trackUnitsAndStructures(task):
             player.units.remove(unit)
             unit.removeFromGame()
             unit = None
-            ''' TODO : remove the unit properly '''
-            ''' TODO: remove unit model and its abilities if any'''
     for structure in player.structures:
         if(structure.energy <= 0):
             structure.host_planet.removeSurfaceStructure(structure)
             player.structures.remove(structure)
             structure = None
-            ''' TODO : remove the structure properly '''
-            ''' TODO: remove structure texture'''
     return task.again

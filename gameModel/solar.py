@@ -41,6 +41,10 @@ class SphericalBody(Observable):
     planet_phylon_tex = None
     planet_generatorCore_tex = None
     
+    star_created_sound1 = None
+    star_created_sound2 = None
+    planet_created_sound = None
+    
     def __init__(self, position, radius, activated, player):
         '''
         Constructor
@@ -73,7 +77,16 @@ class SphericalBody(Observable):
         SphericalBody.planet_phylon_tex = loader.loadTexture("models/planets/planet_phylon_tex.png")
         SphericalBody.planet_generatorCore_tex = loader.loadTexture("models/planets/planet_generatorCore_tex.png")
         
-    #def __str__(self) :
+        SphericalBody.star_created_sound1 = base.loader.loadSfx("sound/effects/star/starCreation1.wav")
+        SphericalBody.star_created_sound2 = base.loader.loadSfx("sound/effects/star/starCreation2.wav")
+        SphericalBody.planet_created_sound = base.loader.loadSfx("sound/effects/planet/planetCreation.wav")
+        #sound1.setLoop(False)
+        #sound2.setLoop(False)
+        SphericalBody.star_created_sound1.setVolume(0.5)
+        SphericalBody.star_created_sound2.setVolume(0.4)
+        SphericalBody.planet_created_sound.setVolume(0.3)
+        
+    #def __str__(self)
     #   '''To String method'''
     #  return str(self.__dict__)
 
@@ -230,14 +243,9 @@ class Star(SphericalBody):
         render.setLight(pt_node)
         
         '''TODO : display star birth animation '''
-        sound1 = base.loader.loadSfx("sound/effects/star/starCreation1.wav")
-        sound1.setLoop(False)
-        sound1.setVolume(0.5)
-        sound1.play()
-        sound2 = base.loader.loadSfx("sound/effects/star/starCreation2.wav")
-        sound2.setLoop(False)
-        sound2.setVolume(0.45)
-        sound2.play()
+        
+        SphericalBody.star_created_sound1.play()
+        SphericalBody.star_created_sound2.play()
         
         self.radius = MAX_STAR_RADIUS
         self.model_path.setScale(self.radius)
@@ -496,9 +504,10 @@ class Planet(SphericalBody):
         @param player, the player who has selected
         '''
         player.selected_star = None
-
-        if(self.player == player):
-            '''TODO : notify the GUI Panel about the constructions available on this planet '''
+#
+#        if(self.player == player):
+#            from gameEngine.gameEngine import updateGUI
+#            updateGUI.refreshUnitsAndConstructions(self)
         
         if(not self.activated and player.selected_planet == self):
             if((self.prev_planet == None or self.prev_planet.activated) and \
@@ -547,11 +556,7 @@ class Planet(SphericalBody):
         player.planets.append(self)
         self.player = player
 
-        
-        sound = base.loader.loadSfx("sound/effects/planet/planetCreation.wav")
-        sound.setLoop(False)
-        sound.setVolume(0.23)
-        sound.play()
+        SphericalBody.planet_created_sound.play()
         
         self.radius = MAX_PLANET_RADIUS
         self.model_path.setScale(self.radius)
@@ -566,7 +571,7 @@ class Planet(SphericalBody):
         if self.parent_star.lifetime != 0:
             taskMgr.add(self._accelerateOrbit, 'accelerateOrbit')
         
-        self.orbit_path = shapes.makeArc(360, int(self.orbital_radius))
+        self.orbit_path = shapes.makeArc(self.player.color, 360, int(self.orbital_radius))
         self.orbit_path.reparentTo(self.parent_star.point_path)
         self.orbit_path.setScale(self.orbital_radius)
     
@@ -669,6 +674,7 @@ class Planet(SphericalBody):
         @param player: Player, the player who has captured the planet by swarms
         @precondition: the player must have used the capture ability of a swarm unit on the planet
         '''
+        '''TODO: Use makeArc to change the color of the orbit'''
         self.player = player
         
     def addOrbitingUnit(self, unit):
@@ -860,7 +866,8 @@ class Planet(SphericalBody):
         return False
     
     def removeFromGame(self):
-        self.next_planet.prev_planet = None
+        if(self.next_planet != None):
+            self.next_planet.prev_planet = None
         self.point_path.removeNode()
         from player import Player
         if type(self.player) == Player and self.player.selected_planet == self:

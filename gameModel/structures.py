@@ -31,9 +31,8 @@ class Structure(object):
         self.host_planet = host_planet
         self.host_planet.addSurfaceStructure(self)
         
-        self.model_path = loader.loadModel("models/planets/torus")
-        
-        self.model_path.reparentTo(self.host_planet.model_path)
+#        self.model_path = loader.loadModel("models/planets/torus")       
+#        self.model_path.reparentTo(self.host_planet.model_path)
 #        self.model_path.setScale(1.0)
 #        self.model_path.setSx(0.45)
 #        self.model_path.setSy(0.45)
@@ -51,11 +50,11 @@ class Forge(Structure):
         '''
         super(Forge, self).__init__(FORGE_MAX_ENERGY, host_planet)
         self._units_in_construction = [] #Queue for units waiting to be trained.
+        self.host_planet.setTexture("forge")
         
-        self.model_path.setTexture("forge")
-#        self.model_path.setTextureOff()
-        self.model_path.setColor(Vec4(0.99, 0.12, 0.10, 0.8))
-        self.model_path.setTransparency(TransparencyAttrib.MAlpha)
+##        self.model_path.setTextureOff()
+#        self.model_path.setColor(Vec4(0.99, 0.12, 0.10, 0.8))
+#        self.model_path.setTransparency(TransparencyAttrib.MAlpha)
         
     '''TODO : manage build time '''
     def addToConstructionQueue(self, unit): 
@@ -77,11 +76,13 @@ class Nexus(Structure):
         @param host_planet : The planet where the structure is constructed on
         '''
         super(Nexus, self).__init__(NEXUS_MAX_ENERGY, host_planet)
-        self.model_path.setPos(0,0,-0.2)
-        self.model_path.setTexture("nexus")
-#        self.model_path.setTextureOff()
-        self.model_path.setColor(Vec4(0.1, 0.12, 0.99, 0.8))
-        self.model_path.setTransparency(TransparencyAttrib.MAlpha)
+        
+        self.host_planet.setTexture("nexus")
+        
+#        self.model_path.setPos(0,0,-0.2)
+##        self.model_path.setTextureOff()
+#        self.model_path.setColor(Vec4(0.1, 0.12, 0.99, 0.8))
+#        self.model_path.setTransparency(TransparencyAttrib.MAlpha)
 
 
 class Extractor(Structure):
@@ -97,11 +98,11 @@ class Extractor(Structure):
         @param host_planet : The planet where the structure is constructed on
         '''
         super(Extractor, self).__init__(EXTRACTOR_MAX_ENERGY, host_planet)
-        self.model_path.setTexture("extractor")
-        self.model_path.setPos(0,0,0.2)
-#        self.model_path.setTextureOff()
-        self.model_path.setColor(Vec4(0.1, 0.92, 0.29, 0.8))
-        self.model_path.setTransparency(TransparencyAttrib.MAlpha)
+        self.host_planet.setTexture("extractor")
+#        self.model_path.setPos(0,0,0.2)
+##        self.model_path.setTextureOff()
+#        self.model_path.setColor(Vec4(0.1, 0.92, 0.29, 0.8))
+#        self.model_path.setTransparency(TransparencyAttrib.MAlpha)
 
 
 class Phylon(Structure):
@@ -117,11 +118,11 @@ class Phylon(Structure):
         @param host_planet : The planet where the structure is constructed on
         '''
         super(Phylon, self).__init__(PHYLON_MAX_ENERGY, host_planet)
-        self.model_path.setTexture("phylon")
-        self.model_path.setPos(0,0,0.4)
-#        self.model_path.setTextureOff()
-        self.model_path.setColor(Vec4(0.9, 0.12, 0.99, 0.8))
-        self.model_path.setTransparency(TransparencyAttrib.MAlpha)
+        self.host_planet.setTexture("phylon")
+#        self.model_path.setPos(0,0,0.4)
+##        self.model_path.setTextureOff()
+#        self.model_path.setColor(Vec4(0.9, 0.12, 0.99, 0.8))
+#        self.model_path.setTransparency(TransparencyAttrib.MAlpha)
 
 
 class GeneratorCore(Structure):
@@ -137,11 +138,11 @@ class GeneratorCore(Structure):
         @param host_planet : The planet where the structure is constructed on
         '''
         super(GeneratorCore, self).__init__(GENERATOR_CORE_MAX_ENERGY, host_planet) 
-        self.model_path.setTexture("generatorCore")
-        self.model_path.setPos(0,0,-0.4)
-#        self.model_path.setTextureOff()
-        self.model_path.setColor(Vec4(0.1, 0.92, 0.99, 0.8))
-        self.model_path.setTransparency(TransparencyAttrib.MAlpha)
+        self.host_planet.setTexture("generatorCore")
+#        self.model_path.setPos(0,0,-0.4)
+##        self.model_path.setTextureOff()
+#        self.model_path.setColor(Vec4(0.1, 0.92, 0.99, 0.8))
+#        self.model_path.setTransparency(TransparencyAttrib.MAlpha)
 
                
 class PlanetaryDefenseI(Structure):

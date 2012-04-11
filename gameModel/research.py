@@ -4,36 +4,32 @@ Created on 7 janv. 2012
 @author: Bazibaz
 '''
 
-_nb_of_tiers = 4
-
 class ResearchTree(object):
     '''
-    Research tree of player abilities
+    Evolution tree of unit abilities and tier's of technology
     '''
 
-    def __init__(self, unit_list, struct_list):
+    def __init__(self):
         '''
         Constructor
         '''
-        self._level = 0
-        #TODO: why sort here? what?
-        #Please use python built-in data structures: Ordered(Something)
-        self.unit_tier = self._sort_map(unit_list)
-        self.struct_tier = self._sort_map(struct_list)
+        self._level = 1
+        self.capture = False
+        self.cloak = False
+        self.vision = False
+        self.burrow = False
+        self.healing_aura = False
+        self.harvest = False
+        self.ring_of_fire = False
+        self.control_wave = False
+        self.generate_black_hole = False
         
-    '''
-    Prepares the maps by sorting the levels in increasing order.
-    The key will represent the level, while the values will be a list of
-    available units/Structures up until that level.
-    '''
-    def _sortMap(self, strOrUnlist):
-        raise NotImplementedError("Research sort not implemented.")
-    
     '''
     Increments the level of the Tier by 1
     '''    
-    def incrementLevel(self):
-        self._level = self._level + 1 if self._level < _nb_of_tiers else self._level
+    def incrementLevel(self, task):
+        self._level = self._level + 1 if self._level < 4 else self._level
+        return task.done
     
     '''
     Decrements the level of the Tier by 1
