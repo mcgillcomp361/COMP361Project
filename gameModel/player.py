@@ -72,7 +72,7 @@ class Player(object):
 
     
     def _showStructureProgress(self, time):
-        taskMgr.add(indicators.drawProgressBar, 'structureProgressBar', extraArgs =[self.selected_planet, time, False, (1.0,0,0,0.5), (0,1.0,0,0.5)], appendTask=True)
+        taskMgr.add(indicators.drawProgressBar, 'structureProgressBar', extraArgs =[self.selected_planet, time], appendTask=True)
     
     def _delayedConstructStructure(self, Structure, host_planet, task):
         structure = Structure(host_planet)
@@ -139,7 +139,7 @@ class Player(object):
             Player.cannot_build_sound.play()
     
     def _showUnitProgress(self, time):
-        taskMgr.add(indicators.drawProgressBar, 'unitProgressBar', extraArgs =[self.selected_planet, time, True, (0.5,0,1.0,0.5), (1.0,1.0,0,0.5)], appendTask=True)
+        taskMgr.add(indicators.drawUnitProgressBar, 'unitProgressBar', extraArgs =[self.selected_planet, time], appendTask=True)
     
     def _delayedConstructUnit(self, Unit, planet, task):
         unit = Unit(planet, self)

@@ -162,10 +162,11 @@ class MouseEvents(DirectObject.DirectObject):
         model = model_path.getPythonTag(python_tag)
         if(click == 'rightClick'):
             model.selectRight(self.player)
-        elif(click == 'leftClick' and tag == 'unit' and self.player == model.player):
-            for unit in self.player.selected_units:
-                unit.deselect()
-            del self.player.selected_units[:]
-            model.select()
+        elif(click == 'leftClick' and tag == 'unit'):
+            if(self.player == model.player):
+                for unit in self.player.selected_units:
+                    unit.deselect()
+                del self.player.selected_units[:]
+                model.select()
         else:
             model.select(self.player)
