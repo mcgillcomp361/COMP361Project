@@ -214,7 +214,7 @@ class Unit(object):
         else: return False
     
     def deselect(self):
-        ''' TODO : remove cone highlight '''
+        self.cone_path.removeNode()
         
     def select(self):
         self.player.selected_units.append(self)
@@ -275,7 +275,7 @@ class Unit(object):
             #   self.deep_space = True
                 #TODO : The unit will NOT be select-able for the duration of travel
         if(self.select_unit != None):
-           self.select_unit.stop()
+            self.select_unit.stop()
                 
     def _onPlanet(self):
         self.between_orbits = False
@@ -336,7 +336,8 @@ class Swarm(Unit):
         self.quad_path.setScale(2)
 #        self.quad_path.removeNode()
         self._loadSounds("swarm")
-        self.model_path.setColor(Vec4(1,1,1,1))
+        self.model_path.setColor(Vec4(1,1,1,0.1))
+        self.model_path.setLightOff()
         self.p = ParticleEffect()
         self.p.loadConfig('models/units/swarm/swarm.ptf')
         self.p.start(self.model_path)

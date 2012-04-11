@@ -17,8 +17,8 @@ class Client(DirectObject):
     def __init__( self ): 
         print "Initializing client test" 
         
-        self.port = 111 
-        self.ip_address = "127.0.0.1" 
+        self.port = 9099
+        self.ip_address = "142.157.150.72" 
         self.timeout = 3000             # 3 seconds to timeout 
         
         self.cManager = QueuedConnectionManager() 
