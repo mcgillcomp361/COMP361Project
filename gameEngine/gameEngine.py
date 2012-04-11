@@ -134,6 +134,12 @@ def _singlePlayer():
     '''
     global player, mouse_events, ai, all_stars, _game_camera
     player = Player("player")
+    updateGUI.refreshResources()
+    updateGUI.value = player.minerals
+    updateGUI.printResources()
+    updateGUI.refreshGE()
+    updateGUI.value = player.ge_amount
+    updateGUI.printGE()
     task_track_minerals = taskMgr.doMethodLater(1, player.trackMinerals, 'trackPlayerMinerals')
     mouse_events.setPlayer(player)
     mouse_events.setCamera(_game_camera)

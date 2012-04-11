@@ -14,16 +14,15 @@ class guiUpdate():
 
         self.value = value
         self._loadSounds()
-
+        
         self.screenText = OnscreenText(text='Time: ', pos=(0.8, 0.95), scale=0.05, fg=(1, 1, 1, 1))
         self.timeValue = OnscreenText(text='  ', pos=(1.0, 0.95), scale=0.05, fg=(1, 1, 1, 1))
-        self.resources = OnscreenText(text='Minerals: ', pos=(0.3, -0.67), scale=0.05, fg=(1, 1, 1, 1))
-        self.resourceValue = OnscreenText(text='  ', pos=(0.6, -0.67), scale=0.05, fg=(1, 1, 1, 1))
-       # tex = loader.loadTexture("/models/gui/gravsymbol.png")
         self.image = OnscreenImage(image=("./models/gui/gravsymbol.png"), scale = 0.027, pos=(0.2, 0, -0.735))
         self.image.setTransparency(True)
-        self.ge = OnscreenText(text='               : ', pos=(0.4, -0.75), scale=0.05, fg=(1, 1, 1, 1))
+        self.image = OnscreenImage(image=("./models/gui/Mineral.png"), scale = 0.03, pos=(0.2, 0, -0.655))
+        self.image.setTransparency(True)
         self.geAmount = OnscreenText(text=' ', pos=(0.6, -0.75), scale=0.05, fg=(1, 1, 1, 1))
+        self.resourceValue = OnscreenText(text='  ', pos=(0.6, -0.67), scale=0.05, fg=(1, 1, 1, 1))
         self.mainFrame = DirectFrame(frameColor= (0,0,0,1),
             scale=0.05,
             pos=(0, 0,-0.7), parent=aspect2d      
