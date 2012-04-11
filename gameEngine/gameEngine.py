@@ -173,7 +173,6 @@ def setupMinimap():
   #  opponentTargets = []
     for planet in all_planets:
         playerTargets.append(planet)
-        print planet.position
     map = Minimap()
 #    map.setTargets(playerTargets)
 

@@ -22,7 +22,7 @@ from direct.distributed.PyDatagramIterator import PyDatagramIterator
 
 class Server(DirectObject): 
     def __init__( self ): 
-        self.port = 9099 
+        self.port = 9099
         self.portStatus = "Closed" 
         self.host = "localhost" 
         self.backlog = 1000 
