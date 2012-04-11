@@ -13,6 +13,18 @@ from panda3d.core import Vec3, Vec4, Point2, Point3, BitMask32, CardMaker
 import math
 import gameEngine
 
+
+from panda3d.physics import BaseParticleEmitter,BaseParticleRenderer
+from panda3d.physics import PointParticleFactory,SpriteParticleRenderer
+from panda3d.physics import LinearNoiseForce,DiscEmitter
+from panda3d.core import Filename
+from direct.particles.Particles import Particles
+from direct.particles.ParticleEffect import ParticleEffect
+from direct.particles.ForceGroup import ForceGroup
+import sys
+
+
+
 class Unit(object):
     __metaclass__ = ABCMeta
     '''
@@ -146,15 +158,13 @@ class Unit(object):
         return task.again
     
     def highlight(self):
-        cm = CardMaker('quad')
-        tex = loader.loadTexture("models/billboards/cross.png")
-        self.cross_path = self.model_path.attachNewNode(cm.generate())
-        self.cross_path.setTexture(tex)
-        self.cross_path.setTransparency(TransparencyAttrib.MAlpha)
-        self.cross_path.setScale(2)
-        self.cross_path.setPos(Vec3(0, 0, -3))
-        self.cross_path.setP(-90)
-        self.cross_path.setColor(Vec4(0.3, 1, 0.2, 0.6))
+        self.cone_path = loader.loadModel("models/units/cone")
+        self.cone_path.reparentTo(self.model_path)
+        self.cone_path.setTransparency(TransparencyAttrib.MAlpha)
+#        self.cone_path.setScale(2)
+        self.cone_path.setPos(Vec3(0, 0, 3))
+        self.cone_path.setP(180)
+        self.cone_path.setColor(Vec4(0.3, 1, 0.2, 0.6))
     
     def is3dpointIn2dRegion(self, point1, point2): 
         """This function takes a 2d selection box from the screen as defined by two corners 
@@ -320,9 +330,16 @@ class Swarm(Unit):
         Constructor
         @param host_planet : The planet where the unit is constructed
         '''
+        base.enableParticles()
         super(Swarm, self).__init__(host_planet, player, SWARM_VELOCITY, SWARM_MAX_ENERGY, SWARM_DAMAGE, [])
         self.quad_path.setScale(2)
+#        self.quad_path.removeNode()
         self._loadSounds("swarm")
+        self.model_path.setColor(Vec4(1,1,1,1))
+        self.p = ParticleEffect()
+        self.p.loadConfig('models/units/swarm/swarm.ptf')
+        self.p.start(self.model_path)
+        #TODO:Remove
                    
 class Horde(Unit):
     '''
