@@ -80,3 +80,20 @@ def drawUnitProgressBar(self, time, task):
         del self.purple_progress_path       
         return task.done
     return task.cont
+
+#def damageSphere(self, time, task):
+#    try:
+#        if self.damage_sphere_path:
+#            pass
+#    except AttributeError:
+#        self.damage_sphere_path = loader.loadModel("models/stars/planet_sphere")
+#        self.damage_sphere_path.reparentTo(self.model_path)
+#        self.damage_sphere_path.setScale(2)
+#        self.damage_sphere_path.setTextureOff()
+#        self.damage_sphere_path.setColor(1,0,0,0.3)
+#    if task.time > time:
+#        self.yellow_progress_path.removeNode()
+#        self.purple_progress_path.removeNode()
+#        del self.damage_sphere_path 
+#        return task.done
+#    return task.cont
