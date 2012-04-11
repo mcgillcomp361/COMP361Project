@@ -188,7 +188,6 @@ class Unit(object):
 
         # And then convert it to aspect2d coordinates 
         a2d = base.aspect2d.getRelativePoint(render2d, r2d) 
-        print a2d
         #Find out the biggest/smallest X and Y of the 2- 2d points provided. 
         if point1.getX() > point2.getX(): 
             bigX = point1.getX() 
