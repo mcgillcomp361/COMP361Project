@@ -20,7 +20,7 @@ class guiUpdate():
         self.resources = OnscreenText(text='Minerals: ', pos=(0.3, -0.67), scale=0.05, fg=(1, 1, 1, 1))
         self.resourceValue = OnscreenText(text='  ', pos=(0.6, -0.67), scale=0.05, fg=(1, 1, 1, 1))
        # tex = loader.loadTexture("/models/gui/gravsymbol.png")
-        self.image = OnscreenImage(image=("./models/gui/gravsymbol.png"), scale = 0.03, pos=(0.2, 0, -0.75))
+        self.image = OnscreenImage(image=("./models/gui/gravsymbol.png"), scale = 0.027, pos=(0.2, 0, -0.735))
         self.image.setTransparency(True)
         self.ge = OnscreenText(text='               : ', pos=(0.4, -0.75), scale=0.05, fg=(1, 1, 1, 1))
         self.geAmount = OnscreenText(text=' ', pos=(0.6, -0.75), scale=0.05, fg=(1, 1, 1, 1))
