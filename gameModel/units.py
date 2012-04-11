@@ -214,13 +214,17 @@ class Unit(object):
             else: return False 
         else: return False
     
-    def select(self, player):
-        if(player == self.player):
-            player.selected_unit = self
+    def deselect(self):
+        ''' TODO : remove cone highlight '''
+        
+    def select(self):
+        self.player.selected_units.append(self)
+        if(len(self.player.selected_units) == 1):
+            ''' TODO: show the statics of the unit in the characteristic panel on the GUI '''
+            self.highlight()
             if(self.move_unit.status() == self.move_unit.PLAYING):
                 self.move_unit.stop()
             self.select_unit.play()
-        ''' TODO: show the statics of the unit in the characteristic panel on the GUI '''
     
     def startOrbit(self):
         self.orbit_period = self.point_path.hprInterval(10, Vec3(-360, 0, 0))
@@ -271,10 +275,8 @@ class Unit(object):
             #else:
             #   self.deep_space = True
                 #TODO : The unit will NOT be select-able for the duration of travel
-        if(self.move_unit != None):
-            if(self.select_unit.status() == self.select_unit.PLAYING):
-                self.select_unit.stop()
-            self.move_unit.play()
+        if(self.select_unit != None):
+           self.select_unit.stop()
                 
     def _onPlanet(self):
         self.between_orbits = False

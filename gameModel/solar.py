@@ -505,6 +505,7 @@ class Planet(SphericalBody):
         '''
         player.selected_star = None
 #
+        ''' TODO : un-comment the following '''
 #        if(self.player == player):
 #            from gameEngine.gameEngine import updateGUI
 #            updateGUI.refreshUnitsAndConstructions(self)
@@ -533,18 +534,27 @@ class Planet(SphericalBody):
         and notifies the corresponding objects based on the state of the planet
         @param player, the player who has selected with right mouse click
         '''
-        if(player.selected_unit != None and player.selected_unit.player == player):
-            '''movement is inside the solar system'''
-            if(player.selected_unit.host_planet.parent_star == self.parent_star):
-                if(player.selected_unit.host_planet == self.prev_planet):
-                    player.selected_unit.moveUnitNext()
-                if(player.selected_unit.host_planet == self.next_planet):
-                    player.selected_unit.moveUnitPrev()      
-            else:
-                '''movement is between solar systems in deep space'''
-                if(self.next_planet == None and player.selected_unit.host_planet.next_planet == None):
-                    player.selected_unit.moveDeepSpace(self)
-       
+        move_occured = False
+        for selected_unit in player.selected_units:
+            if(selected_unit != None and selected_unit.player == player):
+                '''movement is inside the solar system'''
+                if(selected_unit.host_planet.parent_star == self.parent_star):
+                    if(selected_unit.host_planet == self.prev_planet):
+                        selected_unit.moveUnitNext()
+                        move_occured = True
+                    if(selected_unit.host_planet == self.next_planet):
+                        selected_unit.moveUnitPrev()   
+                        move_occured = True 
+                else:
+                    '''movement is between solar systems in deep space'''
+                    if(self.next_planet == None and selected_unit.host_planet.next_planet == None):
+                        player.selected_unit.moveDeepSpace(self)
+                        move_occured = True
+
+        if(len(player.selected_units)!=0 and move_occured):
+            if(player.selected_units[0] != None and player.selected_units[0].move_unit != None):
+                player.selected_units[0].move_unit.play()
+            
     def activatePlanet(self, player):
         '''
         Activates a constructed dead planet object, starting the orbital movement with the assigned value while

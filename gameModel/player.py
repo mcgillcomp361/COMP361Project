@@ -31,7 +31,6 @@ class Player(object):
         self.name = name
         self.selected_planet = None
         self.selected_star = None
-        self.selected_unit = None
         self.selected_units = []
         self.planets = []
         self.structures = []
