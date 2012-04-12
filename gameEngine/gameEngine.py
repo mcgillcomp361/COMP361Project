@@ -51,9 +51,9 @@ def initialize():
     global mouse_events, env_graphics, all_players, gamePanel, updateGUI
     mouse_events = MouseEvents()
     env_graphics = Environement()
+    gamePanel = None
     updateGUI = guiUpdate(0)
     _prepareGame()
-    gamePanel = GamePanel(player)
     setupMinimap()
     _startGame(all_players)
 
@@ -133,8 +133,9 @@ def _singlePlayer():
     Run a single player game with an AI player
     @players : the player
     '''
-    global player, mouse_events, ai, all_stars, _game_camera
+    global player, mouse_events, ai, all_stars, _game_camera, gamePanel
     player = Player("player")
+    gamePanel = GamePanel(player)
     updateGUI.refreshResources()
     updateGUI.value = player.minerals
     updateGUI.printResources()

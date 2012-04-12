@@ -252,7 +252,7 @@ class Star(SphericalBody):
         self.flare_path.setTransparency(TransparencyAttrib.MAlpha)
         self.flare_path.setTexture(self.flare_ts,flare_tex)
         self.flare_path.setColor(Vec4(1.0, 1.0, 1.0, 1))
-        self.flare_path.setScale(64)
+        self.flare_path.setScale(50)
         self.flare_path.setPos(Vec3(0,0,0))
         self.flare_path.setBillboardPointEye()
         
@@ -497,10 +497,8 @@ class Planet(SphericalBody):
         @param player, the player who has selected
         '''
         player.selected_star = None
-        ''' TODO : uncomment this, fix for optimization '''
-        if(self.player == player or not self.activated):
-            from gameEngine.gameEngine import updateGUI
-            updateGUI.refreshUnitsAndConstructions(self)
+        from gameEngine.gameEngine import updateGUI
+        updateGUI.refreshUnitsAndConstructions(self)
         
         if(not self.activated and player.selected_planet == self):
             if((self.prev_planet == None or self.prev_planet.activated) and \

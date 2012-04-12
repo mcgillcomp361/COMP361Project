@@ -81,7 +81,6 @@ class Menu():
         self.mainFrame.destroy()
         self.b.destroy()
         gameEngine.initialize()
-        self.gamePanel = GamePanel(gameEngine.player)
 
     def mainMenu(self):
         self.mainFrame.destroy()
