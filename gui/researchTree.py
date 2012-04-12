@@ -19,7 +19,7 @@ class ResearchTree():
         if(self.player.getNumberOfNexus() == 0):
             return       
         wp = WindowProperties()
-        wp.setSize(300, 500)
+        wp.setSize(350, 550)
         wp.setOrigin(879, 200)
         win = base.openWindow(props = wp, aspectRatio = 1.33)
         
@@ -59,31 +59,31 @@ class ResearchTree():
                           frameColor=(0, 0,0, 0),image_scale = (0.4, 1, 0.05), command = self.selectTier4)        
 
         #Tier 1 abilities
-        self.b1 = DirectButton(parent = myAspect2d, text = ("Capture", "click!", "roll"), pos = (-0.6, 0, 0.4),
-                          frameColor=(0,0,0,0),text_fg=(1,1,1,1), text_scale=0.08, relief=2, command=self.selectCapture)   
-        self.b2 = DirectButton(parent = myAspect2d, text = ("Cloak", "click!", "roll"), pos = (-0.1, 0, 0.4),
-                          frameColor=(0,0,0,0),text_fg=(1,1,1,1), text_scale=0.08, relief=2, command=self.selectCloak)
-        self.b3 = DirectButton(parent = myAspect2d, text = ("Vision", "click!", "roll"), pos = (0.4, 0, 0.4),
-                          frameColor=(0,0,0,0),text_fg=(1,1,1,1), text_scale=0.08, relief=2, command=self.selectVision)
+        self.b1 = DirectButton(parent = myAspect2d, image = ("./models/gui/researchTree/abilities/capture.png"), pos = (-0.5, 0, 0.48),
+                          frameColor=(0,0,0,0),text_fg=(1,1,1,1), image_scale=(0.15,1,0.08), relief=2, command=self.selectCapture)   
+        self.b2 = DirectButton(parent = myAspect2d, image = ("./models/gui/researchTree/abilities/cloak.png"), pos = (0, 0, 0.48),
+                          frameColor=(0,0,0,0),text_fg=(1,1,1,1), image_scale=(0.15,1,0.08), relief=2, command=self.selectCloak)
+        self.b3 = DirectButton(parent = myAspect2d, image = ("./models/gui/researchTree/abilities/vision.png"), pos = (0.5, 0, 0.48),
+                          frameColor=(0,0,0,0),text_fg=(1,1,1,1), image_scale=(0.15,1,0.08), relief=2, command=self.selectVision)
         
         #Tier 2 abilities
         
-        self.b4 = DirectButton(parent = myAspect2d, text = ("Burrow", "click!", "roll"), pos = (-0.6, 0, 0),
-                          frameColor=(0,0,0,0),text_fg=(1,1,1,1), text_scale=0.08, relief=2, command=self.selectBurrow)
-        self.b5 = DirectButton(parent = myAspect2d, text = ("Healing Aura", "click!", "roll"), pos = (-0.1, 0, 0),
-                          frameColor=(0,0,0,0),text_fg=(1,1,1,1), text_scale=0.08, relief=2, command=self.selectHealingAura)
+        self.b4 = DirectButton(parent = myAspect2d, image = ("./models/gui/researchTree/abilities/burrow.png"), pos = (-0.3, 0, 0.05),
+                          frameColor=(0,0,0,0),text_fg=(1,1,1,1), image_scale=(0.15,1,0.08), relief=2, command=self.selectBurrow)
+        self.b5 = DirectButton(parent = myAspect2d, image = ("./models/gui/researchTree/abilities/healingAura.png"), pos = (0.3, 0, 0.05),
+                          frameColor=(0,0,0,0),text_fg=(1,1,1,1), image_scale=(0.15,1,0.08), relief=2, command=self.selectHealingAura)
         
         #Tier 3 abilities
-        self.b6 = DirectButton(parent = myAspect2d, text = ("Harvest", "click!", "roll"), pos = (-0.6, 0, -0.4),
-                          frameColor=(0,0,0,0),text_fg=(1,1,1,1), text_scale=0.08, relief=2, command=self.selectHarvest)
-        self.b7 = DirectButton(parent = myAspect2d, text = ("Ring of Fire", "click!", "roll"), pos = (-0.1, 0, -0.4),
-                          frameColor=(0,0,0,0),text_fg=(1,1,1,1), text_scale=0.08, relief=2, command=self.selectRingOfFire)
-        self.b8 = DirectButton(parent = myAspect2d, text = ("Control Wave", "click!", "roll"), pos = (0.4, 0, -0.4),
-                          frameColor=(0,0,0,0),text_fg=(1,1,1,1), text_scale=0.08, relief=2, command=self.selectControlWave)
+        self.b6 = DirectButton(parent = myAspect2d, image = ("./models/gui/researchTree/abilities/harvest.png"), pos = (-0.5, 0, -0.39),
+                          frameColor=(0,0,0,0),text_fg=(1,1,1,1), image_scale=(0.15,1,0.08), relief=2, command=self.selectHarvest)
+        self.b7 = DirectButton(parent = myAspect2d, image = ("./models/gui/researchTree/abilities/ringOfFire.png"), pos = (0, 0, -0.39),
+                          frameColor=(0,0,0,0),text_fg=(1,1,1,1), image_scale=(0.15,1,0.08), relief=2, command=self.selectRingOfFire)
+        self.b8 = DirectButton(parent = myAspect2d, image = ("./models/gui/researchTree/abilities/controlWave.png"), pos = (0.5, 0, -0.39),
+                          frameColor=(0,0,0,0),text_fg=(1,1,1,1), image_scale=(0.15,1,0.08), relief=2, command=self.selectControlWave)
         
         #Tier 4 abilities
-        self.b9 = DirectButton(parent = myAspect2d, text = ("Generate Black Hole", "click!", "roll"), pos = (-0.2, 0, -0.8),
-                          frameColor=(0,0,0,0),text_fg=(1,1,1,1), text_scale=0.08, relief=2, command=self.selectGBH)
+        self.b9 = DirectButton(parent = myAspect2d, image = ("./models/gui/researchTree/abilities/bhg.png"), pos = (0, 0, -0.8),
+                          frameColor=(0,0,0,0),text_fg=(1,1,1,1), image_scale=(0.15,1,0.08), relief=2, command=self.selectGBH)
 
     def selectTier2(self):
         if(self.player.research.getLevel() == 1 and self.research_task == None):
