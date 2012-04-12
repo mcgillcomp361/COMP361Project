@@ -41,10 +41,6 @@ class SphericalBody(Observable):
     planet_phylon_tex = None
     planet_generatorCore_tex = None
     
-    star_created_sound1 = None
-    star_created_sound2 = None
-    planet_created_sound = None
-    
     def __init__(self, position, radius, activated, player):
         '''
         Constructor
@@ -76,15 +72,6 @@ class SphericalBody(Observable):
         SphericalBody.planet_extractor_tex = loader.loadTexture("models/planets/planet_extractor_tex.png")
         SphericalBody.planet_phylon_tex = loader.loadTexture("models/planets/planet_phylon_tex.png")
         SphericalBody.planet_generatorCore_tex = loader.loadTexture("models/planets/planet_generatorCore_tex.png")
-        
-        SphericalBody.star_created_sound1 = base.loader.loadSfx("sound/effects/star/starCreation1.wav")
-        SphericalBody.star_created_sound2 = base.loader.loadSfx("sound/effects/star/starCreation2.wav")
-        SphericalBody.planet_created_sound = base.loader.loadSfx("sound/effects/planet/planetCreation.wav")
-        #sound1.setLoop(False)
-        #sound2.setLoop(False)
-        SphericalBody.star_created_sound1.setVolume(0.5)
-        SphericalBody.star_created_sound2.setVolume(0.4)
-        SphericalBody.planet_created_sound.setVolume(0.3)
         
     #def __str__(self)
     #   '''To String method'''
@@ -247,7 +234,11 @@ class Star(SphericalBody):
         
         '''TODO : display star birth animation '''
         
-        SphericalBody.star_created_sound1.play()
+        star_created_sound = base.loader.loadSfx("sound/effects/star/starCreation1.wav")
+        #star_created_sound.setVolume(0.5)
+        star_created_sound.play()
+#        base.sfxManagerList[0].update()
+#        SphericalBody.star_created_sound1.play()
         #SphericalBody.star_created_sound2.play()
         
         self.radius = MAX_STAR_RADIUS
@@ -558,6 +549,7 @@ class Planet(SphericalBody):
 
         if(len(player.selected_units)!=0 and move_occured):
             if(player.selected_units[0] != None and player.selected_units[0].move_unit != None):
+                base.sfxManagerList[0].update()
                 player.selected_units[0].move_unit.play()
             
     def activatePlanet(self, player):
@@ -570,8 +562,13 @@ class Planet(SphericalBody):
         self.activated = True
         player.planets.append(self)
         self.player = player
-
-        SphericalBody.planet_created_sound.play()
+        
+        
+        planet_created_sound = base.loader.loadSfx("sound/effects/planet/planetCreation.wav")
+        #planet_created_sound.setVolume(0.3)
+        planet_created_sound.play()
+#        base.sfxManagerList[0].update()
+#        SphericalBody.planet_created_sound.play()
         
         self.radius = MAX_PLANET_RADIUS
         self.model_path.setScale(self.radius)

@@ -71,6 +71,7 @@ class Unit(object):
             
             location = "sound/effects/units/" + unit_name + "/birth.wav"
             #base.loader.loadSfx(location).setLoop(False)
+            base.sfxManagerList[0].update()
             base.loader.loadSfx(location).play()
             #audio3d.loadSfx(location).play()
         
@@ -105,7 +106,7 @@ class Unit(object):
             self.attack_unit = base.loader.loadSfx(location)
             #self.attack_unit = audio3d.loadSfx(location)
             #self.attack_unit.setLoop(False)
-            self.attack_unit.setVolume(0.5)
+            self.attack_unit.setVolume(0.3)
             #audio3d.setSoundVelocityAuto(self.attack_unit)
             #audio3d.setListenerVelocityAuto()
             #audio3d.attachSoundToObject(self.attack_unit, self)
@@ -224,6 +225,7 @@ class Unit(object):
             for unit in self.player.selected_units:
                 if(unit.move_unit != None and unit.move_unit.status() == unit.move_unit.PLAYING):
                     unit.move_unit.stop()
+            base.sfxManagerList[0].update()
             self.select_unit.play()
     
     def startOrbit(self):
@@ -294,6 +296,7 @@ class Unit(object):
         if(target.energy>0 and target != None):
             target.energy = max(0, target.energy-self.damage)
             if(self.attack_unit != None):
+                base.sfxManagerList[0].update()
                 self.attack_unit.play()
             
     
@@ -398,6 +401,7 @@ class Globe(Unit):
         unit_model_path.setScale(1.1)
         self.quad_path.setScale(2)
         self._loadSounds("globe")
+        self.attack_unit.setVolume(1)
 
 class Sphere(Unit):
     '''
@@ -416,6 +420,7 @@ class Sphere(Unit):
         unit_model_path.setScale(1.7)
         self.quad_path.setScale(3)
         self._loadSounds("sphere")
+        self.attack_unit.setVolume(1)
 
 class Planetarium(Unit):
     '''
@@ -433,7 +438,8 @@ class Planetarium(Unit):
         unit_model_path.reparentTo(self.model_path)
         unit_model_path.setScale(2.5)
         self.quad_path.setScale(4.2)
-        self._loadSounds("planetarium")        
+        self._loadSounds("planetarium")
+        self.attack_unit.setVolume(1)        
 
 class Analyzer(Unit):
     '''

@@ -112,7 +112,8 @@ def _startGame(players):
     @param players: the list of the players ready to play
     '''
     global _game_camera, music
-    ''' TODO : music should be self.music so it can be changed later on '''
+    ''' TODO : music should be played here '''
+#    musicMgr = base.audioManager()
     music = base.loader.loadSfx("sound/music/orbitals.mp3")
     music.setLoop(True)
     music.setVolume(0.15)
