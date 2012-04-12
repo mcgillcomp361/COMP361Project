@@ -222,8 +222,8 @@ class Star(SphericalBody):
         @param player, the player who has activated the star
         '''
         self.lifetime = LIFETIME
-        from graphicEngine import indicators
-        self.task_bar = taskMgr.add(indicators.drawStarProgressBar, 'starProgressBar', extraArgs =[self, self.lifetime], appendTask=True)
+        #from graphicEngine import indicators
+        #self.task_bar = taskMgr.add(indicators.drawStarProgressBar, 'starProgressBar', extraArgs =[self, self.lifetime], appendTask=True)
         self.stage = 1
         self.activated = True
         self.radius = MAX_STAR_RADIUS
@@ -264,7 +264,7 @@ class Star(SphericalBody):
         self.flare_path.setTransparency(TransparencyAttrib.MAlpha)
         self.flare_path.setTexture(self.flare_ts,flare_tex)
         self.flare_path.setColor(Vec4(1.0, 1.0, 1.0, 1))
-        self.flare_path.setScale(40)
+        self.flare_path.setScale(32)
         self.flare_path.setPos(Vec3(0,0,0))
         self.flare_path.setBillboardPointEye()
         
@@ -510,10 +510,10 @@ class Planet(SphericalBody):
         @param player, the player who has selected
         '''
         player.selected_star = None
-            
-        if(self.player == player or not self.activated):
-            from gameEngine.gameEngine import updateGUI
-            updateGUI.refreshUnitsAndConstructions(self)
+        ''' TODO : uncomment this, fix for optimization '''
+#        if(self.player == player or not self.activated):
+#            from gameEngine.gameEngine import updateGUI
+#            updateGUI.refreshUnitsAndConstructions(self)
         
         if(not self.activated and player.selected_planet == self):
             if((self.prev_planet == None or self.prev_planet.activated) and \

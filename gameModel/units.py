@@ -355,8 +355,13 @@ class Horde(Unit):
         @param host_planet : The planet where the unit is constructed
         '''
         super(Horde, self).__init__(host_planet, player, HORDE_VELOCITY, HORDE_MAX_ENERGY, HORDE_DAMAGE, []) 
-        self.quad_path.setScale(3)
+        self.quad_path.setScale(5)
         self._loadSounds("horde")
+#        self.model_path.setColor(Vec4(1,1,1,0.1))
+#        self.model_path.setLightOff()
+#        self.p = ParticleEffect()
+#        self.p.loadConfig('models/units/swarm/swarm.ptf')
+#        self.p.start(self.model_path)
         
 class Hive(Unit):
     '''
@@ -368,8 +373,13 @@ class Hive(Unit):
         @param host_planet : The planet where the unit is constructed
         '''
         super(Hive, self).__init__(host_planet, player, HIVE_VELOCITY, HIVE_MAX_ENERGY, HIVE_DAMAGE, [])
-        self.quad_path.setScale(4)
+        self.quad_path.setScale(8)
         self._loadSounds("hive")
+#        self.model_path.setColor(Vec4(1,1,1,0.1))
+#        self.model_path.setLightOff()
+#        self.p = ParticleEffect()
+#        self.p.loadConfig('models/units/swarm/swarm.ptf')
+#        self.p.start(self.model_path)
         
 class Globe(Unit):
     '''
