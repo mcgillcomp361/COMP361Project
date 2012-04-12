@@ -252,7 +252,7 @@ class Star(SphericalBody):
         self.flare_path.setTransparency(TransparencyAttrib.MAlpha)
         self.flare_path.setTexture(self.flare_ts,flare_tex)
         self.flare_path.setColor(Vec4(1.0, 1.0, 1.0, 1))
-        self.flare_path.setScale(32)
+        self.flare_path.setScale(64)
         self.flare_path.setPos(Vec3(0,0,0))
         self.flare_path.setBillboardPointEye()
         
@@ -822,7 +822,7 @@ class Planet(SphericalBody):
                 task = None
         from gameModel.ai import AI
         for unit in self.units():
-            if(type(self.player) != AI):
+            if(type(unit.player) != AI):
                 for selected_unit in unit.player.selected_units:
                     if(unit == selected_unit):
                         unit.player.selected_units.remove(unit)
