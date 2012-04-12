@@ -5,14 +5,11 @@ Created on 7 Jan. 2012
 '''
 from abc import ABCMeta, abstractmethod
 from constants import FORGE_MAX_ENERGY, NEXUS_MAX_ENERGY, EXTRACTOR_MAX_ENERGY, PHYLON_MAX_ENERGY,\
-GENERATOR_CORE_MAX_ENERGY, PLANETARY_DEFENSE_I_MAX_ENERGY, PLANETARY_DEFENSE_I_DAMAGE, PLANETARY_DEFENSE_II_MAX_ENERGY,\
-PLANETARY_DEFENSE_II_DAMAGE, PLANETARY_DEFENSE_III_MAX_ENERGY, PLANETARY_DEFENSE_III_DAMAGE,\
- PLANETARY_DEFENSE_IV_MAX_ENERGY, PLANETARY_DEFENSE_IV_DAMAGE
+GENERATOR_CORE_MAX_ENERGY, PLANETARY_DEFENSE_I_MAX_ENERGY, PLANETARY_DEFENSE_II_MAX_ENERGY, \
+PLANETARY_DEFENSE_III_MAX_ENERGY,PLANETARY_DEFENSE_IV_MAX_ENERGY
 from panda3d.core import Vec3, Vec4
 from pandac.PandaModules import TransparencyAttrib
 _default_energy = 0
-
-''' TODO : add the planet defence model and functionality '''
 
 class Structure(object):
     __metaclass__ = ABCMeta
@@ -148,7 +145,6 @@ class PlanetaryDefenseI(Structure):
         @param host_planet : The planet where the structure is constructed on
         '''
         super(PlanetaryDefenseI, self).__init__(PLANETARY_DEFENSE_I_MAX_ENERGY, host_planet)
-        self.damage = PLANETARY_DEFENSE_I_DAMAGE
 
 
 class PlanetaryDefenseII(Structure):
@@ -162,7 +158,6 @@ class PlanetaryDefenseII(Structure):
         @param host_planet : The planet where the structure is constructed on
         '''
         super(PlanetaryDefenseII, self).__init__(PLANETARY_DEFENSE_II_MAX_ENERGY, host_planet)
-        self.damage = PLANETARY_DEFENSE_II_DAMAGE
 
 
 class PlanetaryDefenseIII(Structure):
@@ -175,8 +170,7 @@ class PlanetaryDefenseIII(Structure):
         Constructor
         @param host_planet : The planet where the structure is constructed on
         '''
-        super(PlanetaryDefenseIII, self).__init__(PLANETARY_DEFENSE_III_MAX_ENERGY, host_planet)
-        self.damage = PLANETARY_DEFENSE_III_DAMAGE        
+        super(PlanetaryDefenseIII, self).__init__(PLANETARY_DEFENSE_III_MAX_ENERGY, host_planet)        
 
 
 class PlanetaryDefenseIV(Structure):
@@ -190,4 +184,3 @@ class PlanetaryDefenseIV(Structure):
         @param host_planet : The planet where the structure is constructed on
         '''
         super(PlanetaryDefenseIV, self).__init__(PLANETARY_DEFENSE_IV_MAX_ENERGY, host_planet)
-        self.damage = PLANETARY_DEFENSE_IV_DAMAGE

@@ -129,6 +129,7 @@ class Star(SphericalBody):
         self._planets = []
         self.stage = 0
         self.timer_task = None
+        self.task_bar = None
         
         self.t = Timer(self) 
         self.__initSceneGraph()
@@ -221,6 +222,8 @@ class Star(SphericalBody):
         @param player, the player who has activated the star
         '''
         self.lifetime = LIFETIME
+        from graphicEngine import indicators
+        self.task_bar = taskMgr.add(indicators.drawStarProgressBar, 'starProgressBar', extraArgs =[self, self.lifetime], appendTask=True)
         self.stage = 1
         self.activated = True
         self.radius = MAX_STAR_RADIUS
@@ -245,7 +248,7 @@ class Star(SphericalBody):
         '''TODO : display star birth animation '''
         
         SphericalBody.star_created_sound1.play()
-        SphericalBody.star_created_sound2.play()
+        #SphericalBody.star_created_sound2.play()
         
         self.radius = MAX_STAR_RADIUS
         self.model_path.setScale(self.radius)
@@ -261,12 +264,15 @@ class Star(SphericalBody):
         self.flare_path.setTransparency(TransparencyAttrib.MAlpha)
         self.flare_path.setTexture(self.flare_ts,flare_tex)
         self.flare_path.setColor(Vec4(1.0, 1.0, 1.0, 1))
-        self.flare_path.setScale(32)
+        self.flare_path.setScale(40)
         self.flare_path.setPos(Vec3(0,0,0))
         self.flare_path.setBillboardPointEye()
         
     def trackStarLife(self, task):
-        self.lifetime = self.lifetime - float(self.getNumberOfActivePlanets())/(2)
+        self.lifetime = self.lifetime - float(self.getNumberOfActivePlanets()+1)/(2)
+        #if(task_bar != None):
+        #    taskMgr.remove(task_bar)
+        #    task_bar = None
         self.updateTimer()
         if(self.lifetime <= LIFETIME - LIFETIME/6 and self.stage == 1):
             self.stage = 2
@@ -894,7 +900,8 @@ class Planet(SphericalBody):
         Returns true if a type of the structure already exists on the planet
         @structure: String, the desired structure type
         '''
-        from structures import Forge, Nexus, Extractor, Phylon, GeneratorCore
+        from structures import Forge, Nexus, Extractor, Phylon, GeneratorCore,\
+            PlanetaryDefenseI, PlanetaryDefenseII, PlanetaryDefenseIII, PlanetaryDefenseIV
         for surface_structure in self._surface_structures:
             if(structure == "forge" and type(surface_structure) == Forge):
                 return True
@@ -905,6 +912,14 @@ class Planet(SphericalBody):
             elif(structure == "phylon" and type(surface_structure) == Phylon):
                 return True
             elif(structure == "generatorCore" and type(surface_structure) == GeneratorCore):
+                return True
+            elif(structure == "pd1" and type(surface_structure) == PlanetaryDefenseI):
+                return True
+            elif(structure == "pd2" and type(surface_structure) == PlanetaryDefenseII):
+                return True
+            elif(structure == "pd3" and type(surface_structure) == PlanetaryDefenseIII):
+                return True
+            elif(structure == "pd4" and type(surface_structure) == PlanetaryDefenseIV):
                 return True
         return False
     

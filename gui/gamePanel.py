@@ -329,19 +329,19 @@ class GamePanel():
         
     def selectPD1(self):
         if self.player != None:
-            print 'selected pd1'
+            self.player.addStructure("pd1")
     
     def selectPD2(self):
         if(self.player != None):
-            print 'selected PD2'
+            self.player.addStructure("pd2")
         
     def selectPD3(self):
         if(self.player != None):
-            print 'selected PD3'
+            self.player.addStructure("pd3")
         
     def selectPD4(self):
         if(self.player != None):
-            print 'selected PD4'
+            self.player.addStructure("pd4")
         
     ## UNIT SELECTION        
     def selectSwarm(self):
