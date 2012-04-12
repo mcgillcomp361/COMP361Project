@@ -190,7 +190,7 @@ def setupMinimap():
 The Auto management of observing and removing units and structures from the game world
 '''
 def _trackUnitsAndStructures(task):
-    global ai, player
+    global ai, player, all_stars
     #print len(player.selected_units)
     if(ai != None):
         for unit in ai.units:
@@ -209,4 +209,26 @@ def _trackUnitsAndStructures(task):
             player.units.remove(unit)
             unit.removeFromGame()
             unit = None
+            
+    has_no_stars = True
+    for star in all_stars:
+        if(star.player == player):
+            has_no_stars = False
+
+    ''' Loosing Condition ''',
+    if(len(player.planets) == 0 and player.ge_amount == 0 and has_no_stars and player.hasCaptureTypeUnit()==False):
+        print 'You Lost, Noob !'
+        base.userExit()
+#        base.framework.set_exit_flag()
+        
+    has_no_stars = True
+    for star in all_stars:
+        if(star.player == ai):
+            has_no_stars = False
+
+    ''' Winning Condition '''
+    if(len(ai.planets) == 0 and len(ai.units) == 0 and has_no_stars and ai.isDead):
+        print 'You Win, Pro!'
+        base.userExit()
+            
     return task.again

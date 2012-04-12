@@ -184,6 +184,13 @@ class Player(object):
             updateGUI.printResources()
         return task.again
     
+    def hasCaptureTypeUnit(self):
+        ''' TODO : player has researched the abilitiy '''
+        for unit in self.units:
+            if(type(unit) == Swarm or type(unit) == Horde or type(unit) == Hive):
+                return True
+        return False
+        
     def getNumberOfNexus(self):
         number = 0
         for structure in self.structures:

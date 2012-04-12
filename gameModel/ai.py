@@ -35,6 +35,7 @@ class AI(object):
         self.assault_party = []
         self.defense_party = []
         self.all_stars = all_stars
+        self.isDead = False
     
     ''' Escape Solar System Routine '''
     def escapeStar(self, star, task):
@@ -67,6 +68,8 @@ class AI(object):
                 taskMgr.doMethodLater(AI_ACTIVATE_PLANET_WAIT_TIME - AI_ACCELERATION_TIME*MAX_NUMBER_OF_PLANETS, self._activatePlanetsLoop, 'AIactivatePlanet', extraArgs =[star], appendTask=True)
             else:
                 self.activateRandomStar()
+        else:
+            self.isDead = True
     
     def _activatePlanetsLoop(self, star, task):
         if self._allPlanetsActivated(star):
