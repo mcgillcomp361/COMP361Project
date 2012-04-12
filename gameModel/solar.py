@@ -255,6 +255,7 @@ class Star(SphericalBody):
         self.flare_path.setScale(64)
         self.flare_path.setPos(Vec3(0,0,0))
         self.flare_path.setBillboardPointEye()
+        self.flare_path.setLightOff()
         
     def trackStarLife(self, task):
         self.lifetime = self.lifetime - float(self.getNumberOfActivePlanets()+1)/(2)
