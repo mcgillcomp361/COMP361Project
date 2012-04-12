@@ -18,9 +18,9 @@ class Minimap():
     
     def __init__(self):
         taskMgr.add(self.step,"MinimapTask") 
-        pos = Vec3(1.3, 0, -0.55)
-        self.scale = (350)
-        self.constant = 13
+        pos = Vec3(1.05, 0, -0.65)
+        self.scale = (180)
+        self.constant = 22
         cpos = Vec3(0,0,0)      #center
         mapImage = "models/gui/minimap/minimap.png"
         self.mapRadius = 75

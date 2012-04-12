@@ -86,25 +86,26 @@ class guiUpdate():
 
     def refreshUnitsAndConstructions(self, planet):
         #g = None
-        from gameEngine.gameEngine import player
-        g = GamePanel(player)
+        
+        from gameEngine.gameEngine import gamePanel
         if not planet.activated:
             return
         elif(planet.hasStructure("forge")):
-            g.hasForge()
+            gamePanel.resetGamePanel()
+            gamePanel.hasForge()
             if(planet.player.research.getLevel()>=2):
-                g.unlockTier2Units()
-                g.unlockTier2Structures()
+                gamePanel.unlockTier2Units()
+                gamePanel.unlockTier2Structures()
             if(planet.player.research.getLevel()>=3):
-                g.unlockTier3Units()
-                g.unlockTier3Structures()
+                gamePanel.unlockTier3Units()
+                gamePanel.unlockTier3Structures()
             if(planet.player.research.getLevel()==4):
-                g.unlockTier4Units()
-                g.unlockTier4Structures()
+                gamePanel.unlockTier4Units()
+                gamePanel.unlockTier4Structures()
         else:
             if(planet.player.research.getLevel()>=2):
-                g.unlockTier2Structures()
+                gamePanel.unlockTier2Structures()
             if(planet.player.research.getLevel()>=3):
-                g.unlockTier3Structures()
+                gamePanel.unlockTier3Structures()
             if(planet.player.research.getLevel()==4):
-                g.unlockTier4Structures()
+                gamePanel.unlockTier4Structures()

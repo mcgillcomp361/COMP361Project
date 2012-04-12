@@ -24,8 +24,14 @@ class GamePanel():
         self.loadUnits()
         self.loadResources()
         self.loadResearchTree()
+        self.b1 = DirectButton(image = ("./models/gui/structures/forge.png", "./models/gui/structures/forge.png", 
+                                   "./models/gui/structures/forge_hover.png"), frameColor=(0, 0,0, 0),
+                          image_scale = (0.65, 1, 0.65), pos=(-29.6,0,0.85), command=self.selectForge, clickSound=self.mouse_click, rolloverSound=self.mouse_hover)
         geom=OnscreenImage(parent=render2d, image="./models/gui/guiBar.png", scale = (1, 1, 0.3), pos = (0,0,-0.7))
         geom.setTransparency(True)  
+        
+    def resetGamePanel(self):
+        self.b1.destroy()
         
     def _loadSounds(self):
         '''
@@ -39,12 +45,12 @@ class GamePanel():
         self.mouse_click.setVolume(0.2)
     
     def loadResources(self):
-        b1 = DirectButton(image = ("./models/gui/structures/forge.png", "./models/gui/structures/forge.png", 
+        self.b1 = DirectButton(image = ("./models/gui/structures/forge.png", "./models/gui/structures/forge.png", 
                                    "./models/gui/structures/forge_hover.png"), frameColor=(0, 0,0, 0),
                           image_scale = (0.65, 1, 0.65), pos=(-29.6,0,0.85), command=self.selectForge, clickSound=self.mouse_click, rolloverSound=self.mouse_hover)
-        b1.stateNodePath[2].setTransparency(1)
-        b1.stateNodePath[2].setScale(15, 1, 5)
-        b1.stateNodePath[2].setPos(9, 0, 2)
+        self.b1.stateNodePath[2].setTransparency(1)
+        self.b1.stateNodePath[2].setScale(15, 1, 5)
+        self.b1.stateNodePath[2].setPos(9, 0, 2)
                     
         b2 = DirectButton(image = ("./models/gui/structures/nexus.png", "./models/gui/structures/nexus.png",
                           "./models/gui/structures/nexus_hover.png"), frameColor=(0, 0,0, 0),
@@ -105,7 +111,7 @@ class GamePanel():
         b4.reparentTo(self.mainFrame)
         b3.reparentTo(self.mainFrame)
         b2.reparentTo(self.mainFrame)
-        b1.reparentTo(self.mainFrame)
+        self.b1.reparentTo(self.mainFrame)
         b6.reparentTo(self.mainFrame)
         b5.reparentTo(self.mainFrame)
         b8.reparentTo(self.mainFrame)
@@ -143,9 +149,12 @@ class GamePanel():
         b5.stateNodePath[2].setScale(15, 1, 5)
         b5.stateNodePath[2].setPos(10, 0, 3)
         
-        bGravity = DirectButton(image = ("./models/gui/units/gravityEngine.png"),
+        bGravity = DirectButton(image = ("./models/gui/gravsymbol_locked.png", "./models/gui/gravsymbol_locked.png", "./models/gui/gravsymbol_hover.png"),
                           frameColor=(0, 0,0, 0), image_scale = (0.65, 1, 0.65), pos=(-18,0, -0.75), relief=2, command=self.selectGravityEngine, clickSound=self.mouse_click, rolloverSound=self.mouse_hover)
         bGravity.setTransparency(1)
+        bGravity.stateNodePath[2].setTransparency(1)
+        bGravity.stateNodePath[2].setScale(15, 1, 5)
+        bGravity.stateNodePath[2].setPos(9, 0, 1)
         
         b6 = DirectButton(image = ("./models/gui/units/hive_locked.png", "./models/gui/units/hive_locked.png","./models/gui/units/hive_hover.png"),
                           frameColor=(0, 0,0, 0), image_scale = (0.65, 1, 0.65), pos=(-21,0, -2.3),command=self.selectHive, clickSound=self.mouse_click, rolloverSound=self.mouse_hover)
@@ -174,13 +183,13 @@ class GamePanel():
         b3.reparentTo(self.mainFrame)
         b2.reparentTo(self.mainFrame)
         b1.reparentTo(self.mainFrame)
+        bGravity.reparentTo(self.mainFrame)
         b5.reparentTo(self.mainFrame)
         b4.reparentTo(self.mainFrame)
         b8.reparentTo(self.mainFrame)
         b7.reparentTo(self.mainFrame)
         b6.reparentTo(self.mainFrame)
         b9.reparentTo(self.mainFrame)
-        bGravity.reparentTo(self.mainFrame)
     
     #Unlock tier 1 units    
     def hasForge(self):
