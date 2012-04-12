@@ -504,8 +504,8 @@ class Planet(SphericalBody):
         @param player, the player who has selected
         '''
         player.selected_star = None
-        
-        if(self.player == player):
+            
+        if(self.player == player or not self.activated):
             from gameEngine.gameEngine import updateGUI
             updateGUI.refreshUnitsAndConstructions(self)
         
@@ -681,10 +681,41 @@ class Planet(SphericalBody):
         '''
         Change the control of the planet from the self.player to the parameter player
         @param player: Player, the player who has captured the planet by swarms
-        @precondition: the player must have used the capture ability of a swarm unit on the planet
+        @precondition: the player must have used the capture ability of a swarm type unit on the planet
         '''
         '''TODO: Use makeArc to change the color of the orbit'''
+        
+        ''' stop any constructions on the planet '''
+        if(self.task_structure_timer != None):
+            taskMgr.remove(self.task_structure_timer)
+            self.task_structure_timer = None
+        if(self.task_unit_timer != None):
+            taskMgr.remove(self.task_unit_timer)
+            self.task_unit_timer = None
+        if(self.task_structure_timers != None):
+            taskMgr.remove(self.task_structure_timers)
+            self.task_structure_timers = None
+        if(self.task_unit_timers != None):
+            taskMgr.remove(self.task_unit_timers)
+            self.task_unit_timers = None
+        ''' remove previous player's control from the planet '''
+        for structure in self.structures():
+            self.player.structures.remove(structure)
+        ''' set control of the planet to the new player '''
+        for structure in self.structures():
+            player.structures.append(structure)
+        ''' update the construction panel for the human player'''
+        from gameModel.ai import AI
+        ''' if human player is the previous owner '''
+        if(type(self.player) != AI):
+            from gameEngine.gameEngine import updateGUI
+            updateGUI.refreshUnitsAndConstructions(self)
+        ''' give total control to new player '''
         self.player = player
+        ''' if human player is the new owner '''
+        if(type(player) != AI):
+            from gameEngine.gameEngine import updateGUI
+            updateGUI.refreshUnitsAndConstructions(self)
         
     def addOrbitingUnit(self, unit):
         ''' 
@@ -797,7 +828,7 @@ class Planet(SphericalBody):
             unit.player.units.remove(unit)
             self.removeOrbitingUnit(unit)
             unit.removeFromGame()
-            ''' TODO: remove unit model and its abilities if any'''
+            ''' TODO: remove unit abilities if any'''
             unit = None
         
     def _consumeStructures(self):

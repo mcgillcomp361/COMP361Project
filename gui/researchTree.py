@@ -15,7 +15,9 @@ class ResearchTree():
         self.research_task = None
      
     def loadTree(self):            
-               
+        
+        if(self.player.getNumberOfNexus() == 0):
+            return       
         wp = WindowProperties()
         wp.setSize(300, 500)
         wp.setOrigin(879, 200)
@@ -84,17 +86,19 @@ class ResearchTree():
                           frameColor=(0,0,0,0),text_fg=(1,1,1,1), text_scale=0.08, relief=2, command=self.selectGBH)
 
     def selectTier2(self):
-        print self.player.research.getLevel()
         if(self.player.research.getLevel() == 1 and self.research_task == None):
-            self.research_task = taskMgr.doMethodLater(TIER_II_RESEARCH_TIME, self.player.research.incrementLevel, 'researchTireII', extraArgs=[self.player], appendTask = True)
+            research_time = max(1, TIER_II_RESEARCH_TIME-self.player.getNumberOfNexus())
+            self.research_task = taskMgr.doMethodLater(research_time, self.player.research.incrementLevel, 'researchTireII', extraArgs=[self.player], appendTask = True)
     
     def selectTier3(self):
         if(self.player.research.getLevel() == 2 and self.research_task == None):
-            self.research_task = taskMgr.doMethodLater(TIER_III_RESEARCH_TIME, self.player.research.incrementLevel, 'researchTireIII', extraArgs=[self.player], appendTask = True)
-        
+            research_time = max(1, TIER_III_RESEARCH_TIME-self.player.getNumberOfNexus())
+            self.research_task = taskMgr.doMethodLater(research_time, self.player.research.incrementLevel, 'researchTireIII', extraArgs=[self.player], appendTask = True)
+
     def selectTier4(self):
         if(self.player.research.getLevel() == 3 and self.research_task == None):
-            self.research_task = taskMgr.doMethodLater(TIER_IV_RESEARCH_TIME, self.player.research.incrementLevel, 'researchTireIV', extraArgs=[self.player], appendTask = True)
+            research_time = max(1, TIER_IV_RESEARCH_TIME-self.player.getNumberOfNexus())
+            self.research_task = taskMgr.doMethodLater(research_time, self.player.research.incrementLevel, 'researchTireIV', extraArgs=[self.player], appendTask = True)
             
     def selectCapture(self): 
         pass

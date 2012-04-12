@@ -189,7 +189,7 @@ The Auto management of observing and removing units and structures from the game
 '''
 def _trackUnitsAndStructures(task):
     global ai, player
-    print len(player.selected_units)
+    #print len(player.selected_units)
     if(ai != None):
         for unit in ai.units:
             if(unit.energy <= 0):

@@ -315,6 +315,7 @@ class Unit(object):
     def removeFromGame(self):
         self.death_unit.play()
         self.damage = 0
+        taskMgr.remove(self.task_observe_enemy)
         self.task_observe_enemy = None
         self.target = None
         self.point_path.removeNode()

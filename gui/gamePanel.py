@@ -206,7 +206,7 @@ class GamePanel():
         b1.reparentTo(self.mainFrame)
     
     #Unlock Tier 2 Units
-    def unlockTier2(self):
+    def unlockTier2Units(self):
         b4 = DirectButton(image = ("./models/gui/units/horde.png", "./models/gui/units/horde.png", "./models/gui/units/horde_hover.png"),
                           frameColor=(0, 0,0, 0), image_scale = (0.65, 1, 0.65), pos=(-21,0, -0.75), command=self.selectHorde, clickSound=self.mouse_click, rolloverSound=self.mouse_hover)
         b4.stateNodePath[2].setTransparency(1)
@@ -218,6 +218,10 @@ class GamePanel():
         b5.stateNodePath[2].setTransparency(1)
         b5.stateNodePath[2].setScale(15, 1, 5)
         b5.stateNodePath[2].setPos(10, 0, 3)
+        b5.reparentTo(self.mainFrame)
+        b4.reparentTo(self.mainFrame)
+        
+    def unlockTier2Structures(self):
         
         phylon = DirectButton(image = ("./models/gui/structures/phylon.png","./models/gui/structures/phylon.png",
                                     "./models/gui/structures/phylon_hover.png"), frameColor=(0, 0,0, 0),
@@ -234,12 +238,9 @@ class GamePanel():
         pd2.stateNodePath[2].setPos(9, 0, 1)
         pd2.reparentTo(self.mainFrame)
         phylon.reparentTo(self.mainFrame)
-        b5.reparentTo(self.mainFrame)
-        b4.reparentTo(self.mainFrame)
         
     #Unlock Tier 3 
-    def unlockTier3(self):
-        print 'tier3'
+    def unlockTier3Units(self):
         b6 = DirectButton(image = ("./models/gui/units/hive.png", "./models/gui/units/hive.png","./models/gui/units/hive_hover.png"),
                           frameColor=(0, 0,0, 0), image_scale = (0.65, 1, 0.65), pos=(-21,0, -2.3),command=self.selectHive, clickSound=self.mouse_click, rolloverSound=self.mouse_hover)
         b6.stateNodePath[2].setTransparency(1)
@@ -256,8 +257,13 @@ class GamePanel():
                           frameColor=(0, 0,0, 0), image_scale = (0.65, 1, 0.65), pos=(-18,0, -2.3), command=self.selectMathematica, clickSound=self.mouse_click, rolloverSound=self.mouse_hover)
         b8.stateNodePath[2].setTransparency(1)
         b8.stateNodePath[2].setScale(15, 1, 5)
-        b8.stateNodePath[2].setPos(10, 0, 3) 
+        b8.stateNodePath[2].setPos(10, 0, 3)
         
+        b8.reparentTo(self.mainFrame)
+        b7.reparentTo(self.mainFrame)
+        b6.reparentTo(self.mainFrame)
+        
+    def unlockTier3Structures(self):
         gc = DirectButton(image = ("./models/gui/structures/gc.png", "./models/gui/structures/gc.png",
                                    "./models/gui/structures/gc_hover.png"), frameColor=(0, 0,0, 0),
                           image_scale = (0.65, 1, 0.65), pos=(-29.6,0, -2.3), command=self.selectGC, clickSound=self.mouse_click, rolloverSound=self.mouse_hover)
@@ -273,18 +279,17 @@ class GamePanel():
         pd3.stateNodePath[2].setPos(10, 0, 1)
         pd3.reparentTo(self.mainFrame)
         gc.reparentTo(self.mainFrame)
-        b8.reparentTo(self.mainFrame)
-        b7.reparentTo(self.mainFrame)
-        b6.reparentTo(self.mainFrame)
         
     #Unlock Tier 4 Units
-    def unlockTier4(self):
+    def unlockTier4Units(self):
         b9 = DirectButton(image = ("./models/gui/units/bhg.png","./models/gui/units/bhg.png","./models/gui/units/bhg_hover.png"), 
                           frameColor=(0, 0,0, 0), image_scale = (0.65, 1, 0.65), pos=(-21,0, -3.9), command=self.selectBHG, clickSound=self.mouse_click, rolloverSound=self.mouse_hover)         
         b9.stateNodePath[2].setTransparency(1)
         b9.stateNodePath[2].setScale(15, 1, 5)
         b9.stateNodePath[2].setPos(10, 0, 2)
         b9.reparentTo(self.mainFrame)
+        
+    def unlockTier4Structures(self):
         pd4 = DirectButton(image = ("./models/gui/structures/pd4.png", "./models/gui/structures/pd4.png",
                                    "./models/gui/structures/pd4_hover.png"), frameColor=(0, 0,0, 0),
                           image_scale = (0.65, 1, 0.65), pos=(-29.6,0, -3.90), command=self.selectPD4, clickSound=self.mouse_click, rolloverSound=self.mouse_hover) 
@@ -303,59 +308,78 @@ class GamePanel():
        
     ## CONSTRUCTION SELECTION
     def selectForge(self):
-        self.player.addStructure("forge")
+        if(self.player != None):
+            self.player.addStructure("forge")
         
     def selectNexus(self):
-        self.player.addStructure("nexus")
+        if(self.player != None):
+            self.player.addStructure("nexus")
         
-    def selectExtractor(self): 
-        self.player.addStructure("extractor")
+    def selectExtractor(self):
+        if(self.player != None):
+            self.player.addStructure("extractor")
         
     def selectPhylon(self):
-        self.player.addStructure("phylon")
+        if(self.player != None):
+            self.player.addStructure("phylon")
         
     def selectGC(self):
-        self.player.addStructure("generatorCore")
+        if(self.player != None):
+            self.player.addStructure("generatorCore")
         
     def selectPD1(self):
-        print 'selected pd1'
+        if self.player != None:
+            print 'selected pd1'
     
     def selectPD2(self):
-        print 'selected PD2'
+        if(self.player != None):
+            print 'selected PD2'
         
     def selectPD3(self):
-        print 'selected PD3'
+        if(self.player != None):
+            print 'selected PD3'
         
     def selectPD4(self):
-        print 'selected PD4'
+        if(self.player != None):
+            print 'selected PD4'
         
     ## UNIT SELECTION        
     def selectSwarm(self):
-        self.player.addUnit("swarm")
+        if(self.player != None):
+            self.player.addUnit("swarm")
         
     def selectGlobe(self):
-        self.player.addUnit("globe")
+        if(self.player != None):
+            self.player.addUnit("globe")
         
     def selectAnalyzer(self):
-        self.player.addUnit("analyzer")
+        if(self.player != None):
+            self.player.addUnit("analyzer")
         
     def selectHorde(self):
-        self.player.addUnit("horde")
+        if(self.player != None):
+            self.player.addUnit("horde")
         
     def selectSphere(self):
-        self.player.addUnit("sphere")
+        if(self.player != None):
+            self.player.addUnit("sphere")
         
     def selectHive(self):
-        self.player.addUnit("hive")
+        if(self.player != None):
+            self.player.addUnit("hive")
         
     def selectPlanetarium(self):
-        self.player.addUnit("planetarium")
+        if(self.player != None):
+            self.player.addUnit("planetarium")
         
     def selectMathematica(self):
-        self.player.addUnit("mathematica")
+        if(self.player != None):
+            self.player.addUnit("mathematica")
 
     def selectBHG(self):
-        self.player.addUnit("blackHoleGenerator")
+        if(self.player != None):
+            self.player.addUnit("blackHoleGenerator")
     
     def selectGravityEngine(self):
-        self.player.addUnit("gravityEngine")
+        if(self.player != None):
+            self.player.addUnit("gravityEngine")

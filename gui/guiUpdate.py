@@ -13,6 +13,7 @@ class guiUpdate():
     def __init__(self, value):
 
         self.value = value
+        self.g = None
         self._loadSounds()
         
         self.screenText = OnscreenText(text='Time: ', pos=(0.8, 0.95), scale=0.05, fg=(1, 1, 1, 1))
@@ -83,16 +84,28 @@ class guiUpdate():
         
     def printGE(self):
         self.geAmount = OnscreenText(text=str(self.value), pos=(0.6, -0.75), scale=0.05, fg=(1, 1, 1, 1))
-        
+
     def refreshUnitsAndConstructions(self, planet):
-        g = GamePanel(planet.player)
-        if(planet.hasStructure("forge")):
-            g.hasForge()
+        self.g = None
+        from gameEngine.gameEngine import player
+        self.g = GamePanel(player)
+        if not planet.activated:
+            return
+        elif(planet.hasStructure("forge")):
+            self.g.hasForge()
             if(planet.player.research.getLevel()>=2):
-                g.unlockTier2()
+                self.g.unlockTier2Units()
+                self.g.unlockTier2Structures()
             if(planet.player.research.getLevel()>=3):
-                g.unlockTier3()
+                self.g.unlockTier3Units()
+                self.g.unlockTier3Structures()
             if(planet.player.research.getLevel()==4):
-                g.unlockTier4()
+                self.g.unlockTier4Units()
+                self.g.unlockTier4Structures()
         else:
-            pass
+            if(planet.player.research.getLevel()>=2):
+                self.g.unlockTier2Structures()
+            if(planet.player.research.getLevel()>=3):
+                self.g.unlockTier3Structures()
+            if(planet.player.research.getLevel()==4):
+                self.g.unlockTier4Structures()

@@ -170,3 +170,11 @@ class Player(object):
             updateGUI.value = self.minerals
             updateGUI.printResources()
         return task.again
+    
+    def getNumberOfNexus(self):
+        number = 0
+        for structure in self.structures:
+            if(type(structure)==Nexus):
+                number = number + 1
+        return number 
+            
