@@ -498,9 +498,9 @@ class Planet(SphericalBody):
         '''
         player.selected_star = None
         ''' TODO : uncomment this, fix for optimization '''
-#        if(self.player == player or not self.activated):
-#            from gameEngine.gameEngine import updateGUI
-#            updateGUI.refreshUnitsAndConstructions(self)
+        if(self.player == player or not self.activated):
+            from gameEngine.gameEngine import updateGUI
+            updateGUI.refreshUnitsAndConstructions(self)
         
         if(not self.activated and player.selected_planet == self):
             if((self.prev_planet == None or self.prev_planet.activated) and \
@@ -820,10 +820,12 @@ class Planet(SphericalBody):
                 taskMgr.remove(task)
                 self.task_unit_timers.remove(task)
                 task = None
+        from gameModel.ai import AI
         for unit in self.units():
-            for selected_unit in unit.player.selected_units:
-                if(unit == selected_unit):
-                    unit.player.selected_units.remove(unit)
+            if(type(self.player) != AI):
+                for selected_unit in unit.player.selected_units:
+                    if(unit == selected_unit):
+                        unit.player.selected_units.remove(unit)
             unit.player.units.remove(unit)
             self.removeOrbitingUnit(unit)
             unit.removeFromGame()
