@@ -202,7 +202,7 @@ class Unit(object):
             smallY = point2.getY() 
         else: 
             bigY = point2.getY() 
-            smallY = point2.getY() 
+            smallY = point1.getY() 
          
         pX = a2d.getX() 
         pY = a2d.getZ()  #aspect2d is based on a point3 not a point2 like render2d. 
@@ -215,13 +215,14 @@ class Unit(object):
         else: return False
     
     def deselect(self):
-        self.cone_path.removeNode()
+        if(self.cone_path != None):
+            self.cone_path.removeNode()
         
     def select(self):
+        self.highlight()
         self.player.selected_units.append(self)
         if(len(self.player.selected_units) == 1):
             ''' TODO: show the statics of the unit in the characteristic panel on the GUI '''
-            self.highlight()
             for unit in self.player.selected_units:
                 if(unit.move_unit != None and unit.move_unit.status() == unit.move_unit.PLAYING):
                     unit.move_unit.stop()

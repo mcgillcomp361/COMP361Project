@@ -81,7 +81,6 @@ class MouseEvents(DirectObject.DirectObject):
                 for unit in self.player.units:
                     if unit.is3dpointIn2dRegion(scaled_pos, scaled_mpos):
                         unit.select()
-                        unit.highlight()
             self.mouseFirstPos = None
             self.drag_rect_path.hide()
             taskMgr.remove(self.rect_task)
