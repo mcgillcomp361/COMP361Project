@@ -67,23 +67,24 @@ class MouseEvents(DirectObject.DirectObject):
         return task.cont
         
     def handleMouseDrag(self):
-        if self.mouseFirstPos != None:
-            mpos = base.mouseWatcherNode.getMouse()
-            lvec = Vec2(self.mouseFirstPos) - Vec2(mpos)
-            if lvec.length() > 0.01:
-                scaled_pos = Point2(self.mouseFirstPos)
-                scaled_pos.setX(scaled_pos.getX()*base.getAspectRatio())
-                scaled_mpos = Point2(mpos)
-                scaled_mpos.setX(scaled_mpos.getX()*base.getAspectRatio())
-                for unit in self.player.selected_units:
-                    unit.deselect()
-                del self.player.selected_units[:]
-                for unit in self.player.units:
-                    if unit.is3dpointIn2dRegion(scaled_pos, scaled_mpos):
-                        unit.select()
-            self.mouseFirstPos = None
-            self.drag_rect_path.hide()
-            taskMgr.remove(self.rect_task)
+        if base.mouseWatcherNode.hasMouse():
+            if self.mouseFirstPos != None:
+                mpos = base.mouseWatcherNode.getMouse()
+                lvec = Vec2(self.mouseFirstPos) - Vec2(mpos)
+                if lvec.length() > 0.01:
+                    scaled_pos = Point2(self.mouseFirstPos)
+                    scaled_pos.setX(scaled_pos.getX()*base.getAspectRatio())
+                    scaled_mpos = Point2(mpos)
+                    scaled_mpos.setX(scaled_mpos.getX()*base.getAspectRatio())
+                    for unit in self.player.selected_units:
+                        unit.deselect()
+                    del self.player.selected_units[:]
+                    for unit in self.player.units:
+                        if unit.is3dpointIn2dRegion(scaled_pos, scaled_mpos):
+                            unit.select()
+                self.mouseFirstPos = None
+                self.drag_rect_path.hide()
+                taskMgr.remove(self.rect_task)
         
     def setPlayer(self, player):
         self.player = player
