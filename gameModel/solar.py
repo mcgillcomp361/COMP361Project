@@ -116,7 +116,6 @@ class Star(SphericalBody):
         self._planets = []
         self.stage = 0
         self.timer_task = None
-        self.task_bar = None
         
         self.t = Timer(self) 
         self.__initSceneGraph()
@@ -209,8 +208,6 @@ class Star(SphericalBody):
         @param player, the player who has activated the star
         '''
         self.lifetime = LIFETIME
-        #from graphicEngine import indicators
-        #self.task_bar = taskMgr.add(indicators.drawStarProgressBar, 'starProgressBar', extraArgs =[self, self.lifetime], appendTask=True)
         self.stage = 1
         self.activated = True
         self.radius = MAX_STAR_RADIUS
@@ -261,6 +258,8 @@ class Star(SphericalBody):
         
     def trackStarLife(self, task):
         self.lifetime = self.lifetime - float(self.getNumberOfActivePlanets()+1)/(2)
+        from graphicEngine import indicators
+        indicators.drawStarProgressBar(self, self.lifetime)
         #if(task_bar != None):
         #    taskMgr.remove(task_bar)
         #    task_bar = None
@@ -631,7 +630,7 @@ class Planet(SphericalBody):
         return task.cont
     
     def _collapseOrbit(self, task):
-        self.orbital_radius = self.orbital_radius - 0.39
+        self.orbital_radius = self.orbital_radius - 0.27
         self.orbital_angle = self.orbital_angle + self.orbital_velocity
         self.orbital_angle = math.fmod(self.orbital_angle, 2.0*math.pi)
         self.point_path.setPos(self.orbital_radius * math.cos(self.orbital_angle),
