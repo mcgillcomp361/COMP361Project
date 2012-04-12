@@ -189,10 +189,10 @@ class Star(SphericalBody):
             self.activateStar(player)
             self.notify("updateGE")
         else:
-            from gameEngine.gameEngine import all_stars 
-            for star in all_stars:
-                if(star != self):
-                    star.deactivateHighlight()
+#            from gameEngine.gameEngine import all_stars 
+#            for star in all_stars:
+#                if(star != self):
+#                    star.deactivateHighlight()
             from gameEngine.gameEngine import all_planets
             for planet in all_planets:
                 planet.deactivateHighlight()
@@ -260,10 +260,7 @@ class Star(SphericalBody):
         self.lifetime = self.lifetime - float(self.getNumberOfActivePlanets()+1)/(2)
         from graphicEngine import indicators
         indicators.drawStarProgressBar(self, self.lifetime)
-        #if(task_bar != None):
-        #    taskMgr.remove(task_bar)
-        #    task_bar = None
-        self.updateTimer()
+#        self.updateTimer()
         if(self.lifetime <= LIFETIME - LIFETIME/6 and self.stage == 1):
             self.stage = 2
             self.model_path.setTexture(self.flare_ts, SphericalBody.star_stage2_tex)
@@ -293,8 +290,8 @@ class Star(SphericalBody):
         for planet in self.planets():
             planet.startCollapse()
         
-    def updateTimer(self):
-        self.notify("updateTime")
+#    def updateTimer(self):
+#        self.notify("updateTime")
         
     def addPlanet(self, planet):
         '''
@@ -510,9 +507,9 @@ class Planet(SphericalBody):
                     self.parent_star.activated and self.parent_star.player == player):
                 self.activatePlanet(player)
         else:
-            from gameEngine.gameEngine import all_stars 
-            for star in all_stars:
-                star.deactivateHighlight()
+#            from gameEngine.gameEngine import all_stars 
+#            for star in all_stars:
+#                star.deactivateHighlight()
             from gameEngine.gameEngine import all_planets
             for planet in all_planets:
                 if(self != planet or self.next_planet != planet or self.prev_planet != planet):

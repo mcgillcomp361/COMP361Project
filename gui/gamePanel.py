@@ -272,7 +272,7 @@ class GamePanel():
         gc.stateNodePath[2].setPos(10, 0, 1)
         
         pd3 = DirectButton(image = ("./models/gui/structures/pd3.png", "./models/gui/structures/pd3.png",
-                                   "./models/gui/structures/pd3.png"),frameColor=(0, 0,0, 0),
+                                   "./models/gui/structures/pd3_hover.png"),frameColor=(0, 0,0, 0),
                           image_scale = (0.65, 1, 0.65), pos=(-28.1,0, -2.3), command=self.selectPD3, clickSound=self.mouse_click, rolloverSound=self.mouse_hover)
         pd3.stateNodePath[2].setTransparency(1)
         pd3.stateNodePath[2].setScale(15, 1, 5)

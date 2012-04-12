@@ -15,8 +15,8 @@ class guiUpdate():
         self.value = value
         self._loadSounds()
         
-        self.screenText = OnscreenText(text='Time: ', pos=(0.8, 0.95), scale=0.05, fg=(1, 1, 1, 1))
-        self.timeValue = OnscreenText(text='  ', pos=(1.0, 0.95), scale=0.05, fg=(1, 1, 1, 1))
+#        self.screenText = OnscreenText(text='Time: ', pos=(0.8, 0.95), scale=0.05, fg=(1, 1, 1, 1))
+#        self.timeValue = OnscreenText(text='  ', pos=(1.0, 0.95), scale=0.05, fg=(1, 1, 1, 1))
         self.image = OnscreenImage(image=("./models/gui/gravsymbol.png"), scale = 0.027, pos=(0.2, 0, -0.735))
         self.image.setTransparency(True)
         self.image = OnscreenImage(image=("./models/gui/Mineral.png"), scale = 0.03, pos=(0.2, 0, -0.655))
@@ -40,12 +40,12 @@ class guiUpdate():
         self.mouse_click.setVolume(0.2)
             
     def update(self, event):
-        if (event == "updateTime"):          
-            from gameEngine.gameEngine import player
-            if(player.selected_star != None):
-                self.refreshTime() 
-                self.value = player.selected_star.lifetime
-                self.printTime()
+#        if (event == "updateTime"):          
+#            from gameEngine.gameEngine import player
+#            if(player.selected_star != None):
+#                self.refreshTime() 
+#                self.value = player.selected_star.lifetime
+#                self.printTime()
         if (event == "updateMinerals"):
             self.refreshResources()
             from gameEngine.gameEngine import player
@@ -62,15 +62,15 @@ class guiUpdate():
             self.updateConstructions
             
     def start(self):
-        self.printTime()
+#        self.printTime()
         self.printResources()
         self.printGE()
         
-    def refreshTime(self):
-        self.timeValue.remove()
+#    def refreshTime(self):
+#        self.timeValue.remove()
 
-    def printTime(self):
-        self.timeValue = OnscreenText(text=str(self.value), pos=(1.0, 0.95), scale=0.05, fg=(1, 1, 1, 1))
+#    def printTime(self):
+#        self.timeValue = OnscreenText(text=str(self.value), pos=(1.0, 0.95), scale=0.05, fg=(1, 1, 1, 1))
         
     def refreshResources(self):
         self.resourceValue.remove();  

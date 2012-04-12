@@ -25,5 +25,4 @@ class Ability(object):
         initiate ability based on type at given position of the unit
         '''
         if(self.used == False):
-            self.position = unit_position
             self.used = True
