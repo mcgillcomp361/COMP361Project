@@ -35,32 +35,40 @@ class Minimap():
         self.map.setPos(pos)
 
         self.dots = []
-        self.dots.append([])
-        self.planetTargets = []
-        self.planetTargets.append([])
-        self.starTargets = []
-        self.starTargets.append([])
+        self.dotPlayer = OnscreenImage(image = "models/gui/minimap/Player.png", scale = 3,pos = (base.camera.getX()/self.constant,0,base.camera.getY()/self.constant), parent = self.map)
+        self.planetTargets = None
+        self.starTargets = None
 
         image = OnscreenImage(image = mapImage, scale = self.scale, parent = self.map)
         image.setTransparency(True)
-        self.totaltargets = 0
+
         
-    def setTargets(self, playerTargets=None,starTargets=None):
-       
+    def setTargets(self, planetTargets=None,starTargets=None):
+        self.planetTargets = planetTargets
+        if planetTargets is None: pass
+        for i in range(len(self.planetTargets)):
+            star = self.planetTargets[i].parent_star.point_path
+            x = (self.planetTargets[i].point_path.getX() + star.getX())/self.constant
+            y = (self.planetTargets[i].point_path.getY() + star.getY())/self.constant
+            z = (self.planetTargets[i].point_path.getZ() + star.getZ())/self.constant
+            self.dots.append(OnscreenImage(image = "models/gui/minimap/whiteDot.png", scale = 3,pos = (x,0,y), parent = self.map))
         if starTargets is None: pass   
         for i in range(len(starTargets)):
             x = starTargets[i].point_path.getX()/self.constant
             y = starTargets[i].point_path.getY()/self.constant
             z = starTargets[i].point_path.getZ()/self.constant
-            self.dots.append(OnscreenImage(image = "models/gui/minimap/redDot.png", scale = 5,pos = (x,0,y), parent = self.map))
-        if playerTargets is None: pass
-        for i in range(len(playerTargets)):
-            star = playerTargets[i].parent_star.point_path
-            x = (playerTargets[i].point_path.getX() + star.getX())/self.constant
-            y = (playerTargets[i].point_path.getY() + star.getY())/self.constant
-            z = (playerTargets[i].point_path.getZ() + star.getZ())/self.constant
-            self.dots.append(OnscreenImage(image = "models/gui/minimap/whiteDot.png", scale = 3,pos = (x,0,y), parent = self.map))
+            self.dots.append(OnscreenImage(image = "models/gui/minimap/redDot.png", scale = 6,pos = (x,0,y), parent = self.map))
     
     def step(self, task):
+        self.dotPlayer.destroy()
+        x = base.camera.getX()
+        y = base.camera.getY()
+        if (x < -3251): x = -3251
+        if (x > 3000): x= 3000
+        if (y < -6200): y = -6200
+        if (y > 6258): y = 6258
+
+        self.dotPlayer = OnscreenImage(image = "models/gui/minimap/Player.png", scale = 5,pos = (-1*x/self.constant,0,y/(-2*self.constant)), parent = self.map)        
+        self.dotPlayer.setTransparency(1)
         return Task.cont
       
