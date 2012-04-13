@@ -921,7 +921,8 @@ class Planet(SphericalBody):
         from player import Player
         if type(self.player) == Player and self.player.selected_planet == self:
             self.player.selected_planet = None
-        self.player.planets.remove(self)
+        if(self.player != None):
+            self.player.planets.remove(self)
         self.parent_star.removePlanet(self)
     
     
