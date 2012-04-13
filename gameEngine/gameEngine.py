@@ -212,8 +212,9 @@ def _trackUnitsAndStructures(task):
             
     has_no_stars = True
     for star in all_stars:
-        if(star.player == player):
+        if(star.player == player and star.lifetime > 0):
             has_no_stars = False
+            print
 
     ''' Loosing Condition ''',
     if(len(player.planets) == 0 and player.ge_amount == 0 and has_no_stars and player.hasCaptureTypeUnit()==False):

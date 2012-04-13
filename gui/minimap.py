@@ -18,8 +18,7 @@ class Minimap():
     
     def __init__(self):
         taskMgr.add(self.step,"MinimapTask") 
-        x = base.win.getXSize()*0.0016
-        pos = Vec3(x, 0, -0.65)
+        pos = Vec3(1.4, 0, -0.64)
         self.scale = (180)
         self.constant = 22
         cpos = Vec3(0,0,0)      #center

@@ -171,6 +171,9 @@ class Player(object):
         return task.done
         
     def trackMinerals(self, task):
+        print "structures : " + str(len(self.structures))
+        print "units : " + str(len(self.units))
+        print "selected units : " + str(len(self.selected_units))
         for structure in self.structures:
             if(type(structure) == Extractor):
                 self.minerals = self.minerals + EXTRACTOR_RESOURCE_GENERATION_RATE

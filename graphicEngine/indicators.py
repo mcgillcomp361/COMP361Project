@@ -5,7 +5,7 @@ Created on 4 avr. 2012
 '''
 from direct.directtools.DirectGeometry import LineNodePath
 from panda3d.core import Vec4
-
+from gameModel.constants import LIFETIME
 
 def drawProgressBar(self, time, task):
     '''
@@ -56,8 +56,8 @@ def drawStarProgressBar(self, time):
     '''
     try:
         if self.green_progress_path:
-            self.green_progress_path.setScale(2.0*float(time)/180)
-            self.red_progress_path.setScale((1.0-float(time)/180+0.001)*2.0)
+            self.green_progress_path.setScale(2.0*float(time)/LIFETIME)
+            self.red_progress_path.setScale((1.0-float(time)/LIFETIME+0.001)*2.0)
     except AttributeError:
         self.green_progress_path = LineNodePath(parent = self.point_path, thickness = 8.0, colorVec = Vec4(1.0,0.0,1.0,0.5))
         self.green_progress_path.setPos(0,0,9)

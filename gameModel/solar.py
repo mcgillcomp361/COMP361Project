@@ -600,9 +600,9 @@ class Planet(SphericalBody):
 #        self.orbitTask = None
     
     def _consume(self):
-        self.removeFromGame()
         self._consumeUnits()
         self._consumeStructures()
+        self.removeFromGame()
         
     def _accelerateOrbit(self, task):
         self.orbital_angle = self.orbital_angle + self.orbital_velocity
@@ -626,7 +626,7 @@ class Planet(SphericalBody):
         return task.cont
     
     def _collapseOrbit(self, task):
-        self.orbital_radius = self.orbital_radius - 0.27
+        self.orbital_radius = self.orbital_radius - 0.23
         self.orbital_angle = self.orbital_angle + self.orbital_velocity
         self.orbital_angle = math.fmod(self.orbital_angle, 2.0*math.pi)
         self.point_path.setPos(self.orbital_radius * math.cos(self.orbital_angle),
@@ -825,7 +825,9 @@ class Planet(SphericalBody):
                 for selected_unit in unit.player.selected_units:
                     if(unit == selected_unit):
                         unit.player.selected_units.remove(unit)
+                        print "selected unit"
             unit.player.units.remove(unit)
+            print "deleted unit"
             self.removeOrbitingUnit(unit)
             unit.removeFromGame()
             ''' TODO: remove unit abilities if any'''
@@ -843,7 +845,6 @@ class Planet(SphericalBody):
         for structure in self.structures():
             self.player.structures.remove(structure)
             self.removeSurfaceStructure(structure)
-            ''' TODO: remove structure texture'''
             structure = None
        
     def addSurfaceStructure(self, structure):
