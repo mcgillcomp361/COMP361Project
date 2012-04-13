@@ -791,7 +791,7 @@ class Planet(SphericalBody):
         @param player, the owner of the units
         '''
         num = 0
-        for unit in self.units():
+        for unit in self._orbiting_units:
             if(unit.player == player):
                 num = num + 1
         return num
