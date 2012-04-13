@@ -232,7 +232,7 @@ class Star(SphericalBody):
         '''TODO : display star birth animation '''
         
         star_created_sound = base.loader.loadSfx("sound/effects/star/starCreation1.wav")
-        #star_created_sound.setVolume(0.5)
+        star_created_sound.setVolume(0.6)
         star_created_sound.play()
 #        base.sfxManagerList[0].update()
 #        SphericalBody.star_created_sound1.play()
@@ -560,7 +560,7 @@ class Planet(SphericalBody):
         
         
         planet_created_sound = base.loader.loadSfx("sound/effects/planet/planetCreation.wav")
-        #planet_created_sound.setVolume(0.3)
+        planet_created_sound.setVolume(0.3)
         planet_created_sound.play()
 #        base.sfxManagerList[0].update()
 #        SphericalBody.planet_created_sound.play()
@@ -921,6 +921,7 @@ class Planet(SphericalBody):
         from player import Player
         if type(self.player) == Player and self.player.selected_planet == self:
             self.player.selected_planet = None
+        self.player.planets.remove(self)
         self.parent_star.removePlanet(self)
     
     
