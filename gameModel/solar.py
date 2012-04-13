@@ -814,38 +814,34 @@ class Planet(SphericalBody):
         if(self.task_unit_timer!=None):
             taskMgr.remove(self.task_unit_timer)
             self.task_unit_timer = None
-        for task in self._task_unit_timers():
-            if(task!=None):
-                taskMgr.remove(task)
-                self.task_unit_timers.remove(task)
-                task = None
-        from gameModel.ai import AI
-        for unit in self.units():
-            if(type(unit.player) != AI):
-                for selected_unit in unit.player.selected_units:
-                    if(unit == selected_unit):
-                        unit.player.selected_units.remove(unit)
-                        print "selected unit"
+            
+        for task in self.task_unit_timers:
+            taskMgr.remove(task)
+        del self.task_unit_timers[:]
+
+        from gameModel.ai import AI        
+        for unit in self._orbiting_units:
             unit.player.units.remove(unit)
-            print "deleted unit"
-            self.removeOrbitingUnit(unit)
-            unit.removeFromGame()
-            ''' TODO: remove unit abilities if any'''
-            unit = None
+            if(type(unit.player) != AI):
+                try:
+                    unit.player.selected_units.remove(unit)
+                    print "selected unit"
+                except ValueError:
+                    pass
+            unit.removeFromGame()    
+        del self._orbiting_units[:]
         
     def _consumeStructures(self):
         if(self.task_structure_timer!=None):
             taskMgr.remove(self.task_structure_timer)
             self.task_structure_timer = None
-        for task in self._task_structure_timers():
-            if(task!=None):
-                taskMgr.remove(task)
-                self.task_structure_timers.remove(task)
-                task = None
-        for structure in self.structures():
+        for task in self.task_structure_timers:
+            taskMgr.remove(task)
+        del self.task_structure_timers[:]
+
+        for structure in self._surface_structures:
             self.player.structures.remove(structure)
-            self.removeSurfaceStructure(structure)
-            structure = None
+        del self._surface_structures[:]
        
     def addSurfaceStructure(self, structure):
         ''' 
