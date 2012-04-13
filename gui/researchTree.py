@@ -88,17 +88,18 @@ class ResearchTree():
     def selectTier2(self):
         if(self.player.research.getLevel() == 1 and self.research_task == None):
             research_time = max(1, TIER_II_RESEARCH_TIME-self.player.getNumberOfNexus())
-            self.research_task = taskMgr.doMethodLater(research_time, self.player.research.incrementLevel, 'researchTireII', extraArgs=[self.player], appendTask = True)
+            task = taskMgr.doMethodLater(research_time, self.player.research.incrementLevel, 'researchTireII', extraArgs=[self.player], appendTask = True)
+            
     
     def selectTier3(self):
         if(self.player.research.getLevel() == 2 and self.research_task == None):
             research_time = max(1, TIER_III_RESEARCH_TIME-self.player.getNumberOfNexus())
-            self.research_task = taskMgr.doMethodLater(research_time, self.player.research.incrementLevel, 'researchTireIII', extraArgs=[self.player], appendTask = True)
+            task = taskMgr.doMethodLater(research_time, self.player.research.incrementLevel, 'researchTireIII', extraArgs=[self.player], appendTask = True)
 
     def selectTier4(self):
         if(self.player.research.getLevel() == 3 and self.research_task == None):
             research_time = max(1, TIER_IV_RESEARCH_TIME-self.player.getNumberOfNexus())
-            self.research_task = taskMgr.doMethodLater(research_time, self.player.research.incrementLevel, 'researchTireIV', extraArgs=[self.player], appendTask = True)
+            task = taskMgr.doMethodLater(research_time, self.player.research.incrementLevel, 'researchTireIV', extraArgs=[self.player], appendTask = True)
             
     def selectCapture(self): 
         pass
@@ -125,4 +126,5 @@ class ResearchTree():
         pass 
 
     def selectGBH(self): 
-        pass     
+        pass
+        

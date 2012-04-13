@@ -32,6 +32,7 @@ class ResearchTree(object):
         if(player.selected_planet != None):
             from gameEngine.gameEngine import updateGUI
             updateGUI.refreshUnitsAndConstructions(player.selected_planet)
+        player.research_task = None
         return task.done
     
     '''

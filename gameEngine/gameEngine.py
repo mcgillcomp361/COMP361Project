@@ -214,8 +214,8 @@ def _trackUnitsAndStructures(task):
     for star in all_stars:
         if(star.player == player and star.lifetime > 0):
             has_no_stars = False
-            print
 
+    ''' TODO : winning and losing conditions for long term game not set '''
     ''' Loosing Condition '''
     if(len(player.planets) == 0 and player.ge_amount == 0 and has_no_stars and player.hasCaptureTypeUnit()==False):
         print 'You Lost, Noob !'
