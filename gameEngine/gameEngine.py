@@ -216,11 +216,10 @@ def _trackUnitsAndStructures(task):
             has_no_stars = False
             print
 
-    ''' Loosing Condition ''',
+    ''' Loosing Condition '''
     if(len(player.planets) == 0 and player.ge_amount == 0 and has_no_stars and player.hasCaptureTypeUnit()==False):
         print 'You Lost, Noob !'
-        base.userExit()
-#        base.framework.set_exit_flag()
+        #base.userExit()
         
     has_no_stars = True
     for star in all_stars:
@@ -230,6 +229,6 @@ def _trackUnitsAndStructures(task):
     ''' Winning Condition '''
     if(len(ai.planets) == 0 and len(ai.units) == 0 and has_no_stars and ai.isDead):
         print 'You Win, Pro!'
-        base.userExit()
+        #base.userExit()
             
     return task.again

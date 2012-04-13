@@ -299,6 +299,32 @@ class Unit(object):
             if(self.attack_unit != None):
                 base.sfxManagerList[0].update()
                 self.attack_unit.play()
+            taskMgr.add(self.attackAnimation,'attackAnimation', extraArgs =[1.0], appendTask=True)
+    
+    def attackAnimation(self, time, task):
+        try:
+            if self.shockwave_path != None:
+                self.shock_scale += 0.1
+                self.shockwave_path.setScale(self.shock_scale)
+        except AttributeError:
+            cm = CardMaker('quad')
+            cm.setFrameFullscreenQuad()
+            tex = loader.loadTexture("models/billboards/attack.png")
+            self.shockwave_path = self.model_path.attachNewNode(cm.generate())
+            self.shockwave_path.setTexture(tex)
+            self.shockwave_path.setTransparency(TransparencyAttrib.MAlpha)
+            self.shock_scale = 0.2
+            self.shockwave_path.setScale(self.shock_scale)
+            self.shockwave_path.setPos(Vec3(0, 0, -0.5))
+            self.shockwave_path.setP(-90)
+            self.shockwave_path.setColor(Vec4(1.0, 0.65, 0, 0.6))
+        if task.time > time:
+            self.shockwave_path.removeNode()
+            self.shockwave_path = None
+            del self.shock_scale
+            del self.shockwave_path
+            return task.done
+        return task.cont
             
     
     def useAbility(self, ability):

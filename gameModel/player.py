@@ -102,43 +102,43 @@ class Player(object):
         if(self.selected_planet != None and self.selected_planet.activated == True and \
            self.selected_planet.player == self and self.selected_planet.task_unit_timer == None and \
            self.selected_planet.hasStructure("forge")):
-            if(unit == "swarm" and self.minerals > SWARM_MINERAL_COST):
+            if(unit == "swarm" and self.minerals >= SWARM_MINERAL_COST):
                 self.minerals = self.minerals - SWARM_MINERAL_COST
                 self.selected_planet.task_unit_timer = taskMgr.doMethodLater(SWARM_BUILD_TIME, self._delayedConstructUnit, 'buildSwarm', extraArgs =[Swarm, self.selected_planet], appendTask=True)
                 self._showUnitProgress(SWARM_BUILD_TIME)         
-            elif(unit == "horde" and self.research.getLevel() >= 2 and self.minerals > HORDE_MINERAL_COST):
+            elif(unit == "horde" and self.research.getLevel() >= 2 and self.minerals >= HORDE_MINERAL_COST):
                 self.minerals = self.minerals - HORDE_MINERAL_COST
                 self.selected_planet.task_unit_timer = taskMgr.doMethodLater(HORDE_BUILD_TIME, self._delayedConstructUnit, 'buildHorde', extraArgs =[Horde, self.selected_planet], appendTask=True)
                 self._showUnitProgress(HORDE_BUILD_TIME)
-            elif(unit == "hive" and self.research.getLevel() >= 3 and self.minerals > HIVE_MINERAL_COST):
+            elif(unit == "hive" and self.research.getLevel() >= 3 and self.minerals >= HIVE_MINERAL_COST):
                 self.minerals = self.minerals - HIVE_MINERAL_COST
                 self.selected_planet.task_unit_timer = taskMgr.doMethodLater(HIVE_BUILD_TIME, self._delayedConstructUnit, 'buildHive', extraArgs =[Hive, self.selected_planet], appendTask=True)
                 self._showUnitProgress(HIVE_BUILD_TIME)  
-            elif(unit == "globe" and self.minerals > GLOBE_MINERAL_COST):
+            elif(unit == "globe" and self.minerals >= GLOBE_MINERAL_COST):
                 self.minerals = self.minerals - GLOBE_MINERAL_COST
                 self.selected_planet.task_unit_timer = taskMgr.doMethodLater(GLOBE_BUILD_TIME, self._delayedConstructUnit, 'buildGlobe', extraArgs =[Globe, self.selected_planet], appendTask=True)
                 self._showUnitProgress(GLOBE_BUILD_TIME)
-            elif(unit == "sphere" and self.research.getLevel() >= 2 and self.minerals > SPHERE_MINERAL_COST):
+            elif(unit == "sphere" and self.research.getLevel() >= 2 and self.minerals >= SPHERE_MINERAL_COST):
                 self.minerals = self.minerals - SPHERE_MINERAL_COST
                 self.selected_planet.task_unit_timer = taskMgr.doMethodLater(SPHERE_BUILD_TIME, self._delayedConstructUnit, 'buildSphere', extraArgs =[Sphere, self.selected_planet], appendTask=True)
                 self._showUnitProgress(SPHERE_BUILD_TIME)  
-            elif(unit == "planetarium" and self.research.getLevel() >= 3 and self.minerals > PLANETARIUM_MINERAL_COST):
+            elif(unit == "planetarium" and self.research.getLevel() >= 3 and self.minerals >= PLANETARIUM_MINERAL_COST):
                 self.minerals = self.minerals - PLANETARIUM_MINERAL_COST
                 self.selected_planet.task_unit_timer = taskMgr.doMethodLater(PLANETARIUM_BUILD_TIME, self._delayedConstructUnit, 'buildPlanetarium', extraArgs =[Planetarium, self.selected_planet], appendTask=True)
                 self._showUnitProgress(PLANETARIUM_BUILD_TIME)
-            elif(unit == "analyzer" and self.minerals > ANALYZER_MINERAL_COST):
+            elif(unit == "analyzer" and self.minerals >= ANALYZER_MINERAL_COST):
                 self.minerals = self.minerals - ANALYZER_MINERAL_COST
                 self.selected_planet.task_unit_timer = taskMgr.doMethodLater(ANALYZER_BUILD_TIME, self._delayedConstructUnit, 'buildAnalyzer', extraArgs =[Analyzer, self.selected_planet], appendTask=True)
                 self._showUnitProgress(ANALYZER_BUILD_TIME)
-            elif(unit == "mathematica" and self.research.getLevel() >= 3 and self.minerals > MATHEMATICA_MINERAL_COST):
+            elif(unit == "mathematica" and self.research.getLevel() >= 3 and self.minerals >= MATHEMATICA_MINERAL_COST):
                 self.minerals = self.minerals - MATHEMATICA_MINERAL_COST
                 self.selected_planet.task_unit_timer = taskMgr.doMethodLater(MATHEMATICA_BUILD_TIME, self._delayedConstructUnit, 'buildMathematica', extraArgs =[Mathematica, self.selected_planet], appendTask=True)
                 self._showUnitProgress(MATHEMATICA_BUILD_TIME)
-            elif(unit == "blackHoleGenerator" and self.research.getLevel() >= 4 and self.minerals > BLACK_HOLE_GENERATOR_MINERAL_COST):
+            elif(unit == "blackHoleGenerator" and self.research.getLevel() >= 4 and self.minerals >= BLACK_HOLE_GENERATOR_MINERAL_COST):
                 self.minerals = self.minerals - BLACK_HOLE_GENERATOR_MINERAL_COST
                 self.selected_planet.task_unit_timer = taskMgr.doMethodLater(BLACK_HOLE_GENERATOR_BUILD_TIME, self._delayedConstructUnit, 'buildBlackHoleGenerator', extraArgs =[BlackHoleGenerator, self.selected_planet], appendTask=True)
                 self._showUnitProgress(BLACK_HOLE_GENERATOR_BUILD_TIME)
-            elif(unit == "gravityEngine" and self.research.getLevel() >= 2 and self.minerals > GRAVITY_ENGINE_MINERAL_COST):
+            elif(unit == "gravityEngine" and self.research.getLevel() >= 2 and self.minerals >= GRAVITY_ENGINE_MINERAL_COST):
                 self.minerals = self.minerals - GRAVITY_ENGINE_MINERAL_COST
                 self.selected_planet.task_unit_timer = taskMgr.doMethodLater(GRAVITY_ENGINE_BUILD_TIME, self._delayedConstructGravityEngine, 'buildGravityEngine', extraArgs =[self.selected_planet], appendTask=True)
                 self._showUnitProgress(GRAVITY_ENGINE_BUILD_TIME)
@@ -171,9 +171,9 @@ class Player(object):
         return task.done
         
     def trackMinerals(self, task):
-        print "structures : " + str(len(self.structures))
-        print "units : " + str(len(self.units))
-        print "selected units : " + str(len(self.selected_units))
+#        print "structures : " + str(len(self.structures))
+#        print "units : " + str(len(self.units))
+#        print "selected units : " + str(len(self.selected_units))
         for structure in self.structures:
             if(type(structure) == Extractor):
                 self.minerals = self.minerals + EXTRACTOR_RESOURCE_GENERATION_RATE
@@ -200,4 +200,10 @@ class Player(object):
             if(type(structure)==Nexus):
                 number = number + 1
         return number 
+
+#    def removePlanetFromPlanets(self, dead_planet):
+#        for planet in self.planets:
+#            if(dead_planet == planet):
+#                self.planets.remove(dead_planet)
+#                return
             
