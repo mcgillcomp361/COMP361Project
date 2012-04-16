@@ -498,8 +498,6 @@ class Planet(SphericalBody):
         @param player, the player who has selected
         '''
         player.selected_star = None
-        from gameEngine.gameEngine import updateGUI
-        updateGUI.refreshUnitsAndConstructions(self)
         
         if(not self.activated and player.selected_planet == self):
             if((self.prev_planet == None or self.prev_planet.activated) and \
@@ -518,6 +516,9 @@ class Planet(SphericalBody):
             self.activateHighlight(False)
         
         player.selected_planet = self
+        
+        from gameEngine.gameEngine import updateGUI
+        updateGUI.refreshUnitsAndConstructions(self)
         
     def selectRight(self, player):
         '''
@@ -581,6 +582,11 @@ class Planet(SphericalBody):
         self.orbit_path = shapes.makeArc(self.player.color, 360, int(self.orbital_radius))
         self.orbit_path.reparentTo(self.parent_star.point_path)
         self.orbit_path.setScale(self.orbital_radius)
+        
+        from gameModel.ai import AI
+        if(type(self.player) != AI):
+            from gameEngine.gameEngine import updateGUI
+            updateGUI.refreshUnitsAndConstructions(self)
     
     def startSpin(self):
         self.day_period = self.model_path.hprInterval(PLANET_SPIN_VELOCITY, Vec3(360, 0, 0))

@@ -141,28 +141,28 @@ class GamePanel():
         self.mouse_click.setVolume(0.2)
     
     def loadResources(self):
-        self.sb1 = DirectButton(image = ("./models/gui/structures/forge.png", "./models/gui/structures/forge.png", 
+        self.sb1 = DirectButton(image = ("./models/gui/structures/forge_locked.png", "./models/gui/structures/forge_locked.png", 
                                    "./models/gui/structures/forge_hover.png"), frameColor=(0, 0,0, 0),
                           image_scale = (0.65, 1, 0.65), pos=(-29.6,0,0.85), command=self.selectForge, clickSound=self.mouse_click, rolloverSound=self.mouse_hover)
         self.sb1.stateNodePath[2].setTransparency(1)
         self.sb1.stateNodePath[2].setScale(15, 1, 5)
         self.sb1.stateNodePath[2].setPos(9, 0, 2)
                     
-        self.sb2 = DirectButton(image = ("./models/gui/structures/nexus.png", "./models/gui/structures/nexus.png",
+        self.sb2 = DirectButton(image = ("./models/gui/structures/nexus_locked.png", "./models/gui/structures/nexus_locked.png",
                           "./models/gui/structures/nexus_hover.png"), frameColor=(0, 0,0, 0),
                           image_scale = (0.65, 1, 0.65), pos=(-28.1,0,0.85), command=self.selectNexus, clickSound=self.mouse_click, rolloverSound=self.mouse_hover)
         self.sb2.stateNodePath[2].setTransparency(1)
         self.sb2.stateNodePath[2].setScale(15, 1, 5)
         self.sb2.stateNodePath[2].setPos(9, 0, 2)
         
-        self.sb3 = DirectButton(image = ("./models/gui/structures/extractor.png","./models/gui/structures/extractor.png",
+        self.sb3 = DirectButton(image = ("./models/gui/structures/extractor_locked.png","./models/gui/structures/extractor_locked.png",
                                    "./models/gui/structures/extractor_hover.png"),frameColor=(0, 0,0, 0),
                           image_scale = (0.65, 1, 0.65), pos=(-26.6,0, 0.85), command=self.selectExtractor, clickSound=self.mouse_click, rolloverSound=self.mouse_hover)
         self.sb3.stateNodePath[2].setTransparency(1)
         self.sb3.stateNodePath[2].setScale(15, 1, 5)
         self.sb3.stateNodePath[2].setPos(9, 0, 1)
         
-        self.sb4 = DirectButton(image = ("./models/gui/structures/pd1.png", "./models/gui/structures/pd1.png",
+        self.sb4 = DirectButton(image = ("./models/gui/structures/pd1_locked.png", "./models/gui/structures/pd1_locked.png",
                                    "./models/gui/structures/pd1_hover.png"),frameColor=(0, 0,0, 0),
                           image_scale = (0.65, 1, 0.65), pos=(-25.1,0, 0.85), command=self.selectPD1, clickSound=self.mouse_click, rolloverSound=self.mouse_hover)
         self.sb4.stateNodePath[2].setTransparency(1)
@@ -287,6 +287,45 @@ class GamePanel():
         self.ub6.reparentTo(self.mainFrame)
         self.ub9.reparentTo(self.mainFrame)
     
+    def isActivated(self):
+        self.sb1.destroy()
+        self.sb1 = DirectButton(image = ("./models/gui/structures/forge.png", "./models/gui/structures/forge.png", 
+                                   "./models/gui/structures/forge_hover.png"), frameColor=(0, 0,0, 0),
+                          image_scale = (0.65, 1, 0.65), pos=(-29.6,0,0.85), command=self.selectForge, clickSound=self.mouse_click, rolloverSound=self.mouse_hover)
+        self.sb1.stateNodePath[2].setTransparency(1)
+        self.sb1.stateNodePath[2].setScale(15, 1, 5)
+        self.sb1.stateNodePath[2].setPos(9, 0, 2)
+        
+        self.sb2.destroy()        
+        self.sb2 = DirectButton(image = ("./models/gui/structures/nexus.png", "./models/gui/structures/nexus.png",
+                          "./models/gui/structures/nexus_hover.png"), frameColor=(0, 0,0, 0),
+                          image_scale = (0.65, 1, 0.65), pos=(-28.1,0,0.85), command=self.selectNexus, clickSound=self.mouse_click, rolloverSound=self.mouse_hover)
+        self.sb2.stateNodePath[2].setTransparency(1)
+        self.sb2.stateNodePath[2].setScale(15, 1, 5)
+        self.sb2.stateNodePath[2].setPos(9, 0, 2)
+        
+        self.sb3.destroy()
+        self.sb3 = DirectButton(image = ("./models/gui/structures/extractor.png","./models/gui/structures/extractor.png",
+                                   "./models/gui/structures/extractor_hover.png"),frameColor=(0, 0,0, 0),
+                          image_scale = (0.65, 1, 0.65), pos=(-26.6,0, 0.85), command=self.selectExtractor, clickSound=self.mouse_click, rolloverSound=self.mouse_hover)
+        self.sb3.stateNodePath[2].setTransparency(1)
+        self.sb3.stateNodePath[2].setScale(15, 1, 5)
+        self.sb3.stateNodePath[2].setPos(9, 0, 1)
+        
+        self.sb4.destroy()
+        self.sb4 = DirectButton(image = ("./models/gui/structures/pd1.png", "./models/gui/structures/pd1.png",
+                                   "./models/gui/structures/pd1_hover.png"),frameColor=(0, 0,0, 0),
+                          image_scale = (0.65, 1, 0.65), pos=(-25.1,0, 0.85), command=self.selectPD1, clickSound=self.mouse_click, rolloverSound=self.mouse_hover)
+        self.sb4.stateNodePath[2].setTransparency(1)
+        self.sb4.stateNodePath[2].setScale(15, 1, 5)
+        self.sb4.stateNodePath[2].setPos(9, 0, 1)
+        
+        self.sb4.reparentTo(self.mainFrame)
+        self.sb3.reparentTo(self.mainFrame)
+        self.sb2.reparentTo(self.mainFrame)
+        self.sb1.reparentTo(self.mainFrame)
+        
+        
     #Unlock tier 1 units    
     def hasForge(self):
         self.ub1.destroy()

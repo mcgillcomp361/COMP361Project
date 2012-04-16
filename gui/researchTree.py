@@ -12,7 +12,7 @@ class ResearchTree():
     
     def __init__(self, player):
         self.player = player
-        self.research_task = None
+        self.research_task = 0
      
     def loadTree(self):            
         
@@ -86,21 +86,29 @@ class ResearchTree():
                           frameColor=(0,0,0,0),text_fg=(1,1,1,1), image_scale=(0.15,1,0.08), relief=2, command=self.selectGBH)
 
     def selectTier2(self):
-        if(self.player.research.getLevel() == 1 and self.research_task == None):
-            research_time = max(1, TIER_II_RESEARCH_TIME-self.player.getNumberOfNexus())
-            task = taskMgr.doMethodLater(research_time, self.player.research.incrementLevel, 'researchTireII', extraArgs=[self.player], appendTask = True)
+        if(self.player.research.getLevel() == 1 and self.research_task == 0):
+            research_time = max(3, TIER_II_RESEARCH_TIME-self.player.getNumberOfNexus())
+            self.research_task = 1
+            task = taskMgr.doMethodLater(research_time, self._delayedIncrementLevel, 'researchTireII', extraArgs=[self.player], appendTask = True)
             
     
     def selectTier3(self):
-        if(self.player.research.getLevel() == 2 and self.research_task == None):
-            research_time = max(1, TIER_III_RESEARCH_TIME-self.player.getNumberOfNexus())
-            task = taskMgr.doMethodLater(research_time, self.player.research.incrementLevel, 'researchTireIII', extraArgs=[self.player], appendTask = True)
+        if(self.player.research.getLevel() == 2 and self.research_task == 0):
+            research_time = max(3, TIER_III_RESEARCH_TIME-self.player.getNumberOfNexus())
+            self.research_task = 1
+            task = taskMgr.doMethodLater(research_time, self._delayedIncrementLevel, 'researchTireIII', extraArgs=[self.player], appendTask = True)
 
     def selectTier4(self):
-        if(self.player.research.getLevel() == 3 and self.research_task == None):
-            research_time = max(1, TIER_IV_RESEARCH_TIME-self.player.getNumberOfNexus())
-            task = taskMgr.doMethodLater(research_time, self.player.research.incrementLevel, 'researchTireIV', extraArgs=[self.player], appendTask = True)
-            
+        if(self.player.research.getLevel() == 3 and self.research_task == 0):
+            research_time = max(3, TIER_IV_RESEARCH_TIME-self.player.getNumberOfNexus())
+            self.research_task = 1
+            task = taskMgr.doMethodLater(research_time, self._delayedIncrementLevel, 'researchTireIV', extraArgs=[self.player], appendTask = True)
+
+    def _delayedIncrementLevel(self, player, task):
+        self.player.research.incrementLevel(player)
+        self.research_task = 0
+        return task.done
+    
     def selectCapture(self): 
         pass
     

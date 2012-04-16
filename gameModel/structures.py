@@ -49,8 +49,9 @@ class Forge(Structure):
         self.host_planet.setTexture("forge")
         from gameModel.ai import AI
         if(type(host_planet.player) != AI):
-            from gameEngine.gameEngine import updateGUI
-            updateGUI.refreshUnitsAndConstructions(host_planet)
+            if(host_planet == host_planet.player.selected_planet):
+                from gameEngine.gameEngine import updateGUI
+                updateGUI.refreshUnitsAndConstructions(host_planet)
 
 
 class Nexus(Structure):

@@ -94,6 +94,7 @@ class guiUpdate():
         elif planet.player != player:
             return
         elif(planet.hasStructure("forge")):
+            gamePanel.isActivated()
             gamePanel.hasForge()
             if(player.research.getLevel()>=2):
                 gamePanel.unlockTier2Units()
@@ -105,6 +106,7 @@ class guiUpdate():
                 gamePanel.unlockTier4Units()
                 gamePanel.unlockTier4Structures()
         else:
+            gamePanel.isActivated()
             if(player.research.getLevel()>=2):
                 gamePanel.unlockTier2Structures()
             if(player.research.getLevel()>=3):
