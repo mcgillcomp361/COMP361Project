@@ -105,7 +105,7 @@ class Client(DirectObject):
         self.cWriter = ConnectionWriter(self.cManager,0)
         self.connection = None #Connection with the server
         
-    def connectToServer(self, ip_address="192.168.1.110", port_address=9099):
+    def connectToServer(self, ip_address="192.168.1.112", port_address=9099):
         #How long to wait until we give up connecting
         timeout = 3000 # 3 seconds
         self.connection = self.cManager.openTCPClientConnection(ip_address,port_address,timeout)
