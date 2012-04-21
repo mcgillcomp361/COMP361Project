@@ -55,11 +55,12 @@ class MouseEvents(DirectObject.DirectObject):
     
     def selectionRectangle(self, task):
         if base.mouseWatcherNode.hasMouse():# and self.mouseFirstPos != None:
-            mpos = base.mouseWatcherNode.getMouse()
-            self.drag_rect_path.show()
-            self.drag_rect_path.setSx(mpos.getX()-self.mouseFirstPos.getX()+0.0001)
-            self.drag_rect_path.setSz(mpos.getY()-self.mouseFirstPos.getY()+0.0001)
-            self.drag_rect_path.setPos(self.mouseFirstPos.getX(), 0, self.mouseFirstPos.getY())
+            if self.mouseFirstPos != None:
+                mpos = base.mouseWatcherNode.getMouse()
+                self.drag_rect_path.show()
+                self.drag_rect_path.setSx(mpos.getX()-self.mouseFirstPos.getX()+0.0001)
+                self.drag_rect_path.setSz(mpos.getY()-self.mouseFirstPos.getY()+0.0001)
+                self.drag_rect_path.setPos(self.mouseFirstPos.getX(), 0, self.mouseFirstPos.getY())
 
 #            self.drag_rect_path.drawLines([((self.mouseFirstPos.getX(),self.mouseFirstPos.getY()),(mpos.getX(), mpos.getY()))])
 #            self.drag_rect_path.create()
