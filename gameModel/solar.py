@@ -785,6 +785,17 @@ class Planet(SphericalBody):
             if unit.player != player:
                 yield unit
                 
+    def unitsOfLowestEnergy(self, player):
+        '''
+        Generator that iterates over the hosted units belonging to the player
+        sorted by lowest energy.
+        @param player, the owner of the units 
+        '''
+        energyList = sorted(self._orbiting_units, key=lambda unit: unit.energy)
+        for unit in energyList:
+            if unit.player == player:
+                yield unit
+                
     def getNumberOfUnits(self):
         '''
         Returns the number of hosted units from the planet

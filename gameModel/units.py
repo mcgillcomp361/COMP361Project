@@ -31,7 +31,7 @@ class Unit(object):
     General information and functions of units.
     '''
 
-    def __init__(self, host_planet, player, max_velocity, energy, damage, unit_abilities=[]):
+    def __init__(self, host_planet, player, max_velocity, energy, damage, cool_down_time, unit_abilities=[]):
         '''
         Constructor
         @param host_planet : the current planet where the unit is being built
@@ -45,15 +45,22 @@ class Unit(object):
         self.player = player
         self.max_velocity = max_velocity
         self.energy = energy
+        self.max_energy = energy
         self.damage = damage
+        self.cool_down_time = cool_down_time
         self.target = None
         self.between_orbits = False
         self.deep_space = False
         self.host_planet.addOrbitingUnit(self)
         self._unit_abilities = unit_abilities
         self.__initSceneGraph()
-        ''' TODO: add the cool down attack effect '''
-        self.task_observe_enemy = taskMgr.doMethodLater(1, self._observeEnemy, 'observeEnemy')
+        self.task_observe_enemy = None
+        self.task_observe_ally = None
+        if(self.damage != 0):
+            self.task_observe_enemy = taskMgr.doMethodLater(self.cool_down_time, self._observeEnemy, 'observeEnemy')
+        elif(self.cool_down_time != 0):
+            self.healing_points = 10
+            self.task_observe_ally = taskMgr.doMethodLater(self.cool_down_time, self._observeAlly, 'observeAlly')
          
     def _loadSounds(self, unit_name):
         '''
@@ -139,6 +146,9 @@ class Unit(object):
 
         self.quad_path.setColor(self.player.color)
     
+    '''
+    Scans the host_planet for enemy units and attack them if present
+    '''
     def _observeEnemy(self, task):
         if not self.deep_space:
             if self.target != None and self.target.energy > 0 and \
@@ -151,6 +161,28 @@ class Unit(object):
                     return task.done
                 self.target = None
                 for unit in self.host_planet.unitsOfEnemyLowestEnergy(self.player):
+                    self.target = unit
+                    break
+#        if(self.host_planet.player != self.player and self.host_planet.getNumberOfStructures()!=0):
+#            for structure in self.host_planet.structures():
+#                self._attack(structure)
+        return task.again
+    
+    '''
+    Scans the host_planet for all units and heals them if damaged
+    '''
+    def _observeAlly(self, task):
+        if not self.deep_space:
+            if self.target != None and self.target.energy > 0 and \
+                self.host_planet == self.target.host_planet and \
+                not self.target.deep_space:
+                self._heal(self.target)
+                
+            else:
+                if(self.cool_down_time == 0):
+                    return task.done
+                self.target = None
+                for unit in self.host_planet.unitsOfLowestEnergy(self.player):
                     self.target = unit
                     break
 #        if(self.host_planet.player != self.player and self.host_planet.getNumberOfStructures()!=0):
@@ -293,13 +325,22 @@ class Unit(object):
         self.point_path.setPos(relativePos)
             
     def _attack(self, target):
-        '''Deals damage to an opposing unit or structure only if the unit is capable of attacking'''
+        '''Deals damage to an opposing unit only if the unit is capable of attacking'''
         if(target.energy>0 and target != None):
             target.energy = max(0, target.energy-self.damage)
             if(self.attack_unit != None):
                 base.sfxManagerList[0].update()
                 self.attack_unit.play()
             taskMgr.add(self.attackAnimation,'attackAnimation', extraArgs =[1.0], appendTask=True)
+            
+    def _heal(self, target):
+        '''heals an ally unit only if the unit is capable of healing'''
+        if(target.energy>0 and target != None):
+            target.energy = min(target.max_energy, target.energy+self.healing_points)
+            #if(self.attack_unit != None):
+            #    base.sfxManagerList[0].update()
+            #    self.attack_unit.play()
+            #taskMgr.add(self.attackAnimation,'attackAnimation', extraArgs =[1.0], appendTask=True)
     
     def attackAnimation(self, time, task):
         try:
@@ -345,8 +386,14 @@ class Unit(object):
     def removeFromGame(self):
         self.death_unit.play()
         self.damage = 0
-        taskMgr.remove(self.task_observe_enemy)
-        self.task_observe_enemy = None
+        self.cool_down_time = 0
+        if self.task_observe_enemy != None:
+            taskMgr.remove(self.task_observe_enemy)
+            self.task_observe_enemy = None
+        if self.task_observe_ally != None:
+            self.healing_points = 0
+            taskMgr.remove(self.task_observe_ally)
+            self.task_observe_ally = None
         self.target = None
         self.point_path.removeNode()
         
@@ -364,7 +411,7 @@ class Swarm(Unit):
         @param host_planet : The planet where the unit is constructed
         '''
         base.enableParticles()
-        super(Swarm, self).__init__(host_planet, player, SWARM_VELOCITY, SWARM_MAX_ENERGY, SWARM_DAMAGE, [])
+        super(Swarm, self).__init__(host_planet, player, SWARM_VELOCITY, SWARM_MAX_ENERGY, SWARM_DAMAGE, SWARM_COOL_DOWN_TIME, [])
         self.quad_path.setScale(2)
 #        self.quad_path.removeNode()
         self._loadSounds("swarm")
@@ -384,7 +431,7 @@ class Horde(Unit):
         Constructor
         @param host_planet : The planet where the unit is constructed
         '''
-        super(Horde, self).__init__(host_planet, player, HORDE_VELOCITY, HORDE_MAX_ENERGY, HORDE_DAMAGE, []) 
+        super(Horde, self).__init__(host_planet, player, HORDE_VELOCITY, HORDE_MAX_ENERGY, HORDE_DAMAGE, HORDE_COOL_DOWN_TIME, []) 
         self.quad_path.setScale(5)
         self._loadSounds("horde")
 #        self.model_path.setColor(Vec4(1,1,1,0.1))
@@ -402,7 +449,7 @@ class Hive(Unit):
         Constructor
         @param host_planet : The planet where the unit is constructed
         '''
-        super(Hive, self).__init__(host_planet, player, HIVE_VELOCITY, HIVE_MAX_ENERGY, HIVE_DAMAGE, [])
+        super(Hive, self).__init__(host_planet, player, HIVE_VELOCITY, HIVE_MAX_ENERGY, HIVE_DAMAGE, HIVE_COOL_DOWN_TIME, [])
         self.quad_path.setScale(8)
         self._loadSounds("hive")
 #        self.model_path.setColor(Vec4(1,1,1,0.1))
@@ -420,7 +467,7 @@ class Globe(Unit):
         Constructor
         @param host_planet : The planet where the unit is constructed
         '''
-        super(Globe, self).__init__(host_planet, player, GLOBE_VELOCITY, GLOBE_MAX_ENERGY, GLOBE_DAMAGE, [])
+        super(Globe, self).__init__(host_planet, player, GLOBE_VELOCITY, GLOBE_MAX_ENERGY, GLOBE_DAMAGE, GLOBE_COOL_DOWN_TIME, [])
         unit_model_path = loader.loadModel("models/units/globe/sphere")
         tex = loader.loadTexture("models/units/globe/globe_tex.jpg")
         unit_model_path.setTexture(tex)
@@ -439,7 +486,7 @@ class Sphere(Unit):
         Constructor
         @param host_planet : The planet where the unit is constructed
         '''
-        super(Sphere, self).__init__(host_planet, player, SPHERE_VELOCITY, SPHERE_MAX_ENERGY, SPHERE_DAMAGE, [])
+        super(Sphere, self).__init__(host_planet, player, SPHERE_VELOCITY, SPHERE_MAX_ENERGY, SPHERE_DAMAGE, SPHERE_COOL_DOWN_TIME, [])
         unit_model_path = loader.loadModel("models/units/sphere/sphere")
         tex = loader.loadTexture("models/units/sphere/sphere_tex.jpg")
         unit_model_path.setTexture(tex)
@@ -458,7 +505,7 @@ class Planetarium(Unit):
         Constructor
         @param host_planet : The planet where the unit is constructed
         '''
-        super(Planetarium, self).__init__(host_planet, player, PLANETARIUM_VELOCITY, PLANETARIUM_MAX_ENERGY, PLANETARIUM_DAMAGE, [])
+        super(Planetarium, self).__init__(host_planet, player, PLANETARIUM_VELOCITY, PLANETARIUM_MAX_ENERGY, PLANETARIUM_DAMAGE, PLANETARIUM_COOL_DOWN_TIME, [])
         unit_model_path = loader.loadModel("models/units/planetarium/sphere")
         tex = loader.loadTexture("models/units/planetarium/planetarium_tex.jpg")
         unit_model_path.setTexture(tex)
@@ -477,7 +524,7 @@ class Analyzer(Unit):
         Constructor
         @param host_planet : The planet where the unit is constructed
         '''
-        super(Analyzer, self).__init__(host_planet, player, ANALYZER_VELOCITY, ANALYZER_MAX_ENERGY, ANALYZER_DAMAGE, [])
+        super(Analyzer, self).__init__(host_planet, player, ANALYZER_VELOCITY, ANALYZER_MAX_ENERGY, ANALYZER_DAMAGE, ANALYZER_COOL_DOWN_TIME, [])
         unit_model_path = loader.loadModel("models/units/analyzer/SpaceDock")
         unit_model_path.reparentTo(self.model_path)
         unit_model_path.setScale(0.02)
@@ -493,7 +540,7 @@ class Mathematica(Unit):
         Constructor
         @param host_planet : The planet where the unit is constructed
         '''
-        super(Mathematica, self).__init__(host_planet, player, MATHEMATICA_VELOCITY, MATHEMATICA_MAX_ENERGY, MATHEMATICA_DAMAGE, [])
+        super(Mathematica, self).__init__(host_planet, player, MATHEMATICA_VELOCITY, MATHEMATICA_MAX_ENERGY, MATHEMATICA_DAMAGE, MATHEMATICA_COOL_DOWN_TIME, [])
         unit_model_path = loader.loadModel("models/units/mathematica/SpaceDock")
         unit_model_path.reparentTo(self.model_path)
         unit_model_path.setScale(0.05)
@@ -509,7 +556,7 @@ class BlackHoleGenerator(Unit):
         Constructor
         @param host_planet : The planet where the unit is constructed
         '''
-        super(BlackHoleGenerator, self).__init__(host_planet, player, BLACK_HOLE_GENERATOR_VELOCITY, BLACK_HOLE_GENERATOR_MAX_ENERGY, BLACK_HOLE_GENERATOR_DAMAGE, [])
+        super(BlackHoleGenerator, self).__init__(host_planet, player, BLACK_HOLE_GENERATOR_VELOCITY, BLACK_HOLE_GENERATOR_MAX_ENERGY, BLACK_HOLE_GENERATOR_DAMAGE, BLACK_HOLE_COOL_DOWN_TIME, [])
         unit_model_path = loader.loadModel("models/units/blackholegen/Icosahedron")
         tex = loader.loadTexture("models/units/planetarium/special_tex.jpg")
         unit_model_path.setTexture(tex)
