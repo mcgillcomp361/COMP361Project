@@ -44,7 +44,7 @@ class Unit(object):
         self.position = None
         self.player = player
         self.max_velocity = max_velocity
-        self.energy = energy - 50
+        self.energy = energy
         self.max_energy = energy
         self.damage = damage
         self.cool_down_time = cool_down_time
