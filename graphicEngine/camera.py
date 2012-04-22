@@ -73,14 +73,15 @@ class Camera(DirectObject.DirectObject):
         taskMgr.add(self.camMoveTask,'camMoveTask') 
         # sets the camMoveTask to be run every frame 
          
-        self.force = Vec2(0,0)
-        self.last_force = Vec2(0,0)
-        self.vel = Vec2(0,0)
+        self._force = Vec2(0,0)
+        self._last_force = Vec2(0,0)
+        self._vel = Vec2(0,0)
+        self.key_scroll_speed = 5.0
     
     def addForce(self, force):
-        self.last_force.set(0,0)
-        self.last_force = force
-        self.force += force
+        self._last_force.set(0,0)
+        self._last_force = force
+        self._force += force
 
     def zoomOut(self):
 #        print "Zoom Out: " ,self.camDist
@@ -140,7 +141,8 @@ class Camera(DirectObject.DirectObject):
         self.target.setX(x) 
         y = self.clamp(y, self.panLimitsY.getX(), self.panLimitsY.getY()) 
         self.target.setY(y) 
-        self.target.setZ(z) 
+        self.target.setZ(z)
+        self.turnCameraAroundPoint(0,0)
         # Stores the new target position values in the target variable. The x and y values are clamped to the pan limits. 
          
     def setPanLimits(self,xMin, xMax, yMin, yMax): 
@@ -183,107 +185,77 @@ class Camera(DirectObject.DirectObject):
          
         self.turnCameraAroundPoint(0,0) 
         # Calls turnCameraAroundPoint with 0s for the rotation to reset the camera to the new position.
-        
-     
+    
+    def _move_x(self, angle, pan_factor):
+        pan_rate = pan_factor * (self.camDist / self.panRateDivisor)
+        tempX = self.target.getX()+self._vel.getX()-math.sin(angle)*pan_rate 
+        tempX = self.clamp(tempX, self.panLimitsX.getX(), self.panLimitsX.getY()) 
+        self.target.setX(tempX) 
+        tempY = self.target.getY()+self._vel.getY()+math.cos(angle)*pan_rate 
+        tempY = self.clamp(tempY, self.panLimitsY.getX(), self.panLimitsY.getY()) 
+        self.target.setY(tempY)
+        self.turnCameraAroundPoint(0,0)
+    
+    def _move_y(self, angle, pan_factor):
+        pan_rate = pan_factor * (self.camDist / self.panRateDivisor)
+        tempX = self.target.getX()+self._vel.getX()+math.sin(angle)*pan_rate 
+        tempX = self.clamp(tempX, self.panLimitsX.getX(), self.panLimitsX.getY())
+        self.target.setX(tempX) 
+        tempY = self.target.getY()+self._vel.getY()-math.cos(angle)*pan_rate 
+        tempY = self.clamp(tempY, self.panLimitsY.getX(), self.panLimitsY.getY())
+        self.target.setY(tempY) 
+        self.turnCameraAroundPoint(0,0) 
           
-    def camMoveTask(self,task): 
-        # This task is the camera handler's work house. It's set to be called every frame and will control both orbiting and panning the camera. 
-         
+    def camMoveTask(self,task):
         if base.mouseWatcherNode.hasMouse(): 
-            # We're going to use the mouse, so we have to make sure it's in the game window. If it's not and we try to use it, we'll get 
-            # a crash error. 
-             
             mpos = base.mouseWatcherNode.getMouse() 
-            # Gets the mouse position 
-             
             if self.orbiting: 
-            # Checks to see if the camera is in orbiting mode. Orbiting mode overrides panning, because it would be problematic if, while 
-            # orbiting the camera the mouse came close to the screen edge and started panning the camera at the same time. 
-             
                 self.turnCameraAroundPoint((self.mx-mpos.getX())*100,(self.my-mpos.getY())*100)          
-                # calculates new values for camera rotation based on the change in mouse position. mx and my are used here as the old 
-                # mouse position. 
-                 
             else: 
-            # If the camera isn't in orbiting mode, we check to see if the mouse is close enough to the edge of the screen to start panning 
-             
-                moveY=moveX=False
-#           
-                self.vel = self.vel + self.force
-                self.vel = self.vel * 0.9
-                vx, vy = self.vel.getX(), self.vel.getY()
-                panRate1 = panRate2 = 0
-                if abs(vy) > 0.01:
-                    moveY = True
-                    if self.last_force.getY() > 0:
-                        
-                        angleradiansX1 = base.camera.getH() * (math.pi / 180.0) 
-                        panRate1 = 10.0* vy * (self.camDist / self.panRateDivisor)
-                    else:
-                        print "UP"
-                        angleradiansX1 = base.camera.getH() * (math.pi / 180.0)+math.pi 
-                        panRate1 = -10.0* vy *(self.camDist / self.panRateDivisor)
+                angle = pan_factor = 0
+                self._vel = self._vel + self._force
+                self._vel = self._vel * 0.9
+                vx, vy = self._vel.getX(), self._vel.getY()
                 if abs(vx) > 0.01:
-                    moveX = True
-                    if self.last_force.getX() > 0:
-                        
-                        angleradiansX2 = base.camera.getH() * (math.pi / 180.0)+math.pi*0.5
-                        panRate2 = 10.0* vx * (self.camDist / self.panRateDivisor)
+                    if self._last_force.getX() < 0: #right
+                        angle = base.camera.getH() * (math.pi / 180.0)+math.pi*0.5
+                        pan_factor = self.key_scroll_speed * vx
                     else:
-                        print "RIGHT"
-                        angleradiansX2 = base.camera.getH() * (math.pi / 180.0)-math.pi*0.5 
-                        panRate2 = -10.0* vx * (self.camDist / self.panRateDivisor)
-                else: 
-                    if self.my > (1 - self.panZoneSize):
-                        print "UP"
-                        angleradiansX1 = base.camera.getH() * (math.pi / 180.0) 
-                        panRate1 = (1 - self.my - self.panZoneSize) * (self.camDist / self.panRateDivisor)
-                        moveY = True 
-                    if self.my < (-1 + self.panZoneSize):
-                        print "DOWN" 
-                        angleradiansX1 = base.camera.getH() * (math.pi / 180.0)+math.pi 
-                        panRate1 = (1 + self.my - self.panZoneSize) * (self.camDist / self.panRateDivisor)
-                        moveY = True
-                        
-                    if self.mx > (1 - self.panZoneSize): 
-                        print "RIGHT"
-                        angleradiansX2 = base.camera.getH() * (math.pi / 180.0)+math.pi*0.5 
-                        panRate2 = (1 - self.mx - self.panZoneSize) * (self.camDist / self.panRateDivisor)
-                        moveX = True 
-                    if self.mx < (-1 + self.panZoneSize): 
-                        print "LEFT"
-                        angleradiansX2 = base.camera.getH() * (math.pi / 180.0)-math.pi*0.5 
-                        panRate2 = (1 + self.mx - self.panZoneSize) * (self.camDist / self.panRateDivisor)
-                        moveX = True
-                        
-                # These four blocks check to see if the mouse cursor is close enough to the edge of the screen to start panning and then 
-                # perform part of the math necessary to find the new camera position. Once again, the math is a bit above my head, so 
-                # I can't properly explain it. These blocks also set the move booleans to true so that the next lines will move the camera. 
+                        angle = base.camera.getH() * (math.pi / 180.0)-math.pi*0.5 
+                        pan_factor = -self.key_scroll_speed * vx
+                    self._move_x(angle, pan_factor)
+                    
+                if abs(vy) > 0.01:
+                    if self._last_force.getY() < 0: #up
+                        angle = base.camera.getH() * (math.pi / 180.0) 
+                        pan_factor = self.key_scroll_speed * vy
+                    else:
+                        angle = base.camera.getH() * (math.pi / 180.0)+math.pi 
+                        pan_factor = - self.key_scroll_speed * vy
+                    self._move_y(angle, pan_factor)
                 
-                if moveY: 
-                    tempX = self.target.getX()+self.vel.getY()+math.sin(angleradiansX1)*panRate1 
-                    tempX = self.clamp(tempX, self.panLimitsX.getX(), self.panLimitsX.getY())
-                    self.target.setX(tempX) 
-                    tempY = self.target.getY()+self.vel.getY()-math.cos(angleradiansX1)*panRate1 
-                    tempY = self.clamp(tempY, self.panLimitsY.getX(), self.panLimitsY.getY())
-                    self.target.setY(tempY) 
-                    self.turnCameraAroundPoint(0,0) 
-                if moveX: 
-                    tempX = self.target.getX()+self.vel.getX()-math.sin(angleradiansX2)*panRate2 
-                    tempX = self.clamp(tempX, self.panLimitsX.getX(), self.panLimitsX.getY()) 
-                    self.target.setX(tempX) 
-                    tempY = self.target.getY()+self.vel.getY()+math.cos(angleradiansX2)*panRate2 
-                    tempY = self.clamp(tempY, self.panLimitsY.getX(), self.panLimitsY.getY()) 
-                    self.target.setY(tempY)
-                    self.turnCameraAroundPoint(0,0)
-                
-                
-                # These two blocks finalize the math necessary to find the new camera position and apply the transformation to the 
-                # camera's TARGET. Then turnCameraAroundPoint is called with 0s for rotation, and it resets the camera position based 
-                # on the position of the target. The x and y values are clamped to the pan limits before they are applied. 
-            #print(self.target) 
+                # no keyboard motion, apply motion from hovering near borders
+                if abs(vx) < 0.01 and abs(vy) < 0.01:
+                    if self.mx > (1 - self.panZoneSize): #right
+                        angle = base.camera.getH() * (math.pi / 180.0)+math.pi*0.5 
+                        pan_factor = 1 - self.mx - self.panZoneSize
+                        self._move_x(angle, pan_factor)
+                    elif self.mx < (-1 + self.panZoneSize): #left
+                        angle = base.camera.getH() * (math.pi / 180.0)-math.pi*0.5 
+                        pan_factor = 1 + self.mx - self.panZoneSize
+                        self._move_x(angle, pan_factor)
+                    
+                    if self.my > (1 - self.panZoneSize): #up
+                        angle = base.camera.getH() * (math.pi / 180.0) 
+                        pan_factor = 1 - self.my - self.panZoneSize
+                        self._move_y(angle, pan_factor)
+                    elif self.my < (-1 + self.panZoneSize): #down
+                        angle = base.camera.getH() * (math.pi / 180.0)+math.pi 
+                        pan_factor = 1 + self.my - self.panZoneSize
+                        self._move_y(angle, pan_factor)
+
             self.mx=mpos.getX() 
             self.my=mpos.getY()
-            # The old mouse positions are updated to the current mouse position as the final step. 
-        self.force.set(0,0)
+            self._force.set(0,0)
         return task.cont
+

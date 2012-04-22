@@ -182,7 +182,9 @@ class Star(SphericalBody):
         and notifies the corresponding objects based on the state of the star
         '''
         player.selected_planet = None
-        
+        from gameEngine.gameEngine import game_camera
+        cam_pos = self.point_path.getPos()
+        game_camera.setTarget(cam_pos.getX(), cam_pos.getY(), cam_pos.getZ())
         if(player.ge_amount != 0 and self.activated == False and \
            player.selected_star == self):
             player.ge_amount = player.ge_amount - 1

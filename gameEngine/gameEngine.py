@@ -41,7 +41,7 @@ all_planets = []
 
 music = None
 
-_game_camera = None
+game_camera = None
             
     #Keyboard events
 gamePanel = None
@@ -111,7 +111,7 @@ def _startGame(players):
     either the single player mode or the multiplayer mode based on the players choice.
     @param players: the list of the players ready to play
     '''
-    global _game_camera, music
+    global game_camera, music
     ''' TODO : music should be played here '''
 #    musicMgr = base.audioManager()
     music = base.loader.loadSfx("sound/music/orbitals.mp3")
@@ -122,7 +122,7 @@ def _startGame(players):
     #randomly set the camera on one of the stars for the player
     rand = random.randrange(0,NUMBER_OF_STARS,1)
     ''' TODO : camera is not set on the correct position, why ? '''
-    _game_camera = Camera(all_stars[rand])
+    game_camera = Camera(all_stars[rand])
     
     '''TODO : choose between single player or multiplayer '''
     _singlePlayer()
@@ -133,7 +133,7 @@ def _singlePlayer():
     Run a single player game with an AI player
     @players : the player
     '''
-    global player, mouse_events, ai, all_stars, _game_camera, gamePanel
+    global player, mouse_events, ai, all_stars, game_camera, gamePanel
     player = Player("player")
     gamePanel = GamePanel(player)
     updateGUI.refreshResources()
@@ -144,7 +144,7 @@ def _singlePlayer():
     updateGUI.printGE()
     task_track_minerals = taskMgr.doMethodLater(1, player.trackMinerals, 'trackPlayerMinerals')
     mouse_events.setPlayer(player)
-    mouse_events.setCamera(_game_camera)
+    mouse_events.setCamera(game_camera)
     ai = AI("Alien", all_stars)
     _runAI()
     task_track_units_and_structures = taskMgr.doMethodLater(1, _trackUnitsAndStructures, 'trackUnitsAndStructures')
