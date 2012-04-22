@@ -80,6 +80,43 @@ def drawStarProgressBar(self, time):
         del self.red_progress_path
     return
 
+def drawUnitEnergyBar(self, energy, max_energy, model_path):
+    '''
+    Draw a progress bar above or below an object (unit).
+    @param self: instance of the object associated with the progress bar 
+    @param time: total duration
+    @param above: True if the progress bar is displayed above
+    @param red: Vec4 representing the first color
+    @param green: Vec4 representing the second color
+    @param task: Panda3d's task
+    '''
+    try:
+        if self.green_progress_path:
+            self.green_progress_path.setScale(2.0*float(energy)/max_energy)
+            self.red_progress_path.setScale((1.0-float(energy)/max_energy+0.001)*2.0)
+    except AttributeError:
+        self.green_progress_path = LineNodePath(parent = self.point_path, thickness = 4.0, colorVec = Vec4(0.0,1.0,0.0,1.0))
+        self.green_progress_path.setPos(model_path.getX()+1,model_path.getY()-1,model_path.getZ()-3)
+        self.green_progress_path.drawLines([((0,0,0),(2, 0,0))])
+        self.green_progress_path.create()
+        self.green_progress_path.setBillboardPointEye()
+        self.green_progress_path.setScale(0.0008)
+            
+        self.red_progress_path = LineNodePath(parent = self.point_path, thickness = 4.0, colorVec = Vec4(1.0,0.0,0.0,1.0))
+        self.red_progress_path.setPos(model_path.getX()+1,model_path.getY()-1,model_path.getZ()-3)
+        self.red_progress_path.drawLines([((0,0,0),(-2, 0,0))])
+        self.red_progress_path.create()
+        self.red_progress_path.setBillboardPointEye()
+        self.red_progress_path.setScale(0.0008)
+
+    if energy <= 0:
+        self.green_progress_path.removeNode()
+        self.red_progress_path.removeNode()
+        del self.green_progress_path 
+        del self.red_progress_path
+        return
+    return
+    
 def drawUnitProgressBar(self, time, task):
     '''
     Draw a progress bar above or below an object (planet).

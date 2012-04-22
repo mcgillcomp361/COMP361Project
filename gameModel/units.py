@@ -54,6 +54,11 @@ class Unit(object):
         self.host_planet.addOrbitingUnit(self)
         self._unit_abilities = unit_abilities
         self.__initSceneGraph()
+        from gameModel.player import Player
+        if(type(self.player)==Player):
+            self.energy_bar_task = taskMgr.doMethodLater(1, self._drawUnitEnergyBar, 'drawEnergyBar')
+        else:
+            self.energy_bar_task = None
         self.task_observe_enemy = None
         self.task_observe_ally = None
         if(self.damage != 0):
@@ -146,6 +151,24 @@ class Unit(object):
 
         self.quad_path.setColor(self.player.color)
     
+    def _drawUnitEnergyBar(self, task):
+        if(self.energy > 0):
+            if self._isSelected():
+                from graphicEngine import indicators
+                indicators.drawUnitEnergyBar(self, self.energy, self.max_energy, self.model_path)
+            else:
+                try:
+                    if self.green_progress_path:
+                        self.green_progress_path.removeNode()
+                        self.red_progress_path.removeNode()
+                        del self.green_progress_path 
+                        del self.red_progress_path
+                except AttributeError:
+                    pass
+        else:
+            return task.done
+        return task.again
+    
     '''
     Scans the host_planet for enemy units and attack them if present
     '''
@@ -173,7 +196,7 @@ class Unit(object):
     '''
     def _observeAlly(self, task):
         if not self.deep_space:
-            if self.target != None and self.target.energy > 0 and \
+            if self.target != None and self.target.energy > 0 and self.target.energy < self.target.max_energy and \
                 self.host_planet == self.target.host_planet and \
                 not self.target.deep_space:
                 self._heal(self.target)
@@ -249,10 +272,20 @@ class Unit(object):
     def deselect(self):
         if(self.cone_path != None):
             self.cone_path.removeNode()
+        try:
+            if self.green_progress_path:
+                self.green_progress_path.removeNode()
+                self.red_progress_path.removeNode()
+                del self.green_progress_path 
+                del self.red_progress_path
+        except AttributeError:
+            pass
         
     def select(self):
         self.highlight()
         self.player.selected_units.append(self)
+        from graphicEngine import indicators
+        indicators.drawUnitEnergyBar(self, self.energy, self.max_energy, self.model_path)
         if(len(self.player.selected_units) == 1):
             ''' TODO: show the statics of the unit in the characteristic panel on the GUI '''
             for unit in self.player.selected_units:
@@ -261,6 +294,13 @@ class Unit(object):
             base.sfxManagerList[0].update()
             self.select_unit.play()
     
+    def _isSelected(self):
+        if(self.player != None and self.player.selected_units != None):    
+            for unit in self.player.selected_units:
+                if(unit == self):
+                    return True
+        return False        
+           
     def startOrbit(self):
         self.orbit_period = self.point_path.hprInterval(10, Vec3(-360, 0, 0))
         self.orbit_period.loop()
@@ -326,7 +366,7 @@ class Unit(object):
             
     def _attack(self, target):
         '''Deals damage to an opposing unit only if the unit is capable of attacking'''
-        if(target.energy>0 and target != None):
+        if(target.energy > 0 and target != None):
             target.energy = max(0, target.energy-self.damage)
             if(self.attack_unit != None):
                 base.sfxManagerList[0].update()
@@ -335,7 +375,7 @@ class Unit(object):
             
     def _heal(self, target):
         '''heals an ally unit only if the unit is capable of healing'''
-        if(target.energy>0 and target != None):
+        if(target.energy > 0 and target.energy < target.max_energy and target != None):
             target.energy = min(target.max_energy, target.energy+self.healing_points)
             #if(self.attack_unit != None):
             #    base.sfxManagerList[0].update()
@@ -394,6 +434,9 @@ class Unit(object):
             self.healing_points = 0
             taskMgr.remove(self.task_observe_ally)
             self.task_observe_ally = None
+        if self.energy_bar_task != None:
+            taskMgr.remove(self.energy_bar_task)
+            self.energy_bar_task = None
         self.target = None
         self.point_path.removeNode()
         
