@@ -18,7 +18,7 @@ class Client(DirectObject):
         print "Initializing client test" 
         
         self.port = 9099
-        self.ip_address = "192.168.1.112" 
+        self.ip_address = "192.168.1.110" 
         self.timeout = 3000             # 3 seconds to timeout 
         
         self.cManager = QueuedConnectionManager() 
@@ -62,7 +62,8 @@ class Client(DirectObject):
     
     def processServerMessage(self, netDatagram): 
         myIterator = PyDatagramIterator(netDatagram) 
-        print myIterator.getString() 
+        #print myIterator.getString()
+        print myIterator.getClassType() 
         
 Client = Client() 
 run() 
