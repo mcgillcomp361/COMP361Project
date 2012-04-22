@@ -51,7 +51,7 @@ class MouseEvents(DirectObject.DirectObject):
         self.drag_rect_path.setColor(Vec4(1,1,1,0.3))
         self.drag_rect_path.hide()
 #        self.drag_rect_path = LineNodePath(base.render2d, thickness = 8.0)
-
+        self.camForce = 0.1
     
     def selectionRectangle(self, task):
         if base.mouseWatcherNode.hasMouse():# and self.mouseFirstPos != None:
@@ -92,18 +92,19 @@ class MouseEvents(DirectObject.DirectObject):
     
     def setCamera(self, camera):
         self.camera = camera
-        
+    
+    
     def moveCameraUp(self):
-        self.camera.camera_direction = "moveUp"
+        self.camera.addForce(Vec2(0,-self.camForce))
         
     def moveCameraDown(self):  
-        self.camera.camera_direction = "moveDown" 
+        self.camera.addForce(Vec2(0,self.camForce))
     
     def moveCameraLeft(self):
-        self.camera.camera_direction = "moveLeft"
+        self.camera.addForce(Vec2(self.camForce,0))
     
     def moveCameraRight(self):
-        self.camera.camera_direction = "moveRight"   
+        self.camera.addForce(Vec2(-self.camForce,0))  
     
     def handleLeftMouseClick(self):
         if base.mouseWatcherNode.hasMouse():
