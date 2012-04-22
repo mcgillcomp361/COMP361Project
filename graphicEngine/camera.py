@@ -207,32 +207,55 @@ class Camera(DirectObject.DirectObject):
             else: 
             # If the camera isn't in orbiting mode, we check to see if the mouse is close enough to the edge of the screen to start panning 
              
-                moveY=False 
-                moveX=False
-#                moveVel = self.vel.length() > 0.001
-                # these two booleans are used to denote if the camera needs to pan. X and Y refer to the mouse position that causes the 
-                # panning. X is the left or right edge of the screen, Y is the top or bottom. 
+                moveY=moveX=False
+#           
                 self.vel = self.vel + self.force
-                self.vel = self.vel * 0.85
+                self.vel = self.vel * 0.9
                 vx, vy = self.vel.getX(), self.vel.getY()
-                vlength = self.vel.length()
-#                print self.last_force
-                if self.my > (1 - self.panZoneSize) or (vlength>0.01 and self.last_force.getY() > 0):
-                    angleradiansX1 = base.camera.getH() * (math.pi / 180.0) 
-                    panRate1 = vlength*(1 - self.my - self.panZoneSize - vy) * (self.camDist / self.panRateDivisor)
-                    moveY = True 
-                if self.my < (-1 + self.panZoneSize) or (vlength>0.01 and self.last_force.getY() < 0): 
-                    angleradiansX1 = base.camera.getH() * (math.pi / 180.0)+math.pi 
-                    panRate1 = vlength*(1 + self.my - self.panZoneSize + vy)*(self.camDist / self.panRateDivisor)
-                    moveY = True 
-                if self.mx > (1 - self.panZoneSize) or (vlength>0.01 and self.last_force.getX() > 0): 
-                    angleradiansX2 = base.camera.getH() * (math.pi / 180.0)+math.pi*0.5 
-                    panRate2 = vlength*(1 - self.mx - self.panZoneSize - vx) * (self.camDist / self.panRateDivisor)
-                    moveX = True 
-                if self.mx < (-1 + self.panZoneSize) or (vlength>0.01 and self.last_force.getX() < 0): 
-                    angleradiansX2 = base.camera.getH() * (math.pi / 180.0)-math.pi*0.5 
-                    panRate2 = vlength*(1 + self.mx - self.panZoneSize + vx) * (self.camDist / self.panRateDivisor)
+                panRate1 = panRate2 = 0
+                if abs(vy) > 0.01:
+                    moveY = True
+                    if self.last_force.getY() > 0:
+                        
+                        angleradiansX1 = base.camera.getH() * (math.pi / 180.0) 
+                        panRate1 = 10.0* vy * (self.camDist / self.panRateDivisor)
+                    else:
+                        print "UP"
+                        angleradiansX1 = base.camera.getH() * (math.pi / 180.0)+math.pi 
+                        panRate1 = -10.0* vy *(self.camDist / self.panRateDivisor)
+                if abs(vx) > 0.01:
                     moveX = True
+                    if self.last_force.getX() > 0:
+                        
+                        angleradiansX2 = base.camera.getH() * (math.pi / 180.0)+math.pi*0.5
+                        panRate2 = 10.0* vx * (self.camDist / self.panRateDivisor)
+                    else:
+                        print "RIGHT"
+                        angleradiansX2 = base.camera.getH() * (math.pi / 180.0)-math.pi*0.5 
+                        panRate2 = -10.0* vx * (self.camDist / self.panRateDivisor)
+                else: 
+                    if self.my > (1 - self.panZoneSize):
+                        print "UP"
+                        angleradiansX1 = base.camera.getH() * (math.pi / 180.0) 
+                        panRate1 = (1 - self.my - self.panZoneSize) * (self.camDist / self.panRateDivisor)
+                        moveY = True 
+                    if self.my < (-1 + self.panZoneSize):
+                        print "DOWN" 
+                        angleradiansX1 = base.camera.getH() * (math.pi / 180.0)+math.pi 
+                        panRate1 = (1 + self.my - self.panZoneSize) * (self.camDist / self.panRateDivisor)
+                        moveY = True
+                        
+                    if self.mx > (1 - self.panZoneSize): 
+                        print "RIGHT"
+                        angleradiansX2 = base.camera.getH() * (math.pi / 180.0)+math.pi*0.5 
+                        panRate2 = (1 - self.mx - self.panZoneSize) * (self.camDist / self.panRateDivisor)
+                        moveX = True 
+                    if self.mx < (-1 + self.panZoneSize): 
+                        print "LEFT"
+                        angleradiansX2 = base.camera.getH() * (math.pi / 180.0)-math.pi*0.5 
+                        panRate2 = (1 + self.mx - self.panZoneSize) * (self.camDist / self.panRateDivisor)
+                        moveX = True
+                        
                 # These four blocks check to see if the mouse cursor is close enough to the edge of the screen to start panning and then 
                 # perform part of the math necessary to find the new camera position. Once again, the math is a bit above my head, so 
                 # I can't properly explain it. These blocks also set the move booleans to true so that the next lines will move the camera. 
