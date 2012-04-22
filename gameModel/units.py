@@ -44,7 +44,7 @@ class Unit(object):
         self.position = None
         self.player = player
         self.max_velocity = max_velocity
-        self.energy = energy
+        self.energy = energy - 50
         self.max_energy = energy
         self.damage = damage
         self.cool_down_time = cool_down_time
@@ -129,7 +129,7 @@ class Unit(object):
         self.point_path = self.host_planet.point_path.attachNewNode("unit_center_node")
         self.model_path = self.point_path.attachNewNode("unit_node")
         self.model_path.reparentTo(self.point_path)
-        self.model_path.setPos(Vec3(0,6,0))
+        self.model_path.setPos(Vec3(0,7,0))
         
         self.model_path.setPythonTag('pyUnit', self)
         
@@ -206,8 +206,9 @@ class Unit(object):
                     return task.done
                 self.target = None
                 for unit in self.host_planet.unitsOfLowestEnergy(self.player):
-                    self.target = unit
-                    break
+                    if(unit.energy < unit.max_energy and unit != self):
+                        self.target = unit
+                        break
 #        if(self.host_planet.player != self.player and self.host_planet.getNumberOfStructures()!=0):
 #            for structure in self.host_planet.structures():
 #                self._attack(structure)
