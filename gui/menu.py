@@ -5,6 +5,7 @@ from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from gameEngine import gameEngine
 from gui.gamePanel import GamePanel
+#from distributedNetwork.server import MyServerRepository
 from direct.showbase import DirectObject 
 
 class Menu(): 
@@ -83,7 +84,8 @@ class Menu():
         gameEngine.initialize()
         
     def hostGame(self):
-        print 'Waiting for other players'
+        print 'Looking for a match'
+        #self.server = MyServerRepository()
         
     def joinGame(self):
         print 'Looking for a match'
