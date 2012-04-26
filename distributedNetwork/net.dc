@@ -7,10 +7,10 @@ import DistributedSignpost/AI
 // These classes are used in server1.py/client1.py
 
 dclass DistributedPlayer: DistributedNode {
-  setAvColor(uint8 r/255, uint8 g/255, uint8 b/255) broadcast ram required;
+  addStruct(uint8 r/255, uint8 g/255, uint8 b/255) broadcast ram required;
 };
 
-dclass DistributedPellet: DistributedObject {
+dclass DistributedPanet: DistributedObject {
   setInitialPos(int16 x / 100, int16 y / 100, int16 z / 100) broadcast ram required;
 };
 
