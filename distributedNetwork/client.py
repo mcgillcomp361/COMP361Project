@@ -76,6 +76,3 @@ class Client(DirectObject):
     def clearStars(self):
         for p in self.stars:
             self.cr.sendDeleteMsg(p.doId)
-            
-client = Client()
-run()
