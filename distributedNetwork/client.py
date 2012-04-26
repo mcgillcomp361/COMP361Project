@@ -9,7 +9,7 @@ from direct.gui.OnscreenText import OnscreenText
 from direct.showbase.DirectObject import DirectObject
 from pandac.PandaModules import *
 
-from distributedPlanet import DistributedPlanet
+from distributedStar import DistributedStar
 
 import sys
 import random
@@ -26,7 +26,7 @@ class Client(DirectObject):
         
         #No player yet
         self.player = None
-        self.planets = []
+        self.stars = []
         
         tcpPort = base.config.GetInt('server-port', 4400)
         hostname = base.config.GetString('server-host', '192.168.137.1')
@@ -64,13 +64,13 @@ class Client(DirectObject):
         #self.lastBroadcastTransform = self.av.getTransform()
         #self.updateTask = taskMgr.doMethodLater(0.2, self.updateAvatar, 'updateAvatar')
         
-    def addPlanets(self, positions):
+    def addStars(self, positions):
         for position in positions:
-            planet = DistributedPlanet(self.cr)
-            planet.setInitialPos(position)
-            self.cr.createDistributedObject(distObj = planet)
-            self.planets.append(planet)
+            star = DistributedStar(self.cr)
+            star.setInitialPos(position)
+            self.cr.createDistributedObject(distObj = star)
+            self.stars.append(star)
             
-    def clearPlanets(self):
-        for p in self.planets:
+    def clearStars(self):
+        for p in self.stars:
             self.cr.sendDeleteMsg(p.doId)
