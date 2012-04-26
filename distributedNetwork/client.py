@@ -34,6 +34,9 @@ class Client(DirectObject):
         
         self.cr = MyClientRepository()
         self.cr.connect([self.url], successCallback = self.connectSuccess, failureCallback = self.connectFailure)
+        self.waitingText = OnscreenText(
+            'Connecting to %s.\n.' % (self.url),
+            scale = 0.1, fg = (1, 1, 1, 1), shadow = (0, 0, 0, 1))
     
     def connectFailure(self, statusCode, statusString):
         self.waitingText.destroy()
@@ -53,8 +56,7 @@ class Client(DirectObject):
         self.waitingText.destroy()
         
         # Manifest an avatar for ourselves.
-        self.av = self.cr.createDistributedObject(
-            className = 'DistributedPlayer')
+        #self.av = self.cr.createDistributedObject(className = 'DistributedPlayer')
 
         # Update the local avatar's position every frame.
         #self.moveTask = taskMgr.add(self.moveAvatar, 'moveAvatar')
@@ -74,3 +76,6 @@ class Client(DirectObject):
     def clearStars(self):
         for p in self.stars:
             self.cr.sendDeleteMsg(p.doId)
+            
+client = Client()
+run()
