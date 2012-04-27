@@ -217,35 +217,35 @@ class GamePanel():
         
         self.sb5 = DirectButton(image = ("./models/gui/structures/phylon_locked.png","./models/gui/structures/phylon_locked.png",
                                     "./models/gui/structures/phylon_hover.png"), frameColor=(0, 0,0, 0),
-                          image_scale = (0.65, 1, 0.65), pos=(-29.6,0, -0.75), command=self.selectPhylon, clickSound=self.mouse_click, rolloverSound=self.mouse_hover)
+                          image_scale = (0.65, 1, 0.65), pos=(-26.6,0, -0.75), command=self.selectPhylon, clickSound=self.mouse_click, rolloverSound=self.mouse_hover)
         self.sb5.stateNodePath[2].setTransparency(1)
         self.sb5.stateNodePath[2].setScale(15, 1, 5)
         self.sb5.stateNodePath[2].setPos(8, 0, 4)
         
         self.sb6 = DirectButton(image = ("./models/gui/structures/pd2_locked.png", "./models/gui/structures/pd2_locked.png",
                                    "./models/gui/structures/pd2_hover.png"),frameColor=(0, 0,0, 0),
-                          image_scale = (0.65, 1, 0.65), pos=(-28.1,0, -0.75), command=self.selectPD2, clickSound=self.mouse_click, rolloverSound=self.mouse_hover)
+                          image_scale = (0.65, 1, 0.65), pos=(-25.1,0, -0.75), command=self.selectPD2, clickSound=self.mouse_click, rolloverSound=self.mouse_hover)
         self.sb6.stateNodePath[2].setTransparency(1)
         self.sb6.stateNodePath[2].setScale(15, 1, 5)
         self.sb6.stateNodePath[2].setPos(9, 0, 4)             
         
         self.sb7 = DirectButton(image = ("./models/gui/structures/gc_locked.png", "./models/gui/structures/gc_locked.png",
                                    "./models/gui/structures/gc_hover.png"), frameColor=(0, 0,0, 0),
-                          image_scale = (0.65, 1, 0.65), pos=(-29.6,0, -2.3), command=self.selectGC, clickSound=self.mouse_click, rolloverSound=self.mouse_hover)
+                          image_scale = (0.65, 1, 0.65), pos=(-26.6,0, -2.3), command=self.selectGC, clickSound=self.mouse_click, rolloverSound=self.mouse_hover)
         self.sb7.stateNodePath[2].setTransparency(1)
         self.sb7.stateNodePath[2].setScale(15, 1, 5)
         self.sb7.stateNodePath[2].setPos(9, 0, 6)
         
         self.sb8 = DirectButton(image = ("./models/gui/structures/pd3_locked.png", "./models/gui/structures/pd3_locked.png",
                                    "./models/gui/structures/pd3_hover.png"),frameColor=(0, 0,0, 0),
-                          image_scale = (0.65, 1, 0.65), pos=(-28.1,0, -2.3), command=self.selectPD3, clickSound=self.mouse_click, rolloverSound=self.mouse_hover)
+                          image_scale = (0.65, 1, 0.65), pos=(-25.1,0, -2.3), command=self.selectPD3, clickSound=self.mouse_click, rolloverSound=self.mouse_hover)
         self.sb8.stateNodePath[2].setTransparency(1)
         self.sb8.stateNodePath[2].setScale(15, 1, 5)
         self.sb8.stateNodePath[2].setPos(9, 0, 6)
         
         self.sb9 = DirectButton(image = ("./models/gui/structures/pd4_locked.png", "./models/gui/structures/pd4_locked.png",
                                    "./models/gui/structures/pd4_hover.png"), frameColor=(0, 0,0, 0),
-                          image_scale = (0.65, 1, 0.65), pos=(-29.6,0, -3.90), command=self.selectPD4, clickSound=self.mouse_click, rolloverSound=self.mouse_hover) 
+                          image_scale = (0.65, 1, 0.65), pos=(-25.1,0, -3.90), command=self.selectPD4, clickSound=self.mouse_click, rolloverSound=self.mouse_hover) 
         self.sb9.stateNodePath[2].setTransparency(1)
         self.sb9.stateNodePath[2].setScale(15, 1, 5)
         self.sb9.stateNodePath[2].setPos(9, 0, 7.5)
@@ -430,7 +430,7 @@ class GamePanel():
         self.sb5.destroy()
         self.phylon = DirectButton(image = ("./models/gui/structures/phylon.png","./models/gui/structures/phylon.png",
                                     "./models/gui/structures/phylon_hover.png"), frameColor=(0, 0,0, 0),
-                          image_scale = (0.65, 1, 0.65), pos=(-29.6,0, -0.75), command=self.selectPhylon, clickSound=self.mouse_click, rolloverSound=self.mouse_hover)
+                          image_scale = (0.65, 1, 0.65), pos=(-26.6,0, -0.75), command=self.selectPhylon, clickSound=self.mouse_click, rolloverSound=self.mouse_hover)
         self.phylon.stateNodePath[2].setTransparency(1)
         self.phylon.stateNodePath[2].setScale(15, 1, 5)
         self.phylon.stateNodePath[2].setPos(8, 0, 4)
@@ -438,7 +438,7 @@ class GamePanel():
         self.sb6.destroy()
         self.pd2 = DirectButton(image = ("./models/gui/structures/pd2.png", "./models/gui/structures/pd2.png",
                                    "./models/gui/structures/pd2_hover.png"),frameColor=(0, 0,0, 0),
-                          image_scale = (0.65, 1, 0.65), pos=(-28.1,0, -0.75), command=self.selectPD2, clickSound=self.mouse_click, rolloverSound=self.mouse_hover)
+                          image_scale = (0.65, 1, 0.65), pos=(-25.1,0, -0.75), command=self.selectPD2, clickSound=self.mouse_click, rolloverSound=self.mouse_hover)
         self.pd2.stateNodePath[2].setTransparency(1)
         self.pd2.stateNodePath[2].setScale(15, 1, 5)
         self.pd2.stateNodePath[2].setPos(9, 0, 4)
@@ -473,7 +473,7 @@ class GamePanel():
         self.sb7.destroy()
         self.gc = DirectButton(image = ("./models/gui/structures/gc.png", "./models/gui/structures/gc.png",
                                    "./models/gui/structures/gc_hover.png"), frameColor=(0, 0,0, 0),
-                          image_scale = (0.65, 1, 0.65), pos=(-29.6,0, -2.3), command=self.selectGC, clickSound=self.mouse_click, rolloverSound=self.mouse_hover)
+                          image_scale = (0.65, 1, 0.65), pos=(-26.6,0, -2.3), command=self.selectGC, clickSound=self.mouse_click, rolloverSound=self.mouse_hover)
         self.gc.stateNodePath[2].setTransparency(1)
         self.gc.stateNodePath[2].setScale(15, 1, 5)
         self.gc.stateNodePath[2].setPos(9, 0, 6)
@@ -481,7 +481,7 @@ class GamePanel():
         self.sb8.destroy()
         self.pd3 = DirectButton(image = ("./models/gui/structures/pd3.png", "./models/gui/structures/pd3.png",
                                    "./models/gui/structures/pd3_hover.png"),frameColor=(0, 0,0, 0),
-                          image_scale = (0.65, 1, 0.65), pos=(-28.1,0, -2.3), command=self.selectPD3, clickSound=self.mouse_click, rolloverSound=self.mouse_hover)
+                          image_scale = (0.65, 1, 0.65), pos=(-25.1,0, -2.3), command=self.selectPD3, clickSound=self.mouse_click, rolloverSound=self.mouse_hover)
         self.pd3.stateNodePath[2].setTransparency(1)
         self.pd3.stateNodePath[2].setScale(15, 1, 5)
         self.pd3.stateNodePath[2].setPos(9, 0, 6)
@@ -501,7 +501,7 @@ class GamePanel():
         self.sb9.destroy()
         self.pd4 = DirectButton(image = ("./models/gui/structures/pd4.png", "./models/gui/structures/pd4.png",
                                    "./models/gui/structures/pd4_hover.png"), frameColor=(0, 0,0, 0),
-                          image_scale = (0.65, 1, 0.65), pos=(-29.6,0, -3.90), command=self.selectPD4, clickSound=self.mouse_click, rolloverSound=self.mouse_hover) 
+                          image_scale = (0.65, 1, 0.65), pos=(-25.1,0, -3.90), command=self.selectPD4, clickSound=self.mouse_click, rolloverSound=self.mouse_hover) 
         self.pd4.stateNodePath[2].setTransparency(1)
         self.pd4.stateNodePath[2].setScale(15, 1, 5)
         self.pd4.stateNodePath[2].setPos(9, 0, 8.25)
