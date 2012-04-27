@@ -108,7 +108,7 @@ class GamePanel():
         if (planet.hasStructure("pd2")):
             self.spb6 = OnscreenImage(image = "./models/gui/structures/pd2.png", parent = self.mainFrame,
                           scale = (1.5, 1, 1.5), pos=(-0.75,0,-1))
-        if (planet.hasStructure("gc")):
+        if (planet.hasStructure("generatorCore")):
             self.spb7 = OnscreenImage(image = "./models/gui/structures/gc.png", parent = self.mainFrame,
                           scale = (1.5, 1, 1.5), pos=(-4,0,-1))
         if (planet.hasStructure("pd3")):
