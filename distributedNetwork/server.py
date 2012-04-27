@@ -18,3 +18,6 @@ class MyServerRepository(ServerRepository):
         
         ServerRepository.__init__(self, tcpPort, None, dcFileNames = dcFileNames)
         print "server created, waiting."
+        
+server = MyServerRepository()
+run()

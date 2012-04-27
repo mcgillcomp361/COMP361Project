@@ -19,7 +19,44 @@ class DistributedPlayer(DistributedNode):
         
         self.player = Player(os.getenv('COMPUTERNAME'))
         
-    
+    def addStruct(self, structure):
+        '''
+        Change is applied locally.
+        '''
+        self.player.addStructure(structure)
+        
+    def d_addStruct(self, structure):
+        '''
+        Sends updates on the wire but does not apply it locally.
+        '''
+        self.sendUpdate('addStruct', [structure])
+        
+    def b_addStruct(self, structure):
+        '''
+        Change is applied locally and on the wire.
+        '''
+        self.addStruct(structure)
+        self.d_addStruct(structure)
+        
+    def addunit(self, unit):
+        '''
+        Change is applied locally.
+        '''
+        self.player.addUnit(unit)
+        
+    def d_addUnit(self, unit):
+        '''
+        Change is applied on the wire.
+        '''
+        self.sendUpdate('addunit', [unit])
+        
+    def b_addUnit(self, unit):
+        '''
+        Change is applied locally and on the wire.
+        '''
+        self.addunit(unit)
+        self.d_addUnit(unit)
+        
         
     def generate(self):
         """ This method is called when the object is generated: when it
@@ -37,10 +74,6 @@ class DistributedPlayer(DistributedNode):
         the distributed object is ready for use. """
 
         DistributedNode.announceGenerate(self)
-
-        # Now that the object has been fully manifested, we can parent
-        # it into the scene.
-        self.reparentTo(render)
 
     def disable(self):
         """ This method is called when the object is removed from the
@@ -79,6 +112,6 @@ class DistributedPlayer(DistributedNode):
         eventually get delete() called for it exactly once. """
 
         # Clean out self.model, so we don't have a circular reference.
-        self.model = None
+        #self.model = None
 
         DistributedNode.delete(self)
