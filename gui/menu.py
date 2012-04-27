@@ -84,11 +84,13 @@ class Menu():
         gameEngine.initialize()
         
     def hostGame(self):
-        print 'Looking for a match'
+        pass
+        #print 'Looking for a match'
         #self.server = MyServerRepository()
         
     def joinGame(self):
-        print 'Looking for a match'
+        pass
+        #print 'Looking for a match'
 
     def mainMenu(self):
         self.mainFrame.destroy()
@@ -165,7 +167,7 @@ class Menu():
                               relief=2, command = self.hostGame, clickSound=self.menu_click,rolloverSound=self.menu_rollover)
         b3 = DirectButton(text = ("Join Game"), frameColor=(1, 1, 1, 0), text_fg=(1, 1, 1, 1),
                               text_scale=0.1, text_align = TextNode.ALeft,pos=(0.8, 0, 0.15),
-                              relief=2, command = self.joinGame,rolloverSound=self.menu_rollover)
+                              relief=2, command = self.joinGame, clickSound=self.menu_click,rolloverSound=self.menu_rollover)
         self.mainFrame = DirectFrame(pos=(0,0,0))     
         screenText.reparentTo(self.mainFrame)
         b1.reparentTo(self.mainFrame)

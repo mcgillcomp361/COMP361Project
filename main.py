@@ -19,8 +19,9 @@ from gui.menu import Menu
 class Application(ShowBase):
     def __init__(self):
         '''TODO: An option should be added to graphics submenu that allows the user to adjust resolution'''
- #       loadPrcFileData('', 'fullscreen 1')
-        loadPrcFileData('', 'win-size 640 440')
+        #loadPrcFileData('', 'fullscreen 1')
+        #loadPrcFileData('', 'win-size 1366 768')
+        loadPrcFileData('', 'win-size 1024 768')
         ShowBase.__init__(self)
         self.menu = Menu()
         ''' ATTENTION: to see all the tasks running uncomment the line below '''
