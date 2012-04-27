@@ -104,13 +104,13 @@ class GamePanel():
                           scale = (1.5, 1, 1.5), pos=(-0.75,0,-1))
         if (planet.hasStructure("phylon")):
             self.spb5 = OnscreenImage(image = "./models/gui/structures/phylon.png", parent = self.mainFrame,
-                          scale = (1.5, 1, 1.5), pos=(-0.4,0,-1))
+                          scale = (1.5, 1, 1.5), pos=(-4,0,-1))
         if (planet.hasStructure("pd2")):
             self.spb6 = OnscreenImage(image = "./models/gui/structures/pd2.png", parent = self.mainFrame,
                           scale = (1.5, 1, 1.5), pos=(-0.75,0,-1))
         if (planet.hasStructure("gc")):
             self.spb7 = OnscreenImage(image = "./models/gui/structures/gc.png", parent = self.mainFrame,
-                          scale = (1.5, 1, 1.5), pos=(-0.4,0,-1))
+                          scale = (1.5, 1, 1.5), pos=(-4,0,-1))
         if (planet.hasStructure("pd3")):
             self.spb8 = OnscreenImage(image = "./models/gui/structures/pd3.png", parent = self.mainFrame,
                           scale = (1.5, 1, 1.5), pos=(-0.75,0,-1))
