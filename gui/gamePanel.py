@@ -77,31 +77,31 @@ class GamePanel():
     def paintStructurePanel(self, planet):
         if planet.hasStructure("forge"):
             self.spb1 = OnscreenImage(image = "./models/gui/structures/forge.png", parent = self.mainFrame,
-                          scale = (1.5, 1, 1.5), pos=(-10.5,0,-0.5))
+                          scale = (1.5, 1, 1.5), pos=(-10.5,0,-1))
         if (planet.hasStructure("nexus")):
             self.spb2 = OnscreenImage(image = "./models/gui/structures/nexus.png", parent = self.mainFrame,
-                          scale = (1.5, 1, 1.5), pos=(-7.25,0,-0.5))
+                          scale = (1.5, 1, 1.5), pos=(-7.25,0,-1))
         if (planet.hasStructure("extractor")):
             self.spb3 = OnscreenImage(image = "./models/gui/structures/extractor.png", parent = self.mainFrame,
-                          scale = (1.5, 1, 1.5), pos=(-4,0,-0.5))
+                          scale = (1.5, 1, 1.5), pos=(-4,0,-1))
         if (planet.hasStructure("pd1")):
             self.spb4 = OnscreenImage(image = "./models/gui/structures/pd1.png", parent = self.mainFrame,
-                          scale = (1.5, 1, 1.5), pos=(-0.75,0,-0.5))
+                          scale = (1.5, 1, 1.5), pos=(-0.75,0,-1))
         if (planet.hasStructure("phylon")):
             self.spb5 = OnscreenImage(image = "./models/gui/structures/phylon.png", parent = self.mainFrame,
-                          scale = (1.5, 1, 1.5), pos=(-0.4,0,-0.5))
+                          scale = (1.5, 1, 1.5), pos=(-0.4,0,-1))
         if (planet.hasStructure("pd2")):
             self.spb6 = OnscreenImage(image = "./models/gui/structures/pd2.png", parent = self.mainFrame,
-                          scale = (1.5, 1, 1.5), pos=(-0.75,0,-0.5))
+                          scale = (1.5, 1, 1.5), pos=(-0.75,0,-1))
         if (planet.hasStructure("gc")):
             self.spb7 = OnscreenImage(image = "./models/gui/structures/gc.png", parent = self.mainFrame,
-                          scale = (1.5, 1, 1.5), pos=(-0.4,0,-0.5))
+                          scale = (1.5, 1, 1.5), pos=(-0.4,0,-1))
         if (planet.hasStructure("pd3")):
             self.spb8 = OnscreenImage(image = "./models/gui/structures/pd3.png", parent = self.mainFrame,
-                          scale = (1.5, 1, 1.5), pos=(-0.75,0,-0.5))
+                          scale = (1.5, 1, 1.5), pos=(-0.75,0,-1))
         if (planet.hasStructure("pd4")):
             self.spb9 = OnscreenImage(image = "./models/gui/structures/pd4.png", parent = self.mainFrame,
-                          scale = (1.5, 1, 1.5), pos=(-0.75,0,-0.5)) 
+                          scale = (1.5, 1, 1.5), pos=(-0.75,0,-1)) 
             
     def resetGamePanel(self):
         if(self.ub1 != None):
