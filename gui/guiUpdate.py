@@ -87,9 +87,9 @@ class guiUpdate():
     def paintConstructionPanel(self, planet):
         from gameEngine.gameEngine import gamePanel
         gamePanel.resetStructurePanel()
-        gamePanel.paintStructurePanel(planet)
         if not planet.activated:
             return
+        gamePanel.paintStructurePanel(planet)
         
 
     def refreshUnitsAndConstructions(self, planet):
