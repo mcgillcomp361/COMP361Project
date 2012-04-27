@@ -9,6 +9,7 @@ GENERATOR_CORE_MAX_ENERGY, PLANETARY_DEFENSE_I_MAX_ENERGY, PLANETARY_DEFENSE_II_
 PLANETARY_DEFENSE_III_MAX_ENERGY,PLANETARY_DEFENSE_IV_MAX_ENERGY
 from panda3d.core import Vec3, Vec4
 from pandac.PandaModules import TransparencyAttrib
+
 _default_energy = 0
 
 class Structure(object):
@@ -27,7 +28,12 @@ class Structure(object):
         self.energy = energy
         self.host_planet = host_planet
         self.host_planet.addSurfaceStructure(self)
-        
+        from gameModel.ai import AI
+        if(type(host_planet.player) != AI):
+            if(host_planet == host_planet.player.selected_planet):
+                from gameEngine.gameEngine import updateGUI
+                updateGUI.refreshUnitsAndConstructions(host_planet)
+                updateGUI.paintConstructionPanel(host_planet)
 #        self.model_path = loader.loadModel("models/planets/torus")       
 #        self.model_path.reparentTo(self.host_planet.model_path)
 #        self.model_path.setScale(1.0)
@@ -47,11 +53,11 @@ class Forge(Structure):
         '''
         super(Forge, self).__init__(FORGE_MAX_ENERGY, host_planet)
         self.host_planet.setTexture("forge")
-        from gameModel.ai import AI
-        if(type(host_planet.player) != AI):
-            if(host_planet == host_planet.player.selected_planet):
-                from gameEngine.gameEngine import updateGUI
-                updateGUI.refreshUnitsAndConstructions(host_planet)
+#        from gameModel.ai import AI
+#        if(type(host_planet.player) != AI):
+#            if(host_planet == host_planet.player.selected_planet):
+#                from gameEngine.gameEngine import updateGUI
+#                updateGUI.refreshUnitsAndConstructions(host_planet)
 
 
 class Nexus(Structure):

@@ -521,6 +521,7 @@ class Planet(SphericalBody):
         
         from gameEngine.gameEngine import updateGUI
         updateGUI.refreshUnitsAndConstructions(self)
+        updateGUI.paintConstructionPanel(self)
         
     def selectRight(self, player):
         '''
