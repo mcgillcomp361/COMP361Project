@@ -84,6 +84,14 @@ class guiUpdate():
     def printGE(self):
         self.geAmount = OnscreenText(text=str(self.value), pos=(0.6, -0.75), scale=0.05, fg=(1, 1, 1, 1))
 
+    def paintConstructionPanel(self, planet):
+        from gameEngine.gameEngine import gamePanel
+        gamePanel.resetStructurePanel()
+        gamePanel.paintStructurePanel(planet)
+        if not planet.activated:
+            return
+        
+
     def refreshUnitsAndConstructions(self, planet):
         #g = None
         
