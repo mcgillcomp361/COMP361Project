@@ -47,13 +47,17 @@ class GamePanel():
         self.pd2 = None
         self.pd3 = None
         self.pd4 = None
-        
-        
+   
         #StructurePanel buttons
         self.spb1 = None
         self.spb2 = None
         self.spb3 = None
         self.spb4 = None
+        self.spb5 = None
+        self.spb6 = None
+        self.spb7 = None
+        self.spb8 = None
+        self.spb9 = None
         
         self.loadUnits()
         self.loadResources()
@@ -73,6 +77,17 @@ class GamePanel():
             self.spb3.destroy()
         if (self.spb4 != None):
             self.spb4.destroy()
+        if (self.spb5 != None):
+            self.spb5.destroy()
+        if (self.spb6 != None):
+            self.spb6.destroy()
+        if (self.spb7 != None):
+            self.spb7.destroy()
+        if (self.spb8 != None):
+            self.spb8.destroy()
+        if (self.spb9 != None):
+            self.spb9.destroy()
+            
             
     def paintStructurePanel(self, planet):
         if planet.hasStructure("forge"):
